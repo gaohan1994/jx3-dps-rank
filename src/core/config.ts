@@ -2,6 +2,12 @@ import sl_yjj from '../assets/sl_yjj.png';
 import cy_txjy from '../assets/cy_txjy.png';
 import cy_zxg from '../assets/cy_zxg.png';
 import lx_yl from '../assets/lx-yl.png';
+import pl_lh from '../assets/pl-lx.png';
+import cg_mw from '../assets/cg-mw.png';
+import bd_ba from '../assets/bg-ba.png';
+import cy_fs from '../assets/cy-fs.png';
+// import gb_
+
 import { GameProfessionNames } from './profession';
 import { GameClassesNames } from './classes'
 
@@ -112,6 +118,9 @@ const ChunYang = {
   [GameClassesNames.TaiXuJianYi]: TaiXuJianYi,
 }
 
+/**
+ * 凌雪阁门派
+ */
 const YinLongJue: GameClass = {
   profession: GameProfessionNames.LingXueGe,
   professionName: '凌雪阁',
@@ -124,35 +133,180 @@ const YinLongJue: GameClass = {
 const LingXueGe = {
   [GameClassesNames.YinLongJue]: YinLongJue
 }
-const PengLai = {
 
+/**
+ * 蓬莱门派
+ */
+
+const LingHaiJue: GameClass = {
+  profession: GameProfessionNames.PengLai,
+  professionName: '蓬莱',
+  class: GameClassesNames.LingHaiJue,
+  className: '凌海决',
+  color: [191, 170, 229],
+  icon: pl_lh,
+}
+
+const PengLai = {
+  [GameClassesNames.LingHaiJue]: LingHaiJue
+}
+
+/**
+ * 长歌门
+ */
+
+const MoWen: GameClass = {
+  profession: GameProfessionNames.ChangeGe,
+  professionName: '长歌门',
+  class: GameClassesNames.MoWen,
+  className: '莫问',
+  color: [70, 165, 133],
+  icon: cg_mw,
 }
 const ChangeGe = {
+  [GameClassesNames.MoWen]: MoWen
+}
 
+/**
+ * 霸刀
+ */
+
+const BeiAoJue: GameClass = {
+  profession: GameProfessionNames.BaDao,
+  professionName: '霸刀',
+  class: GameClassesNames.BeiAoJue,
+  className: '北傲决',
+  color: [61, 65, 128],
+  icon: bd_ba,
 }
 const BaDao = {
+  [GameClassesNames.BeiAoJue]: BeiAoJue
+}
 
+/**
+ * 苍云
+ */
+
+const FenShanJin: GameClass = {
+  profession: GameProfessionNames.CangYun,
+  professionName: '苍云',
+  class: GameClassesNames.FenShanJin,
+  className: '分山劲',
+  color: [166, 55, 1],
+  icon: cy_fs,
 }
 const CangYun = {
+  [GameClassesNames.FenShanJin]: FenShanJin
+}
 
+/**
+ * 
+ * 丐帮
+ */
+
+const XiaoChenJue: GameClass = {
+  profession: GameProfessionNames.GaiBang,
+  professionName: '丐帮',
+  class: GameClassesNames.XiaoChenJue,
+  className: '笑尘决',
+  color: [155, 105, 50],
+  icon: lx_yl,
 }
 const GaiBang = {
+  [GameClassesNames.XiaoChenJue]: XiaoChenJue
+}
 
+/**
+ * 
+ * 明教
+ */
+
+const FenYingShengJue: GameClass = {
+  profession: GameProfessionNames.MingJiao,
+  professionName: '明教',
+  class: GameClassesNames.FenYingShengJue,
+  className: '焚影圣诀',
+  color: [205, 78, 19],
+  icon: lx_yl,
 }
 const MingJiao = {
+  [GameClassesNames.FenYingShengJue]: FenYingShengJue
+}
 
+/**
+ * 
+ * 唐门
+ */
+
+const JingYuJue: GameClass = {
+  profession: GameProfessionNames.TangMen,
+  professionName: '唐门',
+  class: GameClassesNames.JingYuJue,
+  className: '惊羽诀',
+  color: [7, 120, 128],
+  icon: lx_yl,
+}
+
+const TianLuoGuiDao: GameClass = {
+  profession: GameProfessionNames.TangMen,
+  professionName: '唐门',
+  class: GameClassesNames.TianLuoGuiDao,
+  className: '天罗诡道',
+  color: [7, 120, 128],
+  icon: lx_yl,
 }
 const TangMen = {
+  [GameClassesNames.JingYuJue]: JingYuJue,
+  [GameClassesNames.TianLuoGuiDao]: TianLuoGuiDao
+}
 
+/**
+ * 
+ * 五毒
+ */
+const DuJing: GameClass = {
+  profession: GameProfessionNames.WuDu,
+  professionName: '五毒',
+  class: GameClassesNames.DuJing,
+  className: '毒经',
+  color: [53, 30, 118],
+  icon: lx_yl,
 }
 const WuDu = {
+  [GameClassesNames.DuJing]: DuJing
+}
 
+/**
+ * 
+ * 藏剑
+ */
+const CangJianClass: GameClass = {
+  profession: GameProfessionNames.CangJian,
+  professionName: '藏剑',
+  class: GameClassesNames.CangJian,
+  className: '藏剑',
+  color: [179, 182, 15],
+  icon: lx_yl,
 }
 const CangJian = {
+  [GameClassesNames.CangJian]: CangJianClass
+}
 
+/**
+ * 
+ * 天策
+ */
+
+const AoXueZhanYi: GameClass = {
+  profession: GameProfessionNames.TianCe,
+  professionName: '天策',
+  class: GameClassesNames.AoXueZhanYi,
+  className: '傲血战意',
+  color: [162, 6, 6],
+  icon: lx_yl,
 }
 const TianCe = {
-
+  [GameClassesNames.AoXueZhanYi]: AoXueZhanYi
 }
 
 
@@ -164,7 +318,16 @@ const TianCe = {
 const GameProfessions: { [name: string]: any } = {
   [GameProfessionNames.ShaoLin]: ShaoLin,
   [GameProfessionNames.ChunYang]: ChunYang,
-  [GameProfessionNames.LingXueGe]: LingXueGe
+  [GameProfessionNames.LingXueGe]: LingXueGe,
+  [GameProfessionNames.PengLai]: PengLai,
+  [GameProfessionNames.CangJian]: CangJian,
+  [GameProfessionNames.CangYun]: CangYun,
+  [GameProfessionNames.ChangeGe]: ChangeGe,
+  [GameProfessionNames.GaiBang]: GaiBang,
+  [GameProfessionNames.MingJiao]: MingJiao,
+  [GameProfessionNames.TangMen]: TangMen,
+  [GameProfessionNames.TianCe]: TianCe,
+  [GameProfessionNames.WuDu]: WuDu,
 }
 
 /**

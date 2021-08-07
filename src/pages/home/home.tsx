@@ -1,8 +1,10 @@
 import { useEffect, useState } from 'react';
 import Rank from '../../component/rank';
+import { GameProfessions } from '../../core/config';
 import GameCore from '../../core/game';
 import '../css/index.css';
 import { EquipmentSelect } from './component/select';
+
 
 function Home() {
 
@@ -10,28 +12,24 @@ function Home() {
   const [equipment, setEquipment] = useState(0);
 
   useEffect(() => {
-    const data = [
-      {
-        profession: 'ShaoLin',
-        class: 'YiJinJing',
-        dps: '13000'
-      },
-      {
-        profession: 'ChunYang',
-        class: 'ZiXiaGong',
-        dps: '12000'
-      },
-      {
-        profession: 'ChunYang',
-        class: 'TaiXuJianYi',
-        dps: '11000'
-      },
-      {
-        profession: 'LingXueGe',
-        class: 'YinLongJue',
-        dps: '11000'
+    const data = [];
+
+    for (var key in GameProfessions) {
+      const currentProfession = GameProfessions[key];
+
+      for (var classKey in currentProfession) {
+
+        data.push({
+          profession: key,
+          class: classKey,
+          dps: Math.random() * 10000 + new Date().getTime() / 100000000,
+        });
       }
-    ];
+    }
+
+    data.sort((a, b) => b.dps - a.dps);
+
+    // console.log('data:', data);
 
     let topGameClass: GameCore;
 

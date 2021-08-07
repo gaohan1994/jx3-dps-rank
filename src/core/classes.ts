@@ -58,5 +58,15 @@ export enum GameClassesNames {
   /**
    * 五毒心法
    */
-  DuJing = 'DuJing'
+  DuJing = 'DuJing',
+
+  /**
+   * 藏剑心法
+   */
+  CangJian = 'CangJian',
+
+  /**
+   * 天策心法
+   */
+  AoXueZhanYi = 'AoXueZhanYi'
 }
