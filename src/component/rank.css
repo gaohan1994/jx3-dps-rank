@@ -1,0 +1,67 @@
+.rank {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  box-sizing: border-box;
+  cursor: pointer;
+}
+
+.rank:hover {
+  /* background: #2bb7ff; */
+}
+
+.rank-core {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+}
+.rank-detail {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+
+.rank-index {
+  width: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.rank-icon {
+  width: 40px;
+  height: 40px;
+  margin-right: 10px;
+  background-repeat: no-repeat;
+  background-size: contain;
+}
+
+.rank-name {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  font-weight: 600;
+  color: #c5ccd7;
+}
+
+.rank-number {
+  color: #bbc2cd;
+  font-size: 0.9ren;
+}
+
+.rank-box {
+  width: 80px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.rank-pa {
+  color: rgba(197, 204, 215, 0.5);
+  font-size: 0.8rem;
+}
+
+.rank-dps {
+  height: 4px;
+}
