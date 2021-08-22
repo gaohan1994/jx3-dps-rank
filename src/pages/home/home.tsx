@@ -29,8 +29,6 @@ function Home() {
 
     data.sort((a, b) => b.dps - a.dps);
 
-    // console.log('data:', data);
-
     let topGameClass: GameCore;
 
     const rData = data.map((item: any, index: number) => {

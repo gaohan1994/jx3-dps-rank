@@ -16,7 +16,6 @@ type Props = {
 function Rank(props: Props) {
   const { rank, index } = props;
 
-  console.log(rank.getPercent());
   return <div className='rank'>
     <div className='rank-core'>
       <div className='rank-detail'>

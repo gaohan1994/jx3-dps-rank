@@ -1,3 +1,5 @@
+import { Tooltip } from 'antd';
+import { InfoCircleOutlined } from '@ant-design/icons';
 import sl_yjj from '../assets/sl_yjj.png';
 import cy_txjy from '../assets/cy_txjy.png';
 import cy_zxg from '../assets/cy_zxg.png';
@@ -6,10 +8,62 @@ import pl_lh from '../assets/pl-lx.png';
 import cg_mw from '../assets/cg-mw.png';
 import bd_ba from '../assets/bg-ba.png';
 import cy_fs from '../assets/cy-fs.png';
-// import gb_
 
 import { GameProfessionNames } from './profession';
-import { GameClassesNames } from './classes'
+import { GameClassesNames } from './classes';
+
+/**
+ * 人物属性值
+ * @param UserAttributeKeys
+ */
+export const UserAttributeKeys = [
+  {
+    value: 'YuanQi',
+    title: '元气',
+  },
+  {
+    value: 'JiChuGongJi',
+    title: '基础攻击',
+  },
+  {
+    value: 'HuiXin',
+    title: '会心',
+    suffix: '%'
+  },
+  {
+    value: 'HuiXiao',
+    title: '会效',
+    suffix: '%'
+  },
+  {
+    value: 'PoFang',
+    title: '破防',
+    suffix: '%'
+  },
+  {
+    value: 'PoZhao',
+    title: '破招',
+  },
+  {
+    value: 'WuShuang',
+    title: '无双',
+    suffix: '%'
+  },
+  {
+    value: 'JiaSu',
+    title: '加速',
+  },
+  {
+    value: 'WuQiShangHai',
+    title: '武器伤害',
+    suffix: (
+      <Tooltip title="输入武器伤害计算更加准确" >
+        <InfoCircleOutlined style={{ color: 'rgba(0,0,0,.45)' }} />
+      </Tooltip>
+    ),
+    nullToken: false
+  },
+];
 
 /**
  * 游戏职业详情
@@ -29,44 +83,44 @@ export interface GameClass {
    * 职业名称中文
    *
    * @type {string}
-   * @memberof GameClass
-   */
+        * @memberof GameClass
+        */
   professionName: string;
   /**
    * 职业心法
    *
    * @type {string}
-   * @memberof GameClass
-   */
+        * @memberof GameClass
+        */
   class: GameClassesNames;
   /**
    * 职业心法中文
    *
    * @type {string}
-   * @memberof GameClass
-   */
+        * @memberof GameClass
+        */
   className: string;
   /**
    * 职业颜色
    *
    * @type {string}
-   * @memberof GameClass
-   */
+        * @memberof GameClass
+        */
   color: number[];
   /**
    * 职业图标
    *
    * @type {string}
-   * @memberof GameClass
-   */
+        * @memberof GameClass
+        */
   icon: string;
 
   /**
    * 职业流派 (保留字段)
    *
    * @type {string}
-   * @memberof GameClass
-   */
+        * @memberof GameClass
+        */
   genre?: string;
 }
 
@@ -334,8 +388,8 @@ const GameProfessions: { [name: string]: any } = {
  * 获取游戏门派数据
  *
  * @param {GameProfessionNames} profession
- * @return {*} 返回门派
- */
+        * @return {*} 返回门派
+        */
 function getGameProfession(profession: GameProfessionNames) {
   return GameProfessions[profession];
 }
@@ -344,9 +398,9 @@ function getGameProfession(profession: GameProfessionNames) {
  * 获取游戏心法
  *
  * @param {GameProfessionNames} profession
- * @param {GameClassesNames} className
- * @return {*} 
- */
+        * @param {GameClassesNames} className
+        * @return {*}
+        */
 function getGameClass(profession: GameProfessionNames, className: GameClassesNames) {
   return GameProfessions[profession][className];
 }
