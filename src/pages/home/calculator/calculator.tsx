@@ -1,9 +1,9 @@
 import Jx3DpsCore from "jx3-dps-core";
-import { useState } from "react";
-import { Button, Card, Input, notification, Select, Tag } from 'antd'
-import { CaretRightOutlined } from '@ant-design/icons'
+import { useLayoutEffect, useState } from "react";
+import { Button, Card, Input, notification, Select, Tooltip } from 'antd'
+import { CaretRightOutlined, InfoCircleOutlined } from '@ant-design/icons'
 import './index.css';
-import { Motion, spring, presets } from 'react-motion'
+import { Motion, spring, presets, TransitionMotion } from 'react-motion'
 import numeral from 'numeral';
 import DetailPage from "../detail/detail";
 import { GameClassesNames, GameProfessionNames, getGameClass, UserAttributeKeys } from "../../../core/config";
@@ -19,27 +19,31 @@ function CalculatorPage() {
 
   const [loading, setLoading] = useState(false);
 
+  useLayoutEffect(() => {
+    document.title = '剑网三DPS计算器'
+  }, []);
+
   /**
    * 设置人物属性
    */
   const [core, { setUserAttr }] = useUserAttribute(
     {
-      JiChuGongJi: 13000,
-      WuQiShangHai: 1998,
-      HuiXin: 19,
-      HuiXiao: 190,
-      PoFang: 40,
-      PoZhao: 4117,
-      JiaSu: 4,
-      WuShuang: 41,
-      YuanQi: 3250,
+      JiChuGongJi: 0,
+      WuQiShangHai: 0,
+      HuiXin: 0,
+      HuiXiao: 0,
+      PoFang: 0,
+      PoZhao: 0,
+      JiaSu: 0,
+      WuShuang: 0,
+      YuanQi: 0,
     }
   );
 
   const [formation, setFormation] = useState(formations[1].value);
   const [setBoenus, setSetBoenus] = useState(SetBoenus[1].value);
   const [teamSkill, setTeamSkill] = useState(TeamSkills.map((item) => item.value));
-  const [groupSkill, setGroupSkill] = useState(GroupSkills.map((item) => item.value));
+  const [groupSkill, setGroupSkill] = useState([]);
 
 
 
@@ -192,76 +196,94 @@ function CalculatorPage() {
 
               </div>
 
-              {interpolatedStyle.motionWidth === BoxWidthConfig.max && (
-                <div className='calculator-more-box'>
-                  <div className='calculator-title'>
-                    高级选项
-                  </div>
+              <TransitionMotion
+                styles={interpolatedStyle.motionWidth > BoxWidthConfig.min + 50
+                  ? [{
+                    key: 'test',
+                    style: { scale: spring(1) }
+                  }]
+                  : [{
+                    key: 'test',
+                    style: { scale: spring(0) }
+                  }]}
+              >
+                {inStyles => {
+                  return inStyles[0] ? (
+                    <div
+                      className='calculator-more-box'
+                      style={{ transform: `scale(${inStyles[0].style.scale}, ${inStyles[0].style.scale})` }}
+                    >
 
-                  <div className='calculator-item'>
-                    <div className='calculator-item-title'>阵法</div>
-                    <Select value={formation} onChange={(event) => setFormation(event)} style={{ width: '100%' }}>
-                      {formations.map((item) => {
-                        return (
-                          <Select.Option key={item.value} value={item.value}>
-                            {item.title}
-                          </Select.Option>
-                        )
-                      })}
-                    </Select>
-                  </div>
+                      <div className='calculator-title'>
+                        高级选项
+                      </div>
 
-                  <div className='calculator-item'>
-                    <div className='calculator-item-title'>套装</div>
-                    <Select
-                      value={setBoenus}
-                      onChange={(value) => setSetBoenus(value)}
-                      style={{ width: '100%' }}>
-                      {SetBoenus.map((item) => {
-                        return (
-                          <Select.Option key={item.value} value={item.value}>
-                            {item.title}
-                          </Select.Option>
-                        )
-                      })}
-                    </Select>
-                  </div>
+                      <div className='calculator-item'>
+                        <div className='calculator-item-title'>阵法</div>
+                        <Select value={formation} onChange={(event) => setFormation(event)} style={{ width: '100%' }}>
+                          {formations.map((item) => {
+                            return (
+                              <Select.Option key={item.value} value={item.value}>
+                                {item.title}
+                              </Select.Option>
+                            )
+                          })}
+                        </Select>
+                      </div>
 
-                  <div className='calculator-item'>
-                    <div className='calculator-item-title'>技能增益</div>
-                    <Select
-                      value={teamSkill}
-                      mode='multiple'
-                      onChange={(value) => setTeamSkill(value)}
-                      style={{ width: '100%' }}>
-                      {TeamSkills.map((item) => {
-                        return (
-                          <Select.Option key={item.value} value={item.value}>
-                            {item.title}
-                          </Select.Option>
-                        )
-                      })}
-                    </Select>
-                  </div>
+                      <div className='calculator-item'>
+                        <div className='calculator-item-title'>套装</div>
+                        <Select
+                          value={setBoenus}
+                          onChange={(value) => setSetBoenus(value)}
+                          style={{ width: '100%' }}>
+                          {SetBoenus.map((item) => {
+                            return (
+                              <Select.Option key={item.value} value={item.value}>
+                                {item.title}
+                              </Select.Option>
+                            )
+                          })}
+                        </Select>
+                      </div>
 
-                  <div className='calculator-item'>
-                    <div className='calculator-item-title'>团队辅助</div>
-                    <Select
-                      value={groupSkill}
-                      mode='multiple'
-                      onChange={(value) => setGroupSkill(value)}
-                      style={{ width: '100%' }}>
-                      {GroupSkills.map((item) => {
-                        return (
-                          <Select.Option key={item.value} value={item.value}>
-                            {item.title}
-                          </Select.Option>
-                        )
-                      })}
-                    </Select>
-                  </div>
-                </div>
-              )}
+                      <div className='calculator-item'>
+                        <div className='calculator-item-title'>技能增益</div>
+                        <Select
+                          value={teamSkill}
+                          mode='multiple'
+                          onChange={(value) => setTeamSkill(value)}
+                          style={{ width: '100%' }}>
+                          {TeamSkills.map((item) => {
+                            return (
+                              <Select.Option key={item.value} value={item.value}>
+                                {item.title}
+                              </Select.Option>
+                            )
+                          })}
+                        </Select>
+                      </div>
+
+                      <div className='calculator-item'>
+                        <div className='calculator-item-title'>团队辅助</div>
+                        <Select
+                          value={groupSkill}
+                          mode='multiple'
+                          onChange={(value) => setGroupSkill(value)}
+                          style={{ width: '100%' }}>
+                          {GroupSkills.map((item) => {
+                            return (
+                              <Select.Option key={item.value} value={item.value}>
+                                {item.title}
+                              </Select.Option>
+                            )
+                          })}
+                        </Select>
+                      </div>
+                    </div>
+                  ) : <div />
+                }}
+              </TransitionMotion>
 
               <div className='calculator-options-button' onClick={() => toogleBox()}>
                 <CaretRightOutlined style={{ transform: `rotate(${interpolatedStyle.motionTranslateY}deg)` }} />
@@ -287,13 +309,31 @@ function CalculatorPage() {
       {
         result !== undefined && !!result.dps
           ? <DetailPage data={result} gameClass={gm} icons={skillIcons} />
-          : <div className='calculator-loading'>
-            <img src={gm.icon} />
-            <span style={{ backgroundColor: `rgba(${gm.color.join(', ')})` }} />
+          : <div style={{ display: 'flex', flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+            <div className='calculator-loading'>
+              <img src={gm.icon} />
+              <span style={{ backgroundColor: `rgba(${gm.color.join(', ')})` }} />
+            </div>
           </div>
       }
+
+      <Bate />
     </div>
   );
+}
+
+function Bate() {
+
+  return (
+    <Tooltip
+      title='测试版计算器 加速等属性的计算以及小吃、特效武器、更多技能的高级选项将逐步更新！在做了在做了！'
+    >
+      <div className='calculator-bate'>
+        <span style={{ marginRight: 10 }}>Bate</span>
+        <InfoCircleOutlined style={{ color: '#ffffff' }} />
+      </div>
+    </Tooltip>
+  )
 }
 
 export default CalculatorPage;

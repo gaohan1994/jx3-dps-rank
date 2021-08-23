@@ -52,6 +52,11 @@ export const UserAttributeKeys = [
   {
     value: 'JiaSu',
     title: '加速',
+    suffix: (
+      <Tooltip title="目前暂未实现加速计算 后续开放" >
+        <InfoCircleOutlined style={{ color: 'rgba(0,0,0,.45)' }} />
+      </Tooltip>
+    )
   },
   {
     value: 'WuQiShangHai',

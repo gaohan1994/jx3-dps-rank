@@ -5,6 +5,7 @@
   display: flex;
   flex-direction: row;
   box-sizing: border-box;
+  position: relative;
 }
 
 .calculator-button {
@@ -46,8 +47,23 @@
 }
 
 .calculator-loading {
-  display: flex;
-  flex: 1;
   align-items: center;
   justify-content: center;
+  animation: rotate 15s linear infinite;
+}
+
+@keyframes rotate {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(359deg);
+  }
+}
+
+.calculator-bate {
+  position: fixed;
+  right: 20px;
+  bottom: 20px;
+  font-size: 20px;
 }
