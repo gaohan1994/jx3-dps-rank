@@ -46,7 +46,6 @@ function CalculatorPage() {
   const [groupSkill, setGroupSkill] = useState([]);
 
 
-
   /**
    * 盒子宽度
    * 
@@ -329,7 +328,10 @@ function Bate() {
       title='测试版计算器 加速等属性的计算以及小吃、特效武器、更多技能的高级选项将逐步更新！在做了在做了！'
     >
       <div className='calculator-bate'>
-        <span style={{ marginRight: 10 }}>Bate</span>
+        <span>作者：道灵</span>
+        <span>有问题请加QQ: 871418277</span>
+        <span>特别感谢秃不得、老萧</span>
+        <span>Bate</span>
         <InfoCircleOutlined style={{ color: '#ffffff' }} />
       </div>
     </Tooltip>
