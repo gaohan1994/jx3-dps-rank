@@ -18,16 +18,21 @@
   position: absolute;
   bottom: 20px;
   left: 20px;
+  display: flex;
+  flex-direction: row;
+  /* justify-content: center; */
+  align-items: center;
   cursor: pointer;
   color: #1890ff;
 }
 
 .calculator-more-box {
   position: absolute;
+  overflow: auto;
   right: 20px;
   top: 20px;
   bottom: 20px;
-  width: 50%;
+  width: 55%;
 }
 
 .calculator-title {

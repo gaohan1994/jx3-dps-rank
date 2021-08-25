@@ -56,7 +56,8 @@ export const UserAttributeKeys = [
       <Tooltip title="目前暂未实现加速计算 后续开放" >
         <InfoCircleOutlined style={{ color: 'rgba(0,0,0,.45)' }} />
       </Tooltip>
-    )
+    ),
+    nullToken: true,
   },
   {
     value: 'WuQiShangHai',
@@ -66,7 +67,7 @@ export const UserAttributeKeys = [
         <InfoCircleOutlined style={{ color: 'rgba(0,0,0,.45)' }} />
       </Tooltip>
     ),
-    nullToken: false
+    nullToken: true
   },
 ];
 
