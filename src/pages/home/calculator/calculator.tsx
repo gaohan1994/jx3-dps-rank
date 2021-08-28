@@ -257,7 +257,7 @@ function CalculatorPage() {
 
       jx3Dps.support.showGain();
 
-      toogleBox(false);
+      // toogleBox(false);
       setLoading(true);
 
       setTimeout(() => {

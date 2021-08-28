@@ -1,4 +1,3 @@
-import { } from 'jx3-dps-core';
 import BaseDpsItem from '../../../component/base-dps-item';
 import { GameClass } from '../../../core/config';
 import numeral from 'numeral';
@@ -23,11 +22,14 @@ function DetailPage(props: Props) {
 
   useLayoutEffect(() => {
     const chartsDom = document.getElementById("echarts-main");
+
     const myCharts = echarts.init(chartsDom as any);
+    myCharts.resize();
     setMycharts(myCharts);
-  }, []);
+  }, [data]);
 
   useEffect(() => {
+
     if (mycharts && mycharts.setOption && skills.length > 0) {
 
       let chartsData = []
