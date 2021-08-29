@@ -29,7 +29,6 @@ function DetailPage(props: Props) {
   }, [data]);
 
   useEffect(() => {
-
     if (mycharts && mycharts.setOption && skills.length > 0) {
 
       let chartsData = []

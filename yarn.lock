@@ -7287,10 +7287,10 @@ jsprim@^1.2.2:
     array-includes "^3.1.2"
     object.assign "^4.1.2"
 
-jx3-dps-core@^0.0.5:
-  version "0.0.5"
-  resolved "https://registry.nlark.com/jx3-dps-core/download/jx3-dps-core-0.0.5.tgz#f63f66ce3b6f713c122761b0ba3d42cc124751ed"
-  integrity sha1-9j9mzjtvcTwSJ2Gwuj1CzBJHUe0=
+jx3-dps-core@^0.0.7:
+  version "0.0.7"
+  resolved "https://registry.nlark.com/jx3-dps-core/download/jx3-dps-core-0.0.7.tgz?cache=0&sync_timestamp=1630230460258&other_urls=https%3A%2F%2Fregistry.nlark.com%2Fjx3-dps-core%2Fdownload%2Fjx3-dps-core-0.0.7.tgz#17b60dfa2facda99a157be30e1f44a2218c56642"
+  integrity sha1-F7YN+i+s2pmhV74w4fRKIhjFZkI=
   dependencies:
     "@babel/core" "^7.15.0"
     "@types/invariant" "^2.2.34"

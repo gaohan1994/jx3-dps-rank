@@ -3,7 +3,6 @@ import Rank from '../../component/rank';
 import { GameProfessions } from '../../core/config';
 import GameCore from '../../core/game';
 import '../css/index.css';
-import { EquipmentSelect } from './component/select';
 
 
 function Home() {

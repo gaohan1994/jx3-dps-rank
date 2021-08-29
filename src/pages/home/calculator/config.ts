@@ -1,10 +1,17 @@
-import img1 from '../../../assets/assets-shaolin/10.png';
-import img2 from '../../../assets/assets-shaolin/16.png';
-import img3 from '../../../assets/assets-shaolin/29.png';
-import img4 from '../../../assets/assets-shaolin/37.png';
-import img5 from '../../../assets/assets-shaolin/42.png';
 
 import { CoreHelper } from 'jx3-dps-core';
+
+// import img1 from '../../../assets/assets-shaolin/10.png';
+const img1 = '';
+// import img2 from '../../../assets/assets-shaolin/16.png';
+const img2 = '';
+// import img3 from '../../../assets/assets-shaolin/29.png';
+const img3 = '';
+// import img4 from '../../../assets/assets-shaolin/37.png';
+const img4 = '';
+// import img5 from '../../../assets/assets-shaolin/42.png';
+const img5 = '';
+
 
 export const GroupSkills = [
   // {
@@ -104,6 +111,10 @@ export const Weapons = [
     value: CoreHelper.Weapons.Normal
   },
   {
+    title: '橙武',
+    value: CoreHelper.Weapons.CW,
+  },
+  {
     title: '水特效武器',
     value: CoreHelper.Weapons.EffectWather
   },
@@ -160,12 +171,12 @@ export const FoodEnchance = [
     value: ''
   },
   {
-    title: '白肉血肠 破招+695',
-    value: CoreHelper.Food.FoodEnhance.BaiRouXueChang
-  },
-  {
     title: '灌汤包 基础攻击+374',
     value: CoreHelper.Food.FoodEnhance.GuanTangBao
+  },
+  {
+    title: '白肉血肠 破招+695',
+    value: CoreHelper.Food.FoodEnhance.BaiRouXueChang
   },
   {
     title: '红烧排骨 破防+695',
@@ -194,6 +205,10 @@ export const DrugEnhance = [
     value: ''
   },
   {
+    title: '上品展凤丹 基础+481',
+    value: CoreHelper.Food.DrugEnhance.ShangPinZhanFengDan
+  },
+  {
     title: '上品凝神散 破招+894',
     value: CoreHelper.Food.DrugEnhance.ShangPinNingShenSan
   },
@@ -204,10 +219,6 @@ export const DrugEnhance = [
   {
     title: '上品玉离散 会心+894',
     value: CoreHelper.Food.DrugEnhance.ShangPinYuLiSan
-  },
-  {
-    title: '上品展凤丹 基础+481',
-    value: CoreHelper.Food.DrugEnhance.ShangPinZhanFengDan
   },
 ];
 

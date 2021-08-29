@@ -4,6 +4,8 @@
 :root {
   --fontWeight-nunito-regular: 400;
   --fontFamily-nunito: 'Nunito', sans-serif;
+
+  --primary-bg-color: #252c37;
 }
 
 @font-face {

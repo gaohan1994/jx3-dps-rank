@@ -1,6 +1,6 @@
-import Jx3DpsCore from "jx3-dps-core";
+import Jx3DpsCore, { CoreHelper } from "jx3-dps-core";
 import { useEffect, useLayoutEffect, useState } from "react";
-import { Button, Card, Input, notification, Select, Tooltip, Switch, Modal } from 'antd'
+import { Button, Card, Input, notification, Select, Tooltip, Switch, Modal, Slider } from 'antd'
 import { CaretRightOutlined, InfoCircleOutlined } from '@ant-design/icons'
 import './index.css';
 import { Motion, spring, presets, TransitionMotion } from 'react-motion'
@@ -19,8 +19,9 @@ const BoxWidthConfig = {
 }
 
 const ModeConfig = {
-  Normal: '木桩模式',
+  Normal: '普通模式',
   Fight: '实战模式',
+  Max: '最大值模式',
 }
 
 function CalculatorPage() {
@@ -43,7 +44,7 @@ function CalculatorPage() {
         HuiXiao: 0,
         PoFang: 0,
         PoZhao: 0,
-        JiaSu: 0,
+        JiaSu: CoreHelper.JiaSuList.YiDuanJiaSu,
         WuShuang: 0,
         YuanQi: 0,
       }
@@ -54,7 +55,7 @@ function CalculatorPage() {
         HuiXiao: 176.98,
         PoFang: 39,
         PoZhao: 4117,
-        JiaSu: 4,
+        JiaSu: CoreHelper.JiaSuList.YiDuanJiaSu,
         WuShuang: 43.62,
         YuanQi: 2623,
       }
@@ -74,6 +75,8 @@ function CalculatorPage() {
   const [drugEnhance, setDrugEnhance] = useState('');
   const [drugSupport, setDrugSupport] = useState('');
   const [target, setTarget] = useState(Target[0].value);
+
+  const [cwTimes, setCWTimes] = useState(3);
 
   /**
    * 盒子宽度
@@ -148,6 +151,21 @@ function CalculatorPage() {
       setDrugEnhance(DrugEnhance[1].value);
       setDrugSupport(DrugSupport[1].value);
       setTarget(Target[3].value);
+    } else if (mode === ModeConfig.Max) {
+      setUserAttr({ target: 'JiaSu', value: CoreHelper.JiaSuList.ErDuanJiaSu });
+      setFormation(Formations[4].value);
+      setSetBoenus(SetBoenus[1].value);
+      setTeamSkill(TeamSkills.map((item) => item.value));
+      setGroupSkill(GroupSkills.map((item) => item.value));
+      setWeapon(CoreHelper.Weapons.CW);
+      setenchant(EnChants.map((item) => item.value));
+      setSpine(true);
+      setBanquet(Banquet.map((item) => item.value));
+      setFoodEnchance(FoodEnchance[1].value);
+      setFoodSupport(FoodSupport[1].value);
+      setDrugEnhance(DrugEnhance[1].value);
+      setDrugSupport(DrugSupport[1].value);
+      setTarget(Target[3].value);
     }
   }, [mode]);
 
@@ -187,7 +205,10 @@ function CalculatorPage() {
         /**
          * 属性转化成number
          */
-        coreValue[currentAttr.value] = numeral(core[currentAttr.value]).value() || 0;
+        if (currentAttr.title !== '加速') {
+          coreValue[currentAttr.value] = numeral(core[currentAttr.value]).value();
+        }
+        coreValue[currentAttr.value] = core[currentAttr.value];
       }
 
       const jx3Dps = new Jx3DpsCore.YiJinJing({
@@ -197,7 +218,8 @@ function CalculatorPage() {
         },
         support: {
           mode: "NeiGong",
-          target: target
+          target: target,
+          CWTimes: cwTimes,
         }
       });
 
@@ -255,9 +277,8 @@ function CalculatorPage() {
 
       const result = await jx3Dps.total();
 
-      jx3Dps.support.showGain();
+      // jx3Dps.support.showGain();
 
-      // toogleBox(false);
       setLoading(true);
 
       setTimeout(() => {
@@ -287,19 +308,38 @@ function CalculatorPage() {
 
                 {UserAttributeKeys.map((attr) => {
                   const { value, title, ...rest } = attr;
+                  if (title !== '加速') {
+                    return (
+                      <div key={value} className='calculator-item'>
+                        <div className='calculator-item-title'>{title}</div>
+                        <Input
+                          {...rest}
+                          value={core[value]}
+                          onChange={(event) => {
+                            setUserAttr({ target: value, value: event.target.value })
+                          }}
+                        />
+                      </div>
+                    );
+                  }
                   return (
                     <div key={value} className='calculator-item'>
                       <div className='calculator-item-title'>{title}</div>
-                      <Input
-                        {...rest}
-                        value={core[value]}
-                        onChange={(event) => {
-                          setUserAttr({ target: value, value: event.target.value })
-                        }}
-                      />
+                      <Select value={core[value]} onChange={(event) => setUserAttr({ target: value, value: event })} style={{ width: '100%' }}>
+                        <Select.Option value={CoreHelper.JiaSuList.YiDuanJiaSu}>
+                          一段加速
+                        </Select.Option>
+                        <Select.Option value={CoreHelper.JiaSuList.ErDuanJiaSu}>
+                          二段加速
+                        </Select.Option>
+                      </Select>
                     </div>
-                  );
+                  )
                 })}
+
+                <div className='calculator-tips'>
+                  如果您输入的角色属性是已经吃过小吃、桌子等增益之后的面板了，请勿在高级选项中再次勾选，否则计算出来的结果会高很多
+                </div>
 
               </div>
 
@@ -366,6 +406,19 @@ function CalculatorPage() {
                           })}
                         </Select>
                       </div>
+
+                      {weapon === CoreHelper.Weapons.CW && (
+                        <div className='calculator-item'>
+                          <div className='calculator-item-title'>橙武次数</div>
+                          <Slider
+                            style={{ width: '100%' }}
+                            min={0}
+                            max={6}
+                            value={cwTimes}
+                            onChange={value => setCWTimes(value)}
+                          />
+                        </div>
+                      )}
 
                       <div className='calculator-item'>
                         <div className='calculator-item-title'>套装</div>
@@ -536,6 +589,9 @@ function CalculatorPage() {
                   onChange={(value) => onChangeMode(value)}
                   style={{ marginLeft: 20 }}
                 >
+                  <Select.Option value={ModeConfig.Max}>
+                    {ModeConfig.Max}
+                  </Select.Option>
                   <Select.Option value={ModeConfig.Fight}>
                     {ModeConfig.Fight}
                   </Select.Option>
@@ -581,7 +637,7 @@ function Bate() {
 
   return (
     <Tooltip
-      title='测试版计算器 加速等属性的计算以及小吃、特效武器、更多技能的高级选项将逐步更新！在做了在做了！'
+      title='测试版计算器 后续开放历史记录等功能'
     >
       <div className='calculator-bate'>
         <span>作者：道灵</span>

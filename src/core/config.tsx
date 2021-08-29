@@ -1,16 +1,24 @@
 import { Tooltip } from 'antd';
 import { InfoCircleOutlined } from '@ant-design/icons';
 import sl_yjj from '../assets/sl_yjj.png';
-import cy_txjy from '../assets/cy_txjy.png';
-import cy_zxg from '../assets/cy_zxg.png';
-import lx_yl from '../assets/lx-yl.png';
-import pl_lh from '../assets/pl-lx.png';
-import cg_mw from '../assets/cg-mw.png';
-import bd_ba from '../assets/bg-ba.png';
-import cy_fs from '../assets/cy-fs.png';
-
 import { GameProfessionNames } from './profession';
 import { GameClassesNames } from './classes';
+
+// import cy_txjy from '../assets/cy_txjy.png';
+const cy_txjy = '';
+// import cy_zxg from '../assets/cy_zxg.png';
+const cy_zxg = '';
+// import lx_yl from '../assets/lx-yl.png';
+const lx_yl = '';
+// import pl_lh from '../assets/pl-lx.png';
+const pl_lh = '';
+// import cg_mw from '../assets/cg-mw.png';
+const cg_mw = '';
+// import bd_ba from '../assets/bg-ba.png';
+const bd_ba = '';
+// import cy_fs from '../assets/cy-fs.png';
+const cy_fs = '';
+
 
 /**
  * 人物属性值

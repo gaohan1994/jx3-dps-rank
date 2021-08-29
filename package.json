@@ -11,7 +11,7 @@
     "antd": "^4.16.10",
     "echarts": "^5.1.2",
     "invariant": "^2.2.4",
-    "jx3-dps-core": "^0.0.5",
+    "jx3-dps-core": "^0.0.7",
     "lodash": "^4.17.21",
     "numeral": "^2.0.6",
     "react": "^17.0.2",
@@ -47,8 +47,6 @@
     ]
   },
   "devDependencies": {
-    "cheerio": "^1.0.0-rc.10",
-    "request": "^2.88.2",
     "@types/invariant": "^2.2.34",
     "@types/jest": "^26.0.15",
     "@types/node": "^12.0.0",
@@ -56,6 +54,8 @@
     "@types/react": "^17.0.0",
     "@types/react-dom": "^17.0.0",
     "@types/react-motion": "^0.0.31",
-    "@types/react-router-dom": "^5.1.8"
+    "@types/react-router-dom": "^5.1.8",
+    "cheerio": "^1.0.0-rc.10",
+    "request": "^2.88.2"
   }
 }
