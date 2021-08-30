@@ -8,6 +8,28 @@
   position: relative;
 }
 
+.calculator-header {
+  position: absolute;
+  top: 0px;
+  left: 50%;
+  transform: translateX(-50%);
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+
+.calculator-header-title {
+  font-weight: bold;
+  font-size: 14px;
+}
+
+.calculator-header-tip {
+  position: absolute;
+  right: 0;
+}
+
 .calculator-button {
   position: absolute;
   bottom: 20px;

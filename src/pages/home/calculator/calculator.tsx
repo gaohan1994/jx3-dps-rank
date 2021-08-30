@@ -12,6 +12,7 @@ import {
   skillIcons, Formations, SetBoenus, TeamSkills, GroupSkills, Weapons, EnChants, Spine, Banquet,
   FoodEnchance, FoodSupport, DrugEnhance, DrugSupport, Target
 } from "./config";
+import CalculatorTitle from "./title";
 
 const BoxWidthConfig = {
   min: 300,
@@ -29,7 +30,7 @@ function CalculatorPage() {
   const [loading, setLoading] = useState(false);
 
   useLayoutEffect(() => {
-    document.title = '剑网三DPS计算器'
+    document.title = '剑网三 少林 易筋经 计算器'
   }, []);
 
   /**
@@ -142,7 +143,7 @@ function CalculatorPage() {
       setSetBoenus(SetBoenus[1].value);
       setTeamSkill(TeamSkills.map((item) => item.value));
       setGroupSkill(GroupSkills.map((item) => item.value));
-      setWeapon(Weapons[1].value);
+      setWeapon(Weapons[2].value);
       setenchant(EnChants.map((item) => item.value));
       setSpine(true);
       setBanquet(Banquet.map((item) => item.value));
@@ -297,6 +298,7 @@ function CalculatorPage() {
 
   return (
     <div className='calculator-home'>
+      <CalculatorTitle />
       <Motion style={{ motionWidth: spring(boxWidth, presets.gentle), motionTranslateY: spring(translateY) }}>
         {interpolatedStyle => {
           return (
@@ -637,13 +639,11 @@ function Bate() {
 
   return (
     <Tooltip
-      title='测试版计算器 后续开放历史记录等功能'
+      title='测试版计算器 后续开放历史记录等功能 特别感谢秃不得、老萧'
     >
       <div className='calculator-bate'>
-        <span>作者：道灵</span>
-        <span>有问题请加QQ: 871418277</span>
-        <span>特别感谢秃不得、老萧</span>
-        <span>Bate</span>
+        <span>道灵</span>
+        <span>QQ: 871418277</span>
         <InfoCircleOutlined style={{ color: '#ffffff' }} />
       </div>
     </Tooltip>

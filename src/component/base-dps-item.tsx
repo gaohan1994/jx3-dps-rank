@@ -1,4 +1,5 @@
 import numeral from "numeral";
+import './rank.css';
 
 type Props = {
   index: any;
