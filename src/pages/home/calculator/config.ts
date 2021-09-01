@@ -1,31 +1,18 @@
 
 import { CoreHelper } from 'jx3-dps-core';
 
-// import img1 from '../../../assets/assets-shaolin/10.png';
 const img1 = '';
-// import img2 from '../../../assets/assets-shaolin/16.png';
 const img2 = '';
-// import img3 from '../../../assets/assets-shaolin/29.png';
 const img3 = '';
-// import img4 from '../../../assets/assets-shaolin/37.png';
 const img4 = '';
-// import img5 from '../../../assets/assets-shaolin/42.png';
 const img5 = '';
 
 
 export const GroupSkills = [
-  // {
-  //   title: '弘法',
-  //   value: CoreHelper.GroupSkills.HongFa
-  // },
   {
     title: '立地成佛',
     value: CoreHelper.GroupSkills.LiDiChengFo
   },
-  // {
-  //   title: '朝圣言',
-  //   value: CoreHelper.GroupSkills.ChaoShengYan
-  // },
   {
     title: '戒火斩',
     value: CoreHelper.GroupSkills.JieHuoZhan
@@ -42,9 +29,10 @@ export const GroupSkills = [
   //   title: '号令三军',
   //   value: CoreHelper.GroupSkills.HaoLingSanJun
   // },
+
   // {
-  //   title: '梅花盾',
-  //   value: CoreHelper.GroupSkills.MeiHuaDun
+  //   title: '朝圣言',
+  //   value: CoreHelper.GroupSkills.ChaoShengYan
   // },
 ];
 
@@ -103,6 +91,10 @@ export const Formations = [
     title: '田螺阵',
     value: CoreHelper.Formations.TianLuoZhen
   },
+  {
+    title: '莫问阵',
+    value: CoreHelper.Formations.MoWenZhen
+  }
 ];
 
 export const Weapons = [

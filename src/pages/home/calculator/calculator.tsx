@@ -76,8 +76,19 @@ function CalculatorPage() {
   const [drugEnhance, setDrugEnhance] = useState('');
   const [drugSupport, setDrugSupport] = useState('');
   const [target, setTarget] = useState(Target[0].value);
-
   const [cwTimes, setCWTimes] = useState(3);
+
+  /**
+   * 弘法相关
+   */
+  const [hongFa, setHongFa] = useState(false);
+  const [hongFaPercent, setHongFaPercent] = useState(40);
+
+  /**
+   * 梅花盾相关
+   */
+  const [meiHuaDun, setMeiHuaDun] = useState(false);
+  const [meiHuaDunPercent, setMeiHuaDunPercent] = useState(80);
 
   /**
    * 盒子宽度
@@ -138,11 +149,14 @@ function CalculatorPage() {
       setDrugEnhance('');
       setDrugSupport('');
       setTarget(Target[0].value);
+
+      setHongFa(false);
+      setMeiHuaDun(false);
     } else if (mode === ModeConfig.Fight) {
       setFormation(Formations[4].value);
       setSetBoenus(SetBoenus[1].value);
       setTeamSkill(TeamSkills.map((item) => item.value));
-      setGroupSkill(GroupSkills.map((item) => item.value));
+      setGroupSkill([GroupSkills[0].value, GroupSkills[1].value, GroupSkills[2].value,]);
       setWeapon(Weapons[2].value);
       setenchant(EnChants.map((item) => item.value));
       setSpine(true);
@@ -152,6 +166,9 @@ function CalculatorPage() {
       setDrugEnhance(DrugEnhance[1].value);
       setDrugSupport(DrugSupport[1].value);
       setTarget(Target[3].value);
+
+      setHongFa(false);
+      setMeiHuaDun(false);
     } else if (mode === ModeConfig.Max) {
       setUserAttr({ target: 'JiaSu', value: CoreHelper.JiaSuList.ErDuanJiaSu });
       setFormation(Formations[4].value);
@@ -161,12 +178,15 @@ function CalculatorPage() {
       setWeapon(CoreHelper.Weapons.CW);
       setenchant(EnChants.map((item) => item.value));
       setSpine(true);
-      setBanquet(Banquet.map((item) => item.value));
+      setBanquet(Banquet.map((item) => item.value).filter(a => !!a));
       setFoodEnchance(FoodEnchance[1].value);
       setFoodSupport(FoodSupport[1].value);
       setDrugEnhance(DrugEnhance[1].value);
       setDrugSupport(DrugSupport[1].value);
       setTarget(Target[3].value);
+
+      setHongFa(true);
+      setMeiHuaDun(true);
     }
   }, [mode]);
 
@@ -270,15 +290,22 @@ function CalculatorPage() {
         supportLib.push(drugSupport);
       }
 
-      // console.log('supportLib', supportLib);
+      if (hongFa === true) {
+        jx3Dps.use(CoreHelper.GroupSkills.HongFa, { coverage: hongFaPercent / 100 })
+      }
+
+      if (meiHuaDun === true) {
+        jx3Dps.use(CoreHelper.GroupSkills.MeiHuaDun, { coverage: meiHuaDunPercent / 100 });
+      }
 
       for (let index = 0; index < supportLib.length; index++) {
-        jx3Dps.use(supportLib[index]);
+        jx3Dps.use(supportLib[index], {});
       }
 
       const result = await jx3Dps.total();
 
       // jx3Dps.support.showGain();
+      // console.log(jx3Dps.getSupportContext());
 
       setLoading(true);
 
@@ -414,7 +441,7 @@ function CalculatorPage() {
                           <div className='calculator-item-title'>橙武次数</div>
                           <Slider
                             style={{ width: '100%' }}
-                            min={0}
+                            min={1}
                             max={6}
                             value={cwTimes}
                             onChange={value => setCWTimes(value)}
@@ -575,6 +602,49 @@ function CalculatorPage() {
                           })}
                         </Select>
                       </div>
+
+                      <div className='calculator-item' style={{ justifyContent: 'space-between' }}>
+                        <div className='calculator-item-title'>舍身弘法</div>
+                        <Switch
+                          checked={hongFa}
+                          onChange={(value) => setHongFa(value)}
+                        />
+                      </div>
+
+                      {hongFa && (
+                        <div className='calculator-item'>
+                          <div className='calculator-item-title'>覆盖率%</div>
+                          <Slider
+                            style={{ width: '100%' }}
+                            min={1}
+                            max={100}
+                            value={hongFaPercent}
+                            onChange={value => setHongFaPercent(value)}
+                          />
+                        </div>
+                      )}
+
+                      <div className='calculator-item' style={{ justifyContent: 'space-between' }}>
+                        <div className='calculator-item-title'>梅花盾</div>
+                        <Switch
+                          checked={meiHuaDun}
+                          onChange={(value) => setMeiHuaDun(value)}
+                        />
+                      </div>
+                      {meiHuaDun && (
+                        <div className='calculator-item'>
+                          <div className='calculator-item-title'>覆盖率%</div>
+                          <Slider
+                            style={{ width: '100%' }}
+                            min={1}
+                            max={100}
+                            value={meiHuaDunPercent}
+                            onChange={value => setMeiHuaDunPercent(value)}
+                          />
+                        </div>
+                      )}
+
+
                     </div>
                   ) : <div />
                 }}

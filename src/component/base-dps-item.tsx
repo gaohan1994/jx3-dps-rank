@@ -9,6 +9,7 @@ type Props = {
   percent?: number | string;
   subName?: string;
   color?: string;
+  extra?: any;
 }
 /**
  * Rank 组件
@@ -17,7 +18,7 @@ type Props = {
  * @return {*} 
  */
 function BaseDpsItem(props: Props) {
-  const { index, icon, name, subName, value, percent, color } = props;
+  const { index, icon, name, subName, value, percent, color, extra } = props;
 
   const showValue = numeral(value).format('0,000');
 
@@ -41,6 +42,7 @@ function BaseDpsItem(props: Props) {
           <span>
             {`${showValue}`}
           </span>
+          {extra}
           {percent && (
             <div className='rank-box'>
               <span className='rank-pa'>

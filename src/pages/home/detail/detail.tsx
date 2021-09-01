@@ -100,6 +100,8 @@ function DetailPage(props: Props) {
     }
   }, [mycharts, skills]);
 
+  const SClass = numeral(data.dps * 1.03).format('0,000');
+
   return (
     <div className='detail-page'>
       {data && (
@@ -109,6 +111,11 @@ function DetailPage(props: Props) {
           name={`${gameClass.professionName} - ${gameClass.className}`}
           value={data.dps}
           color={gameClass.color.join(', ')}
+          extra={(
+            <span className='s-class'>
+              S：{SClass}
+            </span>
+          )}
         />
       )}
 
