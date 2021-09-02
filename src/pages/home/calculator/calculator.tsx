@@ -50,15 +50,15 @@ function CalculatorPage() {
         YuanQi: 0,
       }
       : {
-        JiChuGongJi: 14816,
+        JiChuGongJi: 14470,
         WuQiShangHai: 1998,
-        HuiXin: 23.58,
-        HuiXiao: 176.98,
-        PoFang: 39,
-        PoZhao: 4117,
+        HuiXin: 19.05,
+        HuiXiao: 175.77,
+        PoFang: 38.01,
+        PoZhao: 4130,
+        WuShuang: 54.06,
+        YuanQi: 2880,
         JiaSu: CoreHelper.JiaSuList.YiDuanJiaSu,
-        WuShuang: 43.62,
-        YuanQi: 2623,
       }
   );
 
@@ -712,7 +712,7 @@ function Bate() {
       title='测试版计算器 后续开放历史记录等功能 特别感谢秃不得、老萧'
     >
       <div className='calculator-bate'>
-        <span>道灵</span>
+        <span>道灵、秃酱</span>
         <span>QQ: 871418277</span>
         <InfoCircleOutlined style={{ color: '#ffffff' }} />
       </div>

@@ -11,7 +11,7 @@
     "antd": "^4.16.10",
     "echarts": "^5.1.2",
     "invariant": "^2.2.4",
-    "jx3-dps-core": "^1.0.1",
+    "jx3-dps-core": "^1.0.2",
     "lodash": "^4.17.21",
     "numeral": "^2.0.6",
     "react": "^17.0.2",

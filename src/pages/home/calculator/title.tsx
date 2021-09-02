@@ -8,6 +8,7 @@ function CalculatorTitle() {
   const [visible, setVisible] = useState(false);
 
   const data = [
+    '修复和尚阵、气纯阵、莫问阵无双少加bug',
     '新增梅花盾、弘法',
     '修复无视内防计算方式',
     '更新 少林侠士3%增伤 2021-08-30',
