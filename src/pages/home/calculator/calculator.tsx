@@ -13,6 +13,7 @@ import {
   FoodEnchance, FoodSupport, DrugEnhance, DrugSupport, Target
 } from "./config";
 import CalculatorTitle from "./title";
+import cache from "../../../core/cache";
 
 const BoxWidthConfig = {
   min: 300,
@@ -36,7 +37,7 @@ function CalculatorPage() {
   /**
    * 设置人物属性
    */
-  const [core, { setUserAttr }] = useUserAttribute(
+  const [core, { setUserAttr, replaceUserAttr }] = useUserAttribute(
     process.env.NODE_ENV === 'production'
       ? {
         JiChuGongJi: 0,
@@ -206,6 +207,49 @@ function CalculatorPage() {
   }
 
   /**
+   * 导入人物历史记录
+   */
+  const onImport = () => {
+    const token = cache.hasLastCore();
+    if (!token) {
+      notification.error({
+        message: '导入失败',
+        description: '没有历史记录'
+      });
+      return;
+    }
+
+    const core = cache.getLastCore();
+    replaceUserAttr(core);
+  }
+
+  /**
+   * 清空人物数据
+   *
+   */
+  const onReset = () => {
+    Modal.confirm({
+      title: '清空角色属性',
+      content: '确定清空角色属性吗？',
+      okText: '确定',
+      cancelText: '取消',
+      onOk: () => {
+        replaceUserAttr({
+          JiChuGongJi: 0,
+          WuQiShangHai: 2000,
+          HuiXin: 0,
+          HuiXiao: 0,
+          PoFang: 0,
+          PoZhao: 0,
+          JiaSu: CoreHelper.JiaSuList.YiDuanJiaSu,
+          WuShuang: 0,
+          YuanQi: 0,
+        })
+      }
+    });
+  }
+
+  /**
    * 计算dps
    *
    */
@@ -243,6 +287,8 @@ function CalculatorPage() {
           CWTimes: cwTimes,
         }
       });
+
+      cache.saveCoreAttributes(coreValue);
 
       /**
        * 增益库
@@ -304,9 +350,6 @@ function CalculatorPage() {
 
       const result = await jx3Dps.total();
 
-      // jx3Dps.support.showGain();
-      // console.log(jx3Dps.getSupportContext());
-
       setLoading(true);
 
       setTimeout(() => {
@@ -365,6 +408,10 @@ function CalculatorPage() {
                     </div>
                   )
                 })}
+                <div className='calculator-bar'>
+                  <Button type='primary' onClick={onImport}>导入角色属性</Button>
+                  <Button onClick={onReset}>清空角色属性</Button>
+                </div>
 
                 <div className='calculator-tips'>
                   如果您输入的角色属性是已经吃过小吃、桌子等增益之后的面板了，请勿在高级选项中再次勾选，否则计算出来的结果会高很多

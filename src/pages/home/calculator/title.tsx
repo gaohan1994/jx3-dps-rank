@@ -39,7 +39,7 @@ function CalculatorTitle() {
         <Timeline>
           {data.map((item) => {
             return (
-              <Timeline.Item>{item}</Timeline.Item>
+              <Timeline.Item key={item}>{item}</Timeline.Item>
             )
           })}
         </Timeline>

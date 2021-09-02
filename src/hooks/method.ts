@@ -55,9 +55,22 @@ interface UserAttributeMethod {
  */
 const userAttributeMethods: { [name: string]: UserAttributeMethod } = {
 
+  /**
+   * 设置角色属性
+   */
   setUserAttr(state, payload) {
     state[payload.target as keyof DpsCore] = payload.value;
     return { ...state };
+  },
+
+  /**
+   * 重置角色属性
+   */
+  replaceUserAttr(state, payload) {
+    return {
+      ...state,
+      ...payload
+    };
   }
 }
 
