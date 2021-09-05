@@ -3,17 +3,18 @@ import { GameClass } from '../../../core/config';
 import numeral from 'numeral';
 import './index.css';
 import { useEffect, useLayoutEffect, useState } from 'react';
-
 import * as echarts from 'echarts';
+import ProfitPage from '../calculator/profit';
 
 type Props = {
   data: any;
   gameClass: GameClass;
   icons?: any;
+  controller?: any;
 }
 
 function DetailPage(props: Props) {
-  const { data, gameClass, icons = {} } = props;
+  const { data, gameClass, icons = {}, controller } = props;
 
   const [mycharts, setMycharts] = useState({} as echarts.ECharts);
 
@@ -112,9 +113,14 @@ function DetailPage(props: Props) {
           value={data.dps}
           color={gameClass.color.join(', ')}
           extra={(
-            <span className='s-class'>
-              S：{SClass}
-            </span>
+            <>
+              <span className='s-class'>
+                S：{SClass}
+              </span>
+              <div className='profit-box'>
+                {ProfitPage({ controller })}
+              </div>
+            </>
           )}
         />
       )}

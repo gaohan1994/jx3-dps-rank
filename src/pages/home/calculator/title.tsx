@@ -8,6 +8,8 @@ function CalculatorTitle() {
   const [visible, setVisible] = useState(false);
 
   const data = [
+    '新增属性收益',
+    '新增保存最近一次的人物属性',
     '修复和尚阵、气纯阵、莫问阵无双少加bug',
     '新增梅花盾、弘法',
     '修复无视内防计算方式',
@@ -20,11 +22,14 @@ function CalculatorTitle() {
   ];
 
   return (
-    <header
-      className='calculator-header'
-    >
-      <div onClick={() => setVisible(true)}>
-        <span className='calculator-header-title'>易筋经DPS计算器 Version1.0</span>
+    <>
+      <header
+        className='calculator-header'
+      >
+        <div><span className='calculator-header-title'>易筋经DPS计算器 正式版</span></div>
+      </header>
+      <div className='calculator-logs' onClick={() => setVisible(true)}>
+        更新日志
         <InfoCircleOutlined style={{ color: '#ffffff', marginLeft: 10 }} />
       </div>
       <Modal
@@ -44,7 +49,8 @@ function CalculatorTitle() {
           })}
         </Timeline>
       </Modal>
-    </header>
+    </>
+
   );
 }
 export default CalculatorTitle;

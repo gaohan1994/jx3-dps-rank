@@ -1,4 +1,4 @@
-import Jx3DpsCore, { CoreHelper } from "jx3-dps-core";
+import Jx3DpsCore, { CoreHelper, YiJinJing } from "jx3-dps-core";
 import { useEffect, useLayoutEffect, useState } from "react";
 import { Button, Card, Input, notification, Select, Tooltip, Switch, Modal, Slider } from 'antd'
 import { CaretRightOutlined, InfoCircleOutlined } from '@ant-design/icons'
@@ -14,6 +14,7 @@ import {
 } from "./config";
 import CalculatorTitle from "./title";
 import cache from "../../../core/cache";
+import Profit from "./profit";
 
 const BoxWidthConfig = {
   min: 300,
@@ -62,7 +63,8 @@ function CalculatorPage() {
         JiaSu: CoreHelper.JiaSuList.YiDuanJiaSu,
       }
   );
-
+  // Jx3DpsCore 实例
+  const [controller, setController] = useState({} as YiJinJing);
   const [mode, setMode] = useState(ModeConfig.Normal);
   const [formation, setFormation] = useState(Formations[0].value);
   const [setBoenus, setSetBoenus] = useState(SetBoenus[1].value);
@@ -350,13 +352,16 @@ function CalculatorPage() {
 
       const result = await jx3Dps.total();
 
+      // 设置实例
+      setController(jx3Dps);
+
       setLoading(true);
 
       setTimeout(() => {
         setResult(result);
         setLoading(false);
       }, 1000 * 1);
-    } catch (error) {
+    } catch (error: any) {
       notification.error({
         message: error.message,
       });
@@ -738,7 +743,7 @@ function CalculatorPage() {
 
       {
         result !== undefined && !!result.dps
-          ? <DetailPage data={result} gameClass={gm} icons={skillIcons} />
+          ? <DetailPage data={result} gameClass={gm} icons={skillIcons} controller={controller} />
           : <div style={{ display: 'flex', flex: 1, alignItems: 'center', justifyContent: 'center' }}>
             <div className='calculator-loading'>
               <img src={gm.icon} />

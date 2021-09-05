@@ -116,3 +116,11 @@
   align-items: center;
   justify-content: space-between;
 }
+
+.calculator-logs {
+  position: fixed;
+  top: 10px;
+  right: 10px;
+  font-size: 12px;
+  cursor: pointer;
+}
