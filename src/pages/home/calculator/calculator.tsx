@@ -10,11 +10,12 @@ import { GameClassesNames, GameProfessionNames, getGameClass, UserAttributeKeys 
 import { useUserAttribute } from "../../../hooks/method";
 import {
   skillIcons, Formations, SetBoenus, TeamSkills, GroupSkills, Weapons, EnChants, Spine, Banquet,
-  FoodEnchance, FoodSupport, DrugEnhance, DrugSupport, Target
+  FoodEnchance, FoodSupport, DrugEnhance, DrugSupport, Target, HomeFood
 } from "./config";
 import CalculatorTitle from "./title";
 import cache from "../../../core/cache";
-import Profit from "./profit";
+import { YiJinJingValues } from "jx3-dps-core/build/types";
+import smar from 'smar-util';
 
 const BoxWidthConfig = {
   min: 300,
@@ -52,14 +53,14 @@ function CalculatorPage() {
         YuanQi: 0,
       }
       : {
-        JiChuGongJi: 14470,
+        JiChuGongJi: 14399,
         WuQiShangHai: 1998,
-        HuiXin: 19.05,
+        HuiXin: 18.69,
         HuiXiao: 175.77,
-        PoFang: 38.01,
-        PoZhao: 4130,
-        WuShuang: 54.06,
-        YuanQi: 2880,
+        PoFang: 40.44,
+        PoZhao: 5298,
+        WuShuang: 47.49,
+        YuanQi: 2904,
         JiaSu: CoreHelper.JiaSuList.YiDuanJiaSu,
       }
   );
@@ -80,6 +81,7 @@ function CalculatorPage() {
   const [drugSupport, setDrugSupport] = useState('');
   const [target, setTarget] = useState(Target[0].value);
   const [cwTimes, setCWTimes] = useState(3);
+  const [homefood, setHomefood] = useState('');
 
   /**
    * 弘法相关
@@ -104,6 +106,79 @@ function CalculatorPage() {
    * @param translateY
    */
   const [translateY, setTranslateY] = useState(0);
+
+  /**
+   * 计算结果
+   */
+  const [result, setResult] = useState(undefined as any);
+
+  /**
+   * 如果是讲武堂成员则不用一直输入
+   */
+  const [versionToken, setVersionToken] = useState(false);
+  /**
+   * 讲武堂姓名
+   */
+  const [userName, setUserName] = useState('');
+  const [versionVisible, setVersionVisible] = useState(false);
+  /**
+   * 计算器版本
+   */
+  const [version, setCalculatorVersion] = useState(Jx3DpsCore.YiJinJing.YiJinJingVersion.Normal as YiJinJingValues);
+
+  /**
+   * 每次切换版本则重置计算结果
+   */
+  const setVersion = (value: YiJinJingValues) => {
+    setCalculatorVersion(value);
+    setResult(undefined);
+  }
+
+  /**
+   * @todo 切换模式
+   * 
+   * 1、切换成正式版不用校验
+   * 2、切换成讲武堂 校验名字
+   * 3、成功可以切换
+   */
+  const changeCalculatorVersion = async () => {
+    // 如果是从讲武堂模式切换到正式模式 则直接切换
+    if (version === Jx3DpsCore.YiJinJing.YiJinJingVersion.Immortal) {
+      setVersion(Jx3DpsCore.YiJinJing.YiJinJingVersion.Normal);
+      return;
+    }
+
+    // 如果是从正式版切换到讲武堂
+    if (versionToken === true) {
+      // 之前已经输入过讲武堂姓名校验成功
+      setVersion(Jx3DpsCore.YiJinJing.YiJinJingVersion.Immortal);
+      return;
+    }
+
+    // 显示输入框
+    setVersionVisible(true);
+  }
+
+  const onVersionInputFinish = async () => {
+    if (!userName) {
+      return;
+    }
+
+    const url = process.env.NODE_ENV === 'development'
+      ? 'http://101.132.24.127:9090/api/checkimmortal'
+      : '/api/checkimmortal';
+
+    const result = await fetch(`${url}/${userName}`, { method: 'get' }).then(res => res.json());
+    if (result.data === true) {
+      setVersion(Jx3DpsCore.YiJinJing.YiJinJingVersion.Immortal);
+      // 校验成功吧token设置为true
+      setVersionToken(true);
+      notification.success({ message: '切换成讲武堂版本！' })
+    } else {
+      notification.error({ message: '切换失败，请联系道灵或秃酱添加进讲武堂名单' });
+    }
+    setVersionVisible(false);
+  }
 
   /**
    * 切换盒子宽度
@@ -134,8 +209,6 @@ function CalculatorPage() {
     setBoxWidth(targetWidth);
     setTranslateY(targetTranslateY);
   }
-
-  const [result, setResult] = useState(undefined as any);
 
   useEffect(() => {
     if (mode === ModeConfig.Normal) {
@@ -187,6 +260,7 @@ function CalculatorPage() {
       setDrugEnhance(DrugEnhance[1].value);
       setDrugSupport(DrugSupport[1].value);
       setTarget(Target[3].value);
+      setHomefood(HomeFood[1].value)
 
       setHongFa(true);
       setMeiHuaDun(true);
@@ -279,6 +353,7 @@ function CalculatorPage() {
       }
 
       const jx3Dps = new Jx3DpsCore.YiJinJing({
+        CalculatorVersion: version,
         core: {
           type: 'YuanQi',
           ...coreValue
@@ -322,7 +397,7 @@ function CalculatorPage() {
       }
 
       if (banquet.length > 0) {
-        supportLib = supportLib.concat(banquet);
+        supportLib = supportLib.concat(banquet.filter(b => !!b));
       }
 
       if (foodEnchance !== '') {
@@ -336,6 +411,9 @@ function CalculatorPage() {
       }
       if (drugSupport !== '') {
         supportLib.push(drugSupport);
+      }
+      if (homefood !== '') {
+        supportLib.push(homefood);
       }
 
       if (hongFa === true) {
@@ -373,7 +451,7 @@ function CalculatorPage() {
 
   return (
     <div className='calculator-home'>
-      <CalculatorTitle />
+      <CalculatorTitle version={version} changeCalculatorVersion={changeCalculatorVersion} />
       <Motion style={{ motionWidth: spring(boxWidth, presets.gentle), motionTranslateY: spring(translateY) }}>
         {interpolatedStyle => {
           return (
@@ -550,6 +628,22 @@ function CalculatorPage() {
                           onChange={(value) => setBanquet(value)}
                           style={{ width: '100%' }}>
                           {Banquet.map((item) => {
+                            return (
+                              <Select.Option key={item.value} value={item.value}>
+                                {item.title}
+                              </Select.Option>
+                            )
+                          })}
+                        </Select>
+                      </div>
+
+                      <div className='calculator-item'>
+                        <div className='calculator-item-title'>家园小吃</div>
+                        <Select
+                          value={homefood}
+                          onChange={(value) => setHomefood(value)}
+                          style={{ width: '100%' }}>
+                          {HomeFood.map((item) => {
                             return (
                               <Select.Option key={item.value} value={item.value}>
                                 {item.title}
@@ -743,7 +837,7 @@ function CalculatorPage() {
 
       {
         result !== undefined && !!result.dps
-          ? <DetailPage data={result} gameClass={gm} icons={skillIcons} controller={controller} />
+          ? <DetailPage data={result} gameClass={gm} icons={skillIcons} controller={controller} version={version} />
           : <div style={{ display: 'flex', flex: 1, alignItems: 'center', justifyContent: 'center' }}>
             <div className='calculator-loading'>
               <img src={gm.icon} />
@@ -751,8 +845,16 @@ function CalculatorPage() {
             </div>
           </div>
       }
-
       <Bate />
+
+      <Modal title='讲武堂法号' visible={versionVisible} okText='确定' cancelText='取消' centered={true} onOk={onVersionInputFinish} onCancel={() => setVersionVisible(false)}>
+
+        <Input
+          value={userName}
+          onChange={(e) => setUserName(e.target.value)}
+          placeholder='找道灵或者秃酱添加进讲武堂名单（无门槛）'
+        />
+      </Modal>
     </div>
   );
 }

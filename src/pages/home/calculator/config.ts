@@ -223,7 +223,34 @@ export const DrugSupport = [
     title: '上品聚魂丸 元气+200',
     value: CoreHelper.Food.DrugSupport.ShangPinJuHunWan
   },
-]
+];
+
+export const HomeFood = [
+  {
+    title: '不使用',
+    value: ''
+  },
+  {
+    title: '小炒青菜 攻击+149',
+    value: CoreHelper.Food.HomeFood.XiaoChaoQingCai
+  },
+  {
+    title: '煎豆腐 破招+277',
+    value: CoreHelper.Food.HomeFood.JianDouFu
+  },
+  {
+    title: '炖豆腐 无双+277',
+    value: CoreHelper.Food.HomeFood.DunDouFu
+  },
+  {
+    title: '清蒸鲈鱼 破防+277',
+    value: CoreHelper.Food.HomeFood.QingZhengLuYu
+  },
+  {
+    title: '炸小鱼 会心+277',
+    value: CoreHelper.Food.HomeFood.ZhaXiaoYu
+  },
+];
 
 export const Target = [
   {

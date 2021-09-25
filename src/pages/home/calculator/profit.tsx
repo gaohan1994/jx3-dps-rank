@@ -50,7 +50,7 @@ function ProfitPage(props: Props) {
     const pcharts = echarts.init(reactPointDom);
 
     const pointData = deepClone(profitResult);
-    // 单分收益从大到小排序
+    // 单点收益从大到小排序
     pointData.sort((item1, item2) => item2.pointProfit - item1.pointProfit);
 
     const pointOptions = {
@@ -59,7 +59,7 @@ function ProfitPage(props: Props) {
           color: '#ffffff'
         },
         left: 'left',
-        subtext: `单分收益百分比 %`
+        subtext: `单点收益百分比 %`
       },
       xAxis: {
         type: 'category',
@@ -206,7 +206,7 @@ function ProfitPage(props: Props) {
         centered={true}
       >
         <Tabs tabPosition='left' onTabClick={onTabClick}>
-          <Tabs.TabPane tab='单分收益' key="1">
+          <Tabs.TabPane tab='单点收益' key="1">
             <div id='echarts-point-profit' />
           </Tabs.TabPane>
           <Tabs.TabPane tab='单孔收益' key="2">

@@ -124,3 +124,17 @@
   font-size: 12px;
   cursor: pointer;
 }
+
+.calculator-name {
+  position: fixed;
+  top: 10px;
+  left: 40px;
+  font-size: 12px;
+  cursor: pointer;
+}
+
+.calculator-logs-box {
+  height: 50vh;
+  overflow-y: scroll;
+  padding-top: 20px;
+}

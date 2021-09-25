@@ -5,16 +5,18 @@ import './index.css';
 import { useEffect, useLayoutEffect, useState } from 'react';
 import * as echarts from 'echarts';
 import ProfitPage from '../calculator/profit';
+import Jx3DpsCore from 'jx3-dps-core';
 
 type Props = {
   data: any;
   gameClass: GameClass;
   icons?: any;
   controller?: any;
+  version: any;
 }
 
 function DetailPage(props: Props) {
-  const { data, gameClass, icons = {}, controller } = props;
+  const { data, gameClass, icons = {}, controller, version } = props;
 
   const [mycharts, setMycharts] = useState({} as echarts.ECharts);
 
@@ -114,9 +116,11 @@ function DetailPage(props: Props) {
           color={gameClass.color.join(', ')}
           extra={(
             <>
-              <span className='s-class'>
-                S：{SClass}
-              </span>
+              {version !== Jx3DpsCore.YiJinJing.YiJinJingVersion.Immortal && (
+                <span className='s-class'>
+                  S：{SClass}
+                </span>
+              )}
               <div className='profit-box'>
                 {ProfitPage({ controller })}
               </div>
