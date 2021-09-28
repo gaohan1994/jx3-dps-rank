@@ -1,4 +1,4 @@
-@import 'antd/dist/antd.css';
+/* @import 'antd/dist/antd.css'; */
 /* @import '@font/nunito'; */
 
 :root {
@@ -43,8 +43,8 @@ html {
 body {
   height: 100%;
   margin: 0;
-  background-color: #252c37;
-  color: #fff;
+  color: #fff !important;
+  background-color: #252c37 !important;
 }
 
 #root {
@@ -417,6 +417,4 @@ body::-webkit-scrollbar-track {
   -webkit-box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.2);
 
   border-radius: 10px;
-
-  background: #ededed;
 }
