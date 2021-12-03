@@ -1,12 +1,15 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
+import {Provider} from 'react-redux'
 import Index from './pages';
 import reportWebVitals from './reportWebVitals';
 // import 'antd/dist/antd.css';
-
+import {store} from './store/store';
 ReactDOM.render(
   <React.StrictMode>
-    <Index />
+    <Provider store={store}>
+      <Index />
+    </Provider>
   </React.StrictMode>,
   document.getElementById('root')
 );
