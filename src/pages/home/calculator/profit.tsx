@@ -1,14 +1,13 @@
-import { DpsCore, YiJinJing, Profit } from "jx3-dps-core";
-import React, { useEffect, useState, useRef, createRef, useLayoutEffect } from "react";
+import { YiJinJing, Profit } from 'jx3-dps-core';
+import React, { useState } from 'react';
 import { deepClone } from 'smar-util';
 import { Modal, Tabs } from 'antd';
 import * as echarts from 'echarts';
-import numeral from "numeral";
-
+import numeral from 'numeral';
 
 type Props = {
   controller: YiJinJing;
-}
+};
 
 function ProfitPage(props: Props) {
   const { controller } = props;
@@ -19,7 +18,7 @@ function ProfitPage(props: Props) {
     setVisible(true);
 
     onPointProfit();
-  }
+  };
 
   const onTabClick = (key: string) => {
     if (key === '1') {
@@ -27,7 +26,7 @@ function ProfitPage(props: Props) {
     } else {
       onStoneProfit();
     }
-  }
+  };
 
   const onPointProfit = async () => {
     /**
@@ -56,32 +55,34 @@ function ProfitPage(props: Props) {
     const pointOptions = {
       title: {
         textStyle: {
-          color: '#ffffff'
+          color: '#ffffff',
         },
         left: 'left',
-        subtext: `单点收益百分比 %`
+        subtext: '单点收益百分比 %',
       },
       xAxis: {
         type: 'category',
-        data: pointData.map((item) => {
+        data: pointData.map(item => {
           return item.title.replace('收益', '');
-        })
+        }),
       },
       yAxis: {
-        type: 'value'
+        type: 'value',
       },
-      series: [{
-        data: pointData.map((item) => numeral(item.pointProfit * 100).format('0.00')),
-        type: 'bar',
-        label: {
-          show: true,
-          color: '#ffffff',
-        }
-      }]
+      series: [
+        {
+          data: pointData.map(item => numeral(item.pointProfit * 100).format('0.00')),
+          type: 'bar',
+          label: {
+            show: true,
+            color: '#ffffff',
+          },
+        },
+      ],
     };
     pcharts.setOption(pointOptions);
     document.getElementById('echarts-point-profit')?.replaceChildren(reactPointDom);
-  }
+  };
 
   const onStoneProfit = async () => {
     /**
@@ -91,7 +92,6 @@ function ProfitPage(props: Props) {
       options: controller.options,
       gainList: controller.support.gainList,
     });
-
 
     const labelOption = {
       show: true,
@@ -104,9 +104,8 @@ function ProfitPage(props: Props) {
       formatter: '{c}  {name|{a}}',
       fontSize: 16,
       rich: {
-        name: {
-        }
-      }
+        name: {},
+      },
     };
 
     /**
@@ -124,43 +123,49 @@ function ProfitPage(props: Props) {
     reactStoneDom.style.width = '800px';
     const scharts = echarts.init(reactStoneDom);
 
-    const data6 = stoneData.map((item) => numeral(item.profitWithStone.get(6) || 0 * 100).format('0.00'));
-    const data7 = stoneData.map((item) => numeral(item.profitWithStone.get(7) || 0 * 100).format('0.00'));
-    const data8 = stoneData.map((item) => numeral(item.profitWithStone.get(8) || 0 * 100).format('0.00'));
+    const data6 = stoneData.map(item =>
+      numeral(item.profitWithStone.get(6) || 0 * 100).format('0.00')
+    );
+    const data7 = stoneData.map(item =>
+      numeral(item.profitWithStone.get(7) || 0 * 100).format('0.00')
+    );
+    const data8 = stoneData.map(item =>
+      numeral(item.profitWithStone.get(8) || 0 * 100).format('0.00')
+    );
 
     const schartsOptions = {
       title: {
         textStyle: {
-          color: '#ffffff'
+          color: '#ffffff',
         },
         left: 'left',
-        subtext: `单孔收益百分比 %`
+        subtext: '单孔收益百分比 %',
       },
       tooltip: {
         trigger: 'axis',
         axisPointer: {
-          type: 'shadow'
-        }
+          type: 'shadow',
+        },
       },
       // 石头等级
       legend: {
-        data: ['六级', '七级', '八级']
+        data: ['六级', '七级', '八级'],
       },
       xAxis: {
         type: 'category',
-        data: stoneData.map((item) => {
+        data: stoneData.map(item => {
           return item.title.replace('收益', '');
-        })
+        }),
       },
       yAxis: {
-        type: 'value'
+        type: 'value',
       },
       series: [
         {
           name: '八级',
           type: 'bar',
           emphasis: {
-            focus: 'series'
+            focus: 'series',
           },
           data: data8,
           label: labelOption,
@@ -169,7 +174,7 @@ function ProfitPage(props: Props) {
           name: '七级',
           type: 'bar',
           emphasis: {
-            focus: 'series'
+            focus: 'series',
           },
           data: data7,
           label: labelOption,
@@ -178,22 +183,20 @@ function ProfitPage(props: Props) {
           name: '六级',
           type: 'bar',
           emphasis: {
-            focus: 'series'
+            focus: 'series',
           },
           data: data6,
           label: labelOption,
         },
-      ]
+      ],
     };
     scharts.setOption(schartsOptions);
     document.getElementById('echarts-stone-profit')?.replaceChildren(reactStoneDom);
-  }
+  };
 
   return (
     <div>
-      <span onClick={colcalutorProfit}>
-        属性收益
-      </span>
+      <span onClick={colcalutorProfit}>属性收益</span>
 
       <Modal
         visible={visible}
@@ -206,10 +209,10 @@ function ProfitPage(props: Props) {
         centered={true}
       >
         <Tabs tabPosition='left' onTabClick={onTabClick}>
-          <Tabs.TabPane tab='单点收益' key="1">
+          <Tabs.TabPane tab='单点收益' key='1'>
             <div id='echarts-point-profit' />
           </Tabs.TabPane>
-          <Tabs.TabPane tab='单孔收益' key="2">
+          <Tabs.TabPane tab='单孔收益' key='2'>
             <div id='echarts-stone-profit' />
           </Tabs.TabPane>
         </Tabs>

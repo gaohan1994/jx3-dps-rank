@@ -1,5 +1,6 @@
+import React from 'react';
 import '../assets/reset.css';
-import { Switch, Route, HashRouter } from 'react-router-dom'
+import { Switch, Route, HashRouter } from 'react-router-dom';
 import CalculatorPage from './home/calculator/calculator';
 
 function Index() {

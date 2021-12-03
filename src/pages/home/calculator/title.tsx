@@ -1,8 +1,7 @@
+import React, { useState } from 'react';
 import { InfoCircleOutlined } from '@ant-design/icons';
-import { useState } from 'react';
 import { Modal, Timeline, Tooltip } from 'antd';
 import './index.css';
-
 
 function CalculatorTitle(props: any) {
   const { version, changeCalculatorVersion } = props;
@@ -32,24 +31,17 @@ function CalculatorTitle(props: any) {
    */
   return (
     <>
-      <div className='calculator-name'>
-        易筋经DPS计算器
-      </div>
-      <header
-        className='calculator-header'
-        onClick={changeCalculatorVersion}
-      >
+      <div className='calculator-name'>易筋经DPS计算器</div>
+      <header className='calculator-header' onClick={changeCalculatorVersion}>
         <div>
           <Tooltip
             style={{ width: '800px' }}
             title='为了保证准确计算大多数少林玩家dps，减少不必要的误解，计算器默认为少林前山(基础版)，加入讲武堂之后可以切换至讲武堂版本，两版计算方式完全相同，只有技能数不同，对手法有深刻理解，同时已经脱离基本配装追求更高的dps的师兄弟们可以找我或者，秃酱使用讲武堂版本（无门槛）'
           >
-            <span className='calculator-header-title'>{version === 'Normal'
-              ? '少林前山'
-              : '讲武堂'}
+            <span className='calculator-header-title'>
+              {version === 'Normal' ? '少林前山' : '讲武堂'}
             </span>
           </Tooltip>
-
         </div>
       </header>
       <div className='calculator-logs' onClick={() => setVisible(true)}>
@@ -66,18 +58,14 @@ function CalculatorTitle(props: any) {
         centered={true}
       >
         <div className='calculator-logs-box'>
-
           <Timeline>
-            {data.map((item) => {
-              return (
-                <Timeline.Item key={item}>{item}</Timeline.Item>
-              )
+            {data.map(item => {
+              return <Timeline.Item key={item}>{item}</Timeline.Item>;
             })}
           </Timeline>
         </div>
       </Modal>
     </>
-
   );
 }
 export default CalculatorTitle;
