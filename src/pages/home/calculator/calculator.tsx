@@ -1,39 +1,48 @@
-import Jx3DpsCore, { CoreHelper, YiJinJing } from "jx3-dps-core";
-import { useEffect, useLayoutEffect, useState } from "react";
-import { Button, Card, Input, notification, Select, Tooltip, Switch, Modal, Slider } from 'antd'
-import { CaretRightOutlined, InfoCircleOutlined } from '@ant-design/icons'
+import React, { useEffect, useLayoutEffect, useState } from 'react';
+import Jx3DpsCore, { CoreHelper, YiJinJing } from 'jx3-dps-core';
+import { Button, Card, Input, notification, Select, Tooltip, Switch, Modal, Slider } from 'antd';
+import { CaretRightOutlined, InfoCircleOutlined } from '@ant-design/icons';
 import './index.css';
-import { Motion, spring, presets, TransitionMotion } from 'react-motion'
+import { Motion, spring, presets, TransitionMotion } from 'react-motion';
 import numeral from 'numeral';
-import DetailPage from "../detail/detail";
-import { GameClassesNames, GameProfessionNames, getGameClass, UserAttributeKeys } from "../../../core/config";
-import { useUserAttribute } from "../../../hooks/method";
+import DetailPage from '../detail/detail';
+import { useUserAttribute } from '../../../hooks/method';
 import {
-  skillIcons, Formations, SetBoenus, TeamSkills, GroupSkills, Weapons, EnChants, Spine, Banquet,
-  FoodEnchance, FoodSupport, DrugEnhance, DrugSupport, Target, HomeFood
-} from "./config";
-import CalculatorTitle from "./title";
-import cache from "../../../core/cache";
-import { YiJinJingValues } from "jx3-dps-core/build/types";
-import smar from 'smar-util';
+  skillIcons,
+  Formations,
+  SetBoenus,
+  TeamSkills,
+  GroupSkills,
+  Weapons,
+  EnChants,
+  Spine,
+  Banquet,
+  FoodEnchance,
+  FoodSupport,
+  DrugEnhance,
+  DrugSupport,
+  Target,
+  HomeFood,
+} from './config';
+import CalculatorTitle from './title';
+import cache from '../../../core/cache';
+import { YiJinJingValues } from 'jx3-dps-core/build/types';
+import { UserAttributeKeys, getGameClass } from '../../../core/config';
 
 const BoxWidthConfig = {
   min: 300,
-  max: 700
-}
+  max: 700,
+};
 
 const ModeConfig = {
   Normal: '普通模式',
   Fight: '实战模式',
   Max: '最大值模式',
-}
+};
 
 function CalculatorPage() {
-
-  const [loading, setLoading] = useState(false);
-
   useLayoutEffect(() => {
-    document.title = '剑网三 少林 易筋经 计算器'
+    document.title = '剑网三 少林 易筋经 计算器';
   }, []);
 
   /**
@@ -42,27 +51,27 @@ function CalculatorPage() {
   const [core, { setUserAttr, replaceUserAttr }] = useUserAttribute(
     process.env.NODE_ENV === 'production'
       ? {
-        JiChuGongJi: 0,
-        WuQiShangHai: 2000,
-        HuiXin: 0,
-        HuiXiao: 0,
-        PoFang: 0,
-        PoZhao: 0,
-        JiaSu: CoreHelper.JiaSuList.YiDuanJiaSu,
-        WuShuang: 0,
-        YuanQi: 0,
-      }
+          JiChuGongJi: 0,
+          WuQiShangHai: 2000,
+          HuiXin: 0,
+          HuiXiao: 0,
+          PoFang: 0,
+          PoZhao: 0,
+          JiaSu: CoreHelper.JiaSuList.YiDuanJiaSu,
+          WuShuang: 0,
+          YuanQi: 0,
+        }
       : {
-        JiChuGongJi: 14399,
-        WuQiShangHai: 1998,
-        HuiXin: 18.69,
-        HuiXiao: 175.77,
-        PoFang: 40.44,
-        PoZhao: 5298,
-        WuShuang: 47.49,
-        YuanQi: 2904,
-        JiaSu: CoreHelper.JiaSuList.YiDuanJiaSu,
-      }
+          JiChuGongJi: 14399,
+          WuQiShangHai: 1998,
+          HuiXin: 18.69,
+          HuiXiao: 175.77,
+          PoFang: 40.44,
+          PoZhao: 5298,
+          WuShuang: 47.49,
+          YuanQi: 2904,
+          JiaSu: CoreHelper.JiaSuList.YiDuanJiaSu,
+        }
   );
   // Jx3DpsCore 实例
   const [controller, setController] = useState({} as YiJinJing);
@@ -72,7 +81,7 @@ function CalculatorPage() {
   const [teamSkill, setTeamSkill] = useState([] as any[]);
   const [groupSkill, setGroupSkill] = useState([] as any[]);
   const [weapon, setWeapon] = useState(Weapons[0].value as any);
-  const [enchant, setenchant] = useState(EnChants.map((item) => item.value));
+  const [enchant, setenchant] = useState(EnChants.map(item => item.value));
   const [spine, setSpine] = useState(true);
   const [banquet, setBanquet] = useState([] as any[]);
   const [foodEnchance, setFoodEnchance] = useState('');
@@ -97,7 +106,7 @@ function CalculatorPage() {
 
   /**
    * 盒子宽度
-   * 
+   *
    * @param boxWidth
    */
   const [boxWidth, setBoxWidth] = useState(BoxWidthConfig.min);
@@ -124,7 +133,9 @@ function CalculatorPage() {
   /**
    * 计算器版本
    */
-  const [version, setCalculatorVersion] = useState(Jx3DpsCore.YiJinJing.YiJinJingVersion.Normal as YiJinJingValues);
+  const [version, setCalculatorVersion] = useState(
+    Jx3DpsCore.YiJinJing.YiJinJingVersion.Normal as YiJinJingValues
+  );
 
   /**
    * 每次切换版本则重置计算结果
@@ -132,11 +143,11 @@ function CalculatorPage() {
   const setVersion = (value: YiJinJingValues) => {
     setCalculatorVersion(value);
     setResult(undefined);
-  }
+  };
 
   /**
    * @todo 切换模式
-   * 
+   *
    * 1、切换成正式版不用校验
    * 2、切换成讲武堂 校验名字
    * 3、成功可以切换
@@ -157,28 +168,29 @@ function CalculatorPage() {
 
     // 显示输入框
     setVersionVisible(true);
-  }
+  };
 
   const onVersionInputFinish = async () => {
     if (!userName) {
       return;
     }
 
-    const url = process.env.NODE_ENV === 'development'
-      ? 'http://101.132.24.127:9090/api/checkimmortal'
-      : '/api/checkimmortal';
+    const url =
+      process.env.NODE_ENV === 'development'
+        ? 'http://101.132.24.127:9090/api/checkimmortal'
+        : '/api/checkimmortal';
 
     const result = await fetch(`${url}/${userName}`, { method: 'get' }).then(res => res.json());
     if (result.data === true) {
       setVersion(Jx3DpsCore.YiJinJing.YiJinJingVersion.Immortal);
       // 校验成功吧token设置为true
       setVersionToken(true);
-      notification.success({ message: '切换成讲武堂版本！' })
+      notification.success({ message: '切换成讲武堂版本！' });
     } else {
       notification.error({ message: '切换失败，请联系道灵或秃酱添加进讲武堂名单' });
     }
     setVersionVisible(false);
-  }
+  };
 
   /**
    * 切换盒子宽度
@@ -208,7 +220,7 @@ function CalculatorPage() {
 
     setBoxWidth(targetWidth);
     setTranslateY(targetTranslateY);
-  }
+  };
 
   useEffect(() => {
     if (mode === ModeConfig.Normal) {
@@ -217,7 +229,7 @@ function CalculatorPage() {
       setTeamSkill([]);
       setGroupSkill([]);
       setWeapon(Weapons[0].value);
-      setenchant(EnChants.map((item) => item.value));
+      setenchant(EnChants.map(item => item.value));
       setSpine(true);
       setBanquet([]);
       setFoodEnchance('');
@@ -231,12 +243,12 @@ function CalculatorPage() {
     } else if (mode === ModeConfig.Fight) {
       setFormation(Formations[4].value);
       setSetBoenus(SetBoenus[1].value);
-      setTeamSkill(TeamSkills.map((item) => item.value));
-      setGroupSkill([GroupSkills[0].value, GroupSkills[1].value, GroupSkills[2].value,]);
+      setTeamSkill(TeamSkills.map(item => item.value));
+      setGroupSkill([GroupSkills[0].value, GroupSkills[1].value, GroupSkills[2].value]);
       setWeapon(Weapons[2].value);
-      setenchant(EnChants.map((item) => item.value));
+      setenchant(EnChants.map(item => item.value));
       setSpine(true);
-      setBanquet(Banquet.map((item) => item.value));
+      setBanquet(Banquet.map(item => item.value));
       setFoodEnchance(FoodEnchance[1].value);
       setFoodSupport(FoodSupport[1].value);
       setDrugEnhance(DrugEnhance[1].value);
@@ -249,18 +261,18 @@ function CalculatorPage() {
       setUserAttr({ target: 'JiaSu', value: CoreHelper.JiaSuList.ErDuanJiaSu });
       setFormation(Formations[4].value);
       setSetBoenus(SetBoenus[1].value);
-      setTeamSkill(TeamSkills.map((item) => item.value));
-      setGroupSkill(GroupSkills.map((item) => item.value));
+      setTeamSkill(TeamSkills.map(item => item.value));
+      setGroupSkill(GroupSkills.map(item => item.value));
       setWeapon(CoreHelper.Weapons.CW);
-      setenchant(EnChants.map((item) => item.value));
+      setenchant(EnChants.map(item => item.value));
       setSpine(true);
-      setBanquet(Banquet.map((item) => item.value).filter(a => !!a));
+      setBanquet(Banquet.map(item => item.value).filter(a => !!a));
       setFoodEnchance(FoodEnchance[1].value);
       setFoodSupport(FoodSupport[1].value);
       setDrugEnhance(DrugEnhance[1].value);
       setDrugSupport(DrugSupport[1].value);
       setTarget(Target[3].value);
-      setHomefood(HomeFood[1].value)
+      setHomefood(HomeFood[1].value);
 
       setHongFa(true);
       setMeiHuaDun(true);
@@ -278,9 +290,9 @@ function CalculatorPage() {
       cancelText: '取消',
       onOk: () => {
         setMode(value);
-      }
+      },
     });
-  }
+  };
 
   /**
    * 导入人物历史记录
@@ -290,14 +302,14 @@ function CalculatorPage() {
     if (!token) {
       notification.error({
         message: '导入失败',
-        description: '没有历史记录'
+        description: '没有历史记录',
       });
       return;
     }
 
     const core = cache.getLastCore();
     replaceUserAttr(core);
-  }
+  };
 
   /**
    * 清空人物数据
@@ -320,10 +332,10 @@ function CalculatorPage() {
           JiaSu: CoreHelper.JiaSuList.YiDuanJiaSu,
           WuShuang: 0,
           YuanQi: 0,
-        })
-      }
+        });
+      },
     });
-  }
+  };
 
   /**
    * 计算dps
@@ -331,7 +343,7 @@ function CalculatorPage() {
    */
   const onCalculator = async () => {
     try {
-      let coreValue = core;
+      const coreValue = core;
 
       for (let i = 0; i < UserAttributeKeys.length; i++) {
         const currentAttr = UserAttributeKeys[i];
@@ -356,13 +368,13 @@ function CalculatorPage() {
         CalculatorVersion: version,
         core: {
           type: 'YuanQi',
-          ...coreValue
+          ...coreValue,
         },
         support: {
-          mode: "NeiGong",
+          mode: 'NeiGong',
           target: target,
           CWTimes: cwTimes,
-        }
+        },
       });
 
       cache.saveCoreAttributes(coreValue);
@@ -417,7 +429,7 @@ function CalculatorPage() {
       }
 
       if (hongFa === true) {
-        jx3Dps.use(CoreHelper.GroupSkills.HongFa, { coverage: hongFaPercent / 100 })
+        jx3Dps.use(CoreHelper.GroupSkills.HongFa, { coverage: hongFaPercent / 100 });
       }
 
       if (meiHuaDun === true) {
@@ -433,35 +445,40 @@ function CalculatorPage() {
       // 设置实例
       setController(jx3Dps);
 
-      setLoading(true);
-
       setTimeout(() => {
         setResult(result);
-        setLoading(false);
       }, 1000 * 1);
     } catch (error: any) {
       notification.error({
         message: error.message,
       });
     }
-
   };
 
-  const gm = getGameClass(GameProfessionNames.ShaoLin, GameClassesNames.YiJinJing);
+  const gm = getGameClass('ShaoLin', 'YiJinJing');
 
   return (
     <div className='calculator-home'>
       <CalculatorTitle version={version} changeCalculatorVersion={changeCalculatorVersion} />
-      <Motion style={{ motionWidth: spring(boxWidth, presets.gentle), motionTranslateY: spring(translateY) }}>
+      <Motion
+        style={{
+          motionWidth: spring(boxWidth, presets.gentle),
+          motionTranslateY: spring(translateY),
+        }}
+      >
         {interpolatedStyle => {
           return (
-            <Card style={{ width: interpolatedStyle.motionWidth, overflow: 'hidden', position: 'relative' }}>
+            <Card
+              style={{
+                width: interpolatedStyle.motionWidth,
+                overflow: 'hidden',
+                position: 'relative',
+              }}
+            >
               <div style={{ width: 260 }}>
-                <div className='calculator-title'>
-                  角色属性
-                </div>
+                <div className='calculator-title'>角色属性</div>
 
-                {UserAttributeKeys.map((attr) => {
+                {UserAttributeKeys.map(attr => {
                   const { value, title, ...rest } = attr;
                   if (title !== '加速') {
                     return (
@@ -470,8 +487,8 @@ function CalculatorPage() {
                         <Input
                           {...rest}
                           value={core[value]}
-                          onChange={(event) => {
-                            setUserAttr({ target: value, value: event.target.value })
+                          onChange={event => {
+                            setUserAttr({ target: value, value: event.target.value });
                           }}
                         />
                       </div>
@@ -480,7 +497,11 @@ function CalculatorPage() {
                   return (
                     <div key={value} className='calculator-item'>
                       <div className='calculator-item-title'>{title}</div>
-                      <Select value={core[value]} onChange={(event) => setUserAttr({ target: value, value: event })} style={{ width: '100%' }}>
+                      <Select
+                        value={core[value]}
+                        onChange={event => setUserAttr({ target: value, value: event })}
+                        style={{ width: '100%' }}
+                      >
                         <Select.Option value={CoreHelper.JiaSuList.YiDuanJiaSu}>
                           一段加速
                         </Select.Option>
@@ -489,63 +510,77 @@ function CalculatorPage() {
                         </Select.Option>
                       </Select>
                     </div>
-                  )
+                  );
                 })}
                 <div className='calculator-bar'>
-                  <Button type='primary' onClick={onImport}>导入角色属性</Button>
+                  <Button type='primary' onClick={onImport}>
+                    导入角色属性
+                  </Button>
                   <Button onClick={onReset}>清空角色属性</Button>
                 </div>
 
                 <div className='calculator-tips'>
                   如果您输入的角色属性是已经吃过小吃、桌子等增益之后的面板了，请勿在高级选项中再次勾选，否则计算出来的结果会高很多
                 </div>
-
               </div>
 
               <TransitionMotion
-                styles={interpolatedStyle.motionWidth > BoxWidthConfig.min + 50
-                  ? [{
-                    key: 'test',
-                    style: { scale: spring(1) }
-                  }]
-                  : [{
-                    key: 'test',
-                    style: { scale: spring(0) }
-                  }]}
+                styles={
+                  interpolatedStyle.motionWidth > BoxWidthConfig.min + 50
+                    ? [
+                        {
+                          key: 'test',
+                          style: { scale: spring(1) },
+                        },
+                      ]
+                    : [
+                        {
+                          key: 'test',
+                          style: { scale: spring(0) },
+                        },
+                      ]
+                }
               >
                 {inStyles => {
                   return inStyles[0] ? (
                     <div
                       className='calculator-more-box'
-                      style={{ transform: `scale(${inStyles[0].style.scale}, ${inStyles[0].style.scale})` }}
+                      style={{
+                        transform: `scale(${inStyles[0].style.scale}, ${inStyles[0].style.scale})`,
+                      }}
                     >
-
-                      <div className='calculator-title'>
-                        高级选项
-                      </div>
+                      <div className='calculator-title'>高级选项</div>
 
                       <div className='calculator-item'>
                         <div className='calculator-item-title'>目标选择</div>
-                        <Select value={target} onChange={(event) => setTarget(event)} style={{ width: '100%' }}>
-                          {Target.map((item) => {
+                        <Select
+                          value={target}
+                          onChange={event => setTarget(event)}
+                          style={{ width: '100%' }}
+                        >
+                          {Target.map(item => {
                             return (
                               <Select.Option key={item.value} value={item.value}>
                                 {item.title}
                               </Select.Option>
-                            )
+                            );
                           })}
                         </Select>
                       </div>
 
                       <div className='calculator-item'>
                         <div className='calculator-item-title'>阵法</div>
-                        <Select value={formation} onChange={(event) => setFormation(event)} style={{ width: '100%' }}>
-                          {Formations.map((item) => {
+                        <Select
+                          value={formation}
+                          onChange={event => setFormation(event)}
+                          style={{ width: '100%' }}
+                        >
+                          {Formations.map(item => {
                             return (
                               <Select.Option key={item.value} value={item.value}>
                                 {item.title}
                               </Select.Option>
-                            )
+                            );
                           })}
                         </Select>
                       </div>
@@ -554,14 +589,15 @@ function CalculatorPage() {
                         <div className='calculator-item-title'>武器</div>
                         <Select
                           value={weapon}
-                          onChange={(value) => setWeapon(value)}
-                          style={{ width: '100%' }}>
-                          {Weapons.map((item) => {
+                          onChange={value => setWeapon(value)}
+                          style={{ width: '100%' }}
+                        >
+                          {Weapons.map(item => {
                             return (
                               <Select.Option key={item.value} value={item.value}>
                                 {item.title}
                               </Select.Option>
-                            )
+                            );
                           })}
                         </Select>
                       </div>
@@ -583,24 +619,22 @@ function CalculatorPage() {
                         <div className='calculator-item-title'>套装</div>
                         <Select
                           value={setBoenus}
-                          onChange={(value) => setSetBoenus(value)}
-                          style={{ width: '100%' }}>
-                          {SetBoenus.map((item) => {
+                          onChange={value => setSetBoenus(value)}
+                          style={{ width: '100%' }}
+                        >
+                          {SetBoenus.map(item => {
                             return (
                               <Select.Option key={item.value} value={item.value}>
                                 {item.title}
                               </Select.Option>
-                            )
+                            );
                           })}
                         </Select>
                       </div>
 
                       <div className='calculator-item' style={{ justifyContent: 'space-between' }}>
                         <div className='calculator-item-title'>特效腰椎</div>
-                        <Switch
-                          checked={spine}
-                          onChange={(value) => setSpine(value)}
-                        />
+                        <Switch checked={spine} onChange={value => setSpine(value)} />
                       </div>
 
                       <div className='calculator-item'>
@@ -608,14 +642,15 @@ function CalculatorPage() {
                         <Select
                           value={enchant}
                           mode='multiple'
-                          onChange={(value) => setenchant(value)}
-                          style={{ width: '100%' }}>
-                          {EnChants.map((item) => {
+                          onChange={value => setenchant(value)}
+                          style={{ width: '100%' }}
+                        >
+                          {EnChants.map(item => {
                             return (
                               <Select.Option key={item.value} value={item.value}>
                                 {item.title}
                               </Select.Option>
-                            )
+                            );
                           })}
                         </Select>
                       </div>
@@ -625,14 +660,15 @@ function CalculatorPage() {
                         <Select
                           value={banquet}
                           mode='multiple'
-                          onChange={(value) => setBanquet(value)}
-                          style={{ width: '100%' }}>
-                          {Banquet.map((item) => {
+                          onChange={value => setBanquet(value)}
+                          style={{ width: '100%' }}
+                        >
+                          {Banquet.map(item => {
                             return (
                               <Select.Option key={item.value} value={item.value}>
                                 {item.title}
                               </Select.Option>
-                            )
+                            );
                           })}
                         </Select>
                       </div>
@@ -641,14 +677,15 @@ function CalculatorPage() {
                         <div className='calculator-item-title'>家园小吃</div>
                         <Select
                           value={homefood}
-                          onChange={(value) => setHomefood(value)}
-                          style={{ width: '100%' }}>
+                          onChange={value => setHomefood(value)}
+                          style={{ width: '100%' }}
+                        >
                           {HomeFood.map((item: any) => {
                             return (
                               <Select.Option key={item.value} value={item.value}>
                                 {item.title}
                               </Select.Option>
-                            )
+                            );
                           })}
                         </Select>
                       </div>
@@ -657,14 +694,15 @@ function CalculatorPage() {
                         <div className='calculator-item-title'>增强食品</div>
                         <Select
                           value={foodEnchance}
-                          onChange={(value) => setFoodEnchance(value)}
-                          style={{ width: '100%' }}>
-                          {FoodEnchance.map((item) => {
+                          onChange={value => setFoodEnchance(value)}
+                          style={{ width: '100%' }}
+                        >
+                          {FoodEnchance.map(item => {
                             return (
                               <Select.Option key={item.value} value={item.value}>
                                 {item.title}
                               </Select.Option>
-                            )
+                            );
                           })}
                         </Select>
                       </div>
@@ -673,14 +711,15 @@ function CalculatorPage() {
                         <div className='calculator-item-title'>辅助食品</div>
                         <Select
                           value={foodSupport}
-                          onChange={(value) => setFoodSupport(value)}
-                          style={{ width: '100%' }}>
-                          {FoodSupport.map((item) => {
+                          onChange={value => setFoodSupport(value)}
+                          style={{ width: '100%' }}
+                        >
+                          {FoodSupport.map(item => {
                             return (
                               <Select.Option key={item.value} value={item.value}>
                                 {item.title}
                               </Select.Option>
-                            )
+                            );
                           })}
                         </Select>
                       </div>
@@ -688,14 +727,15 @@ function CalculatorPage() {
                         <div className='calculator-item-title'>增强药品</div>
                         <Select
                           value={drugEnhance}
-                          onChange={(value) => setDrugEnhance(value)}
-                          style={{ width: '100%' }}>
-                          {DrugEnhance.map((item) => {
+                          onChange={value => setDrugEnhance(value)}
+                          style={{ width: '100%' }}
+                        >
+                          {DrugEnhance.map(item => {
                             return (
                               <Select.Option key={item.value} value={item.value}>
                                 {item.title}
                               </Select.Option>
-                            )
+                            );
                           })}
                         </Select>
                       </div>
@@ -703,14 +743,15 @@ function CalculatorPage() {
                         <div className='calculator-item-title'>辅助药品</div>
                         <Select
                           value={drugSupport}
-                          onChange={(value) => setDrugSupport(value)}
-                          style={{ width: '100%' }}>
-                          {DrugSupport.map((item) => {
+                          onChange={value => setDrugSupport(value)}
+                          style={{ width: '100%' }}
+                        >
+                          {DrugSupport.map(item => {
                             return (
                               <Select.Option key={item.value} value={item.value}>
                                 {item.title}
                               </Select.Option>
-                            )
+                            );
                           })}
                         </Select>
                       </div>
@@ -720,14 +761,15 @@ function CalculatorPage() {
                         <Select
                           value={teamSkill}
                           mode='multiple'
-                          onChange={(value) => setTeamSkill(value)}
-                          style={{ width: '100%' }}>
-                          {TeamSkills.map((item) => {
+                          onChange={value => setTeamSkill(value)}
+                          style={{ width: '100%' }}
+                        >
+                          {TeamSkills.map(item => {
                             return (
                               <Select.Option key={item.value} value={item.value}>
                                 {item.title}
                               </Select.Option>
-                            )
+                            );
                           })}
                         </Select>
                       </div>
@@ -737,24 +779,22 @@ function CalculatorPage() {
                         <Select
                           value={groupSkill}
                           mode='multiple'
-                          onChange={(value) => setGroupSkill(value)}
-                          style={{ width: '100%' }}>
-                          {GroupSkills.map((item) => {
+                          onChange={value => setGroupSkill(value)}
+                          style={{ width: '100%' }}
+                        >
+                          {GroupSkills.map(item => {
                             return (
                               <Select.Option key={item.value} value={item.value}>
                                 {item.title}
                               </Select.Option>
-                            )
+                            );
                           })}
                         </Select>
                       </div>
 
                       <div className='calculator-item' style={{ justifyContent: 'space-between' }}>
                         <div className='calculator-item-title'>舍身弘法</div>
-                        <Switch
-                          checked={hongFa}
-                          onChange={(value) => setHongFa(value)}
-                        />
+                        <Switch checked={hongFa} onChange={value => setHongFa(value)} />
                       </div>
 
                       {hongFa && (
@@ -772,10 +812,7 @@ function CalculatorPage() {
 
                       <div className='calculator-item' style={{ justifyContent: 'space-between' }}>
                         <div className='calculator-item-title'>梅花盾</div>
-                        <Switch
-                          checked={meiHuaDun}
-                          onChange={(value) => setMeiHuaDun(value)}
-                        />
+                        <Switch checked={meiHuaDun} onChange={value => setMeiHuaDun(value)} />
                       </div>
                       {meiHuaDun && (
                         <div className='calculator-item'>
@@ -789,33 +826,29 @@ function CalculatorPage() {
                           />
                         </div>
                       )}
-
-
                     </div>
-                  ) : <div />
+                  ) : (
+                    <div />
+                  );
                 }}
               </TransitionMotion>
 
-              <div className='calculator-options-button' >
+              <div className='calculator-options-button'>
                 <div onClick={() => toogleBox()}>
-                  <CaretRightOutlined style={{ transform: `rotate(${interpolatedStyle.motionTranslateY}deg)` }} />
+                  <CaretRightOutlined
+                    style={{ transform: `rotate(${interpolatedStyle.motionTranslateY}deg)` }}
+                  />
                   高级选项
                 </div>
 
                 <Select
                   value={mode}
-                  onChange={(value) => onChangeMode(value)}
+                  onChange={value => onChangeMode(value)}
                   style={{ marginLeft: 20 }}
                 >
-                  <Select.Option value={ModeConfig.Max}>
-                    {ModeConfig.Max}
-                  </Select.Option>
-                  <Select.Option value={ModeConfig.Fight}>
-                    {ModeConfig.Fight}
-                  </Select.Option>
-                  <Select.Option value={ModeConfig.Normal}>
-                    {ModeConfig.Normal}
-                  </Select.Option>
+                  <Select.Option value={ModeConfig.Max}>{ModeConfig.Max}</Select.Option>
+                  <Select.Option value={ModeConfig.Fight}>{ModeConfig.Fight}</Select.Option>
+                  <Select.Option value={ModeConfig.Normal}>{ModeConfig.Normal}</Select.Option>
                 </Select>
               </div>
 
@@ -835,23 +868,36 @@ function CalculatorPage() {
         }}
       </Motion>
 
-      {
-        result !== undefined && !!result.dps
-          ? <DetailPage data={result} gameClass={gm} icons={skillIcons} controller={controller} version={version} />
-          : <div style={{ display: 'flex', flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-            <div className='calculator-loading'>
-              <img src={gm.icon} />
-              <span style={{ backgroundColor: `rgba(${gm.color.join(', ')})` }} />
-            </div>
+      {result !== undefined && !!result.dps ? (
+        <DetailPage
+          data={result}
+          gameClass={gm}
+          icons={skillIcons}
+          controller={controller}
+          version={version}
+        />
+      ) : (
+        <div style={{ display: 'flex', flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+          <div className='calculator-loading'>
+            <img src={gm.icon} />
+            <span style={{ backgroundColor: `rgba(${gm.color.join(', ')})` }} />
           </div>
-      }
+        </div>
+      )}
       <Bate />
 
-      <Modal title='讲武堂法号' visible={versionVisible} okText='确定' cancelText='取消' centered={true} onOk={onVersionInputFinish} onCancel={() => setVersionVisible(false)}>
-
+      <Modal
+        title='讲武堂法号'
+        visible={versionVisible}
+        okText='确定'
+        cancelText='取消'
+        centered={true}
+        onOk={onVersionInputFinish}
+        onCancel={() => setVersionVisible(false)}
+      >
         <Input
           value={userName}
-          onChange={(e) => setUserName(e.target.value)}
+          onChange={e => setUserName(e.target.value)}
           placeholder='找道灵或者秃酱添加进讲武堂名单（无门槛）'
         />
       </Modal>
@@ -860,18 +906,15 @@ function CalculatorPage() {
 }
 
 function Bate() {
-
   return (
-    <Tooltip
-      title='测试版计算器 后续开放历史记录等功能 特别感谢秃不得、老萧'
-    >
+    <Tooltip title='测试版计算器 后续开放历史记录等功能 特别感谢秃不得、老萧'>
       <div className='calculator-bate'>
         <span>道灵、秃酱</span>
         <span>QQ: 871418277</span>
         <InfoCircleOutlined style={{ color: '#ffffff' }} />
       </div>
     </Tooltip>
-  )
+  );
 }
 
 export default CalculatorPage;

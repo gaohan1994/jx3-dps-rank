@@ -1,10 +1,10 @@
-import { createStore, applyMiddleware, compose } from "redux";
-import { createLogger } from "redux-logger";
-import rootReducers from "./root-reducers";
+import { createStore, applyMiddleware, compose } from 'redux';
+import { createLogger } from 'redux-logger';
+import rootReducers from './root-reducers';
 
 const middlewares = [];
 
-if (process.env.NODE_ENV === "development") {
+if (process.env.NODE_ENV === 'development') {
   middlewares.push(createLogger());
 }
 

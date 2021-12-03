@@ -1,0 +1,9 @@
+node_modules
+dist
+**/js/thirdparty
+build
+scripts
+*.js
+config
+
+src/reportWebVitals.ts
