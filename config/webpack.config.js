@@ -26,10 +26,6 @@ const ModuleNotFoundPlugin = require('react-dev-utils/ModuleNotFoundPlugin');
 const ForkTsCheckerWebpackPlugin = require('react-dev-utils/ForkTsCheckerWebpackPlugin');
 const typescriptFormatter = require('react-dev-utils/typescriptFormatter');
 const ReactRefreshWebpackPlugin = require('@pmmmwh/react-refresh-webpack-plugin');
-const BundleAnalyzerPlugin = require('webpack-bundle-analyzer')
-  .BundleAnalyzerPlugin;
-
-const SkeletonPlugin = require('page-skeleton-webpack-plugin').SkeletonPlugin;
 
 const postcssNormalize = require('postcss-normalize');
 
@@ -304,12 +300,17 @@ module.exports = function (webpackEnv) {
       splitChunks: {
         chunks: 'all',
         name: isEnvDevelopment,
+        minChunks: 2,
+
+        // 最小打包体积 30k
+        minSize: 30 * 1024,
+        maxAsyncRequests: 8,
+
         cacheGroups: {
           vendors: {
             name: `chunk-vendors`,
             test: /[\\/]node_modules[\\/]/,
             priority: -10,
-            chunks: 'initial',
           },
           vendor: {
             filename: '[name].vendor.js',
@@ -322,11 +323,6 @@ module.exports = function (webpackEnv) {
           antd: {
             test: /[\\/]antd[\\/]/,
             name: 'antd',
-            priority: 0,
-          },
-          antdicons: {
-            test: /[\\/]@antd[\\/]/,
-            name: 'antdicons',
             priority: 0,
           },
           echarts: {
@@ -594,6 +590,7 @@ module.exports = function (webpackEnv) {
     },
     plugins: [
       // isEnvDevelopment && new BundleAnalyzerPlugin(),
+      // new BundleAnalyzerPlugin(),
       // Generates an `index.html` file with the <script> injected.
       new HtmlWebpackPlugin(
         Object.assign(
