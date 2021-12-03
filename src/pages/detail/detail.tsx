@@ -1,9 +1,9 @@
 import React, { useEffect, useLayoutEffect, useState } from 'react';
-import BaseDpsItem from '../../../component/base-dps-item';
+import BaseDpsItem from '../../component/dps-item/base-dps-item';
 import numeral from 'numeral';
 import './index.css';
 import * as echarts from 'echarts';
-import ProfitPage from '../calculator/profit';
+import ProfitPage from '../profit/profit';
 import Jx3DpsCore from 'jx3-dps-core';
 
 type GameClass = any;

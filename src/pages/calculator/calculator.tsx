@@ -6,7 +6,7 @@ import './index.css';
 import { Motion, spring, presets, TransitionMotion } from 'react-motion';
 import numeral from 'numeral';
 import DetailPage from '../detail/detail';
-import { useUserAttribute } from '../../../hooks/method';
+import { useUserAttribute } from '../../hooks/method';
 import {
   skillIcons,
   Formations,
@@ -24,10 +24,10 @@ import {
   Target,
   HomeFood,
 } from './config';
-import CalculatorTitle from './title';
-import cache from '../../../core/cache';
+import CalculatorTitle from '../../component/title/title';
+import cache from '../../core/cache';
 import { YiJinJingValues } from 'jx3-dps-core/build/types';
-import { UserAttributeKeys, getGameClass } from '../../../core/config';
+import { UserAttributeKeys, getGameClass } from '../../core/config';
 
 const BoxWidthConfig = {
   min: 300,

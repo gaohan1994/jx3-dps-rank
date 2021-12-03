@@ -41,12 +41,6 @@ module.exports = {
     'react/jsx-uses-react': 2,
     'react/jsx-uses-vars': 2,
     'react/jsx-pascal-case': 2,
-    'react/jsx-closing-bracket-location': [
-      'warn',
-      {
-        nonEmpty: 'after-props',
-      },
-    ],
     'react/jsx-no-duplicate-props': 2,
     'import/named': ['error'],
     //        "react-hooks/exhaustive-deps": "warn", //FIXME Enable,
