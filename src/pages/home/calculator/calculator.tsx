@@ -71,7 +71,7 @@ function CalculatorPage() {
   const [setBoenus, setSetBoenus] = useState(SetBoenus[1].value);
   const [teamSkill, setTeamSkill] = useState([] as any[]);
   const [groupSkill, setGroupSkill] = useState([] as any[]);
-  const [weapon, setWeapon] = useState(Weapons[0].value);
+  const [weapon, setWeapon] = useState(Weapons[0].value as any);
   const [enchant, setenchant] = useState(EnChants.map((item) => item.value));
   const [spine, setSpine] = useState(true);
   const [banquet, setBanquet] = useState([] as any[]);
@@ -643,7 +643,7 @@ function CalculatorPage() {
                           value={homefood}
                           onChange={(value) => setHomefood(value)}
                           style={{ width: '100%' }}>
-                          {HomeFood.map((item) => {
+                          {HomeFood.map((item: any) => {
                             return (
                               <Select.Option key={item.value} value={item.value}>
                                 {item.title}
