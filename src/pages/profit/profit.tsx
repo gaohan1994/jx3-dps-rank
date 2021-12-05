@@ -1,56 +1,66 @@
-import { YiJinJing, Profit } from 'jx3-dps-core';
-import React, { useState } from 'react';
+import React, { useState, useCallback, useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { CoreHelper, Profit } from 'jx3-dps-core';
 import { deepClone } from 'smar-util';
 import { Modal, Tabs } from 'antd';
 import * as echarts from 'echarts';
-import numeral from 'numeral';
+import { getJdcCore, getJdcResult, getJdcSupport } from '../../core/selector';
+import {
+  getProfitStoneLabelOptions,
+  makeProfitDom,
+  renderProfitPointSeries,
+  renderProfitPointTitle,
+  renderProfitPointXAxis,
+  renderProfitStoneXAxis,
+  sortProfitListByPoint,
+  sortProfitListByStone,
+  sortProfitListByStoneLevel,
+} from '../../utils/utils';
 
-type Props = {
-  controller: YiJinJing;
-};
+const PROFIT_POINT_TAB = 'PROFIT_POINT_TAB';
+const PROFIT_STONE_TAB = 'PROFIT_STONE_TAB';
 
-function ProfitPage(props: Props) {
-  const { controller } = props;
+const ProfitPage = () => {
+  const dispatch = useDispatch();
+
+  const jdcResult = useSelector(getJdcResult);
+  const jdcCore = useSelector(getJdcCore);
+  const jdcSupport = useSelector(getJdcSupport);
+
+  const [tab, setTab] = useState(PROFIT_POINT_TAB);
+  const changeTab = useCallback(tabKey => setTab(tabKey), []);
 
   const [visible, setVisible] = useState(false);
+  const [profit, setProfit] = useState([] as any[]);
 
-  const colcalutorProfit = async () => {
+  useEffect(() => {
+    if (!visible) {
+      return;
+    }
+    if (tab === PROFIT_POINT_TAB) {
+      showPointProfit();
+    }
+    if (tab === PROFIT_STONE_TAB) {
+      showStoneProfit();
+    }
+  }, [visible, tab]);
+
+  const calcalutorProfit = useCallback(() => {
     setVisible(true);
 
-    onPointProfit();
-  };
-
-  const onTabClick = (key: string) => {
-    if (key === '1') {
-      onPointProfit();
-    } else {
-      onStoneProfit();
-    }
-  };
-
-  const onPointProfit = async () => {
-    /**
-     * 元气 core
-     */
-    const profit = new Profit({
-      options: controller.options,
-      gainList: controller.support.gainList,
+    const pfit = new Profit({
+      core: jdcCore,
+      support: jdcSupport,
+      version: CoreHelper.CalculatorVersion.Normal,
     });
+    setProfit(pfit.calculatroProfit());
+  }, [jdcResult]);
 
-    /**
-     * 收益结果
-     * @param profitResult
-     */
-    const profitResult = await profit.calculatroProfit();
-
-    const reactPointDom = document.createElement('div');
-    reactPointDom.style.height = '500px';
-    reactPointDom.style.width = '800px';
+  const showPointProfit = useCallback(() => {
+    const reactPointDom = makeProfitDom();
     const pcharts = echarts.init(reactPointDom);
-
-    const pointData = deepClone(profitResult);
-    // 单点收益从大到小排序
-    pointData.sort((item1, item2) => item2.pointProfit - item1.pointProfit);
+    const pointData = profit;
+    pointData.sort(sortProfitListByPoint);
 
     const pointOptions = {
       title: {
@@ -58,20 +68,18 @@ function ProfitPage(props: Props) {
           color: '#ffffff',
         },
         left: 'left',
-        subtext: '单点收益百分比 %',
+        subtext: renderProfitPointTitle(),
       },
       xAxis: {
         type: 'category',
-        data: pointData.map(item => {
-          return item.title.replace('收益', '');
-        }),
+        data: pointData.map(renderProfitPointXAxis),
       },
       yAxis: {
         type: 'value',
       },
       series: [
         {
-          data: pointData.map(item => numeral(item.pointProfit * 100).format('0.00')),
+          data: pointData.map(renderProfitPointSeries),
           type: 'bar',
           label: {
             show: true,
@@ -82,57 +90,19 @@ function ProfitPage(props: Props) {
     };
     pcharts.setOption(pointOptions);
     document.getElementById('echarts-point-profit')?.replaceChildren(reactPointDom);
-  };
+  }, [profit]);
 
-  const onStoneProfit = async () => {
-    /**
-     * 元气 core
-     */
-    const profit = new Profit({
-      options: controller.options,
-      gainList: controller.support.gainList,
-    });
+  const showStoneProfit = useCallback(() => {
+    const reactPointDom = makeProfitDom();
+    const pcharts = echarts.init(reactPointDom);
+    const pointData = profit;
+    pointData.sort(sortProfitListByStone);
 
-    const labelOption = {
-      show: true,
-      position: 'insideBottom',
-      color: '#ffffff',
-      distance: 15,
-      align: 'left',
-      verticalAlign: 'middle',
-      rotate: 90,
-      formatter: '{c}  {name|{a}}',
-      fontSize: 16,
-      rich: {
-        name: {},
-      },
-    };
+    const data6 = pointData.map(profit => sortProfitListByStoneLevel(profit, 6));
+    const data7 = pointData.map(profit => sortProfitListByStoneLevel(profit, 7));
+    const data8 = pointData.map(profit => sortProfitListByStoneLevel(profit, 8));
 
-    /**
-     * 收益结果
-     * @param profitResult
-     */
-    const profitResult = await profit.calculatroProfit();
-
-    const stoneData = profitResult;
-    stoneData.sort((item1, item2) => {
-      return (item2.profitWithStone.get(8) || 0) - (item1.profitWithStone.get(8) || 0);
-    });
-    const reactStoneDom = document.createElement('div');
-    reactStoneDom.style.height = '500px';
-    reactStoneDom.style.width = '800px';
-    const scharts = echarts.init(reactStoneDom);
-
-    const data6 = stoneData.map(item =>
-      numeral(item.profitWithStone.get(6) || 0 * 100).format('0.00')
-    );
-    const data7 = stoneData.map(item =>
-      numeral(item.profitWithStone.get(7) || 0 * 100).format('0.00')
-    );
-    const data8 = stoneData.map(item =>
-      numeral(item.profitWithStone.get(8) || 0 * 100).format('0.00')
-    );
-
+    const labelOption = getProfitStoneLabelOptions();
     const schartsOptions = {
       title: {
         textStyle: {
@@ -153,9 +123,7 @@ function ProfitPage(props: Props) {
       },
       xAxis: {
         type: 'category',
-        data: stoneData.map(item => {
-          return item.title.replace('收益', '');
-        }),
+        data: pointData.map(renderProfitStoneXAxis),
       },
       yAxis: {
         type: 'value',
@@ -190,14 +158,13 @@ function ProfitPage(props: Props) {
         },
       ],
     };
-    scharts.setOption(schartsOptions);
-    document.getElementById('echarts-stone-profit')?.replaceChildren(reactStoneDom);
-  };
+    pcharts.setOption(schartsOptions);
+    document.getElementById('echarts-stone-profit')?.replaceChildren(reactPointDom);
+  }, [profit]);
 
   return (
     <div>
-      <span onClick={colcalutorProfit}>属性收益</span>
-
+      <span onClick={calcalutorProfit}>属性收益</span>
       <Modal
         visible={visible}
         onCancel={() => setVisible(false)}
@@ -208,16 +175,16 @@ function ProfitPage(props: Props) {
         wrapClassName='echarts-wrap'
         centered={true}
       >
-        <Tabs tabPosition='left' onTabClick={onTabClick}>
-          <Tabs.TabPane tab='单点收益' key='1'>
+        <Tabs tabPosition='left' onTabClick={changeTab}>
+          <Tabs.TabPane tab='单点收益' key={PROFIT_POINT_TAB}>
             <div id='echarts-point-profit' />
           </Tabs.TabPane>
-          <Tabs.TabPane tab='单孔收益' key='2'>
+          <Tabs.TabPane tab='单孔收益' key={PROFIT_STONE_TAB}>
             <div id='echarts-stone-profit' />
           </Tabs.TabPane>
         </Tabs>
       </Modal>
     </div>
   );
-}
+};
 export default ProfitPage;

@@ -1,6 +1,7 @@
 import React from 'react';
 import numeral from 'numeral';
 import './rank.css';
+import { getBackgroundColor } from '../../utils/utils';
 
 type Props = {
   index: any;
@@ -9,7 +10,6 @@ type Props = {
   value: string;
   percent?: number | string;
   subName?: string;
-  color?: string;
   extra?: any;
 };
 /**
@@ -19,7 +19,7 @@ type Props = {
  * @return {*}
  */
 function BaseDpsItem(props: Props) {
-  const { index, icon, name, subName, value, percent, color, extra } = props;
+  const { index, icon, name, subName, value, percent, extra } = props;
 
   const showValue = numeral(value).format('0,000');
 
@@ -54,7 +54,7 @@ function BaseDpsItem(props: Props) {
         className='rank-dps'
         style={{
           marginTop: 4,
-          backgroundColor: `rgb(${color ? color : '#fff'})`,
+          backgroundColor: getBackgroundColor(),
           width: `${percent || 100}%`,
         }}
       />
