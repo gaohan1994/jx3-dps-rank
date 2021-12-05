@@ -1,8 +1,5 @@
 import { combineReducers } from 'redux';
+import { jdcCore } from '../core/reducer';
 
-const demo = () => {
-  return {};
-};
-
-const rootReducers = combineReducers({ demo });
+const rootReducers = combineReducers({ jdcCore });
 export default rootReducers;

@@ -1,5 +1,7 @@
+/* eslint-disable no-unreachable */
 import React, { useEffect, useLayoutEffect, useState } from 'react';
-import Jx3DpsCore, { CoreHelper, YiJinJing } from 'jx3-dps-core';
+import { useDispatch } from 'react-redux';
+import { CoreHelper, createCalculator, createDpsCore, Support } from 'jx3-dps-core';
 import { Button, Card, Input, notification, Select, Tooltip, Switch, Modal, Slider } from 'antd';
 import { CaretRightOutlined, InfoCircleOutlined } from '@ant-design/icons';
 import './index.css';
@@ -8,7 +10,6 @@ import numeral from 'numeral';
 import DetailPage from '../detail/detail';
 import { useUserAttribute } from '../../hooks/method';
 import {
-  skillIcons,
   Formations,
   SetBoenus,
   TeamSkills,
@@ -26,8 +27,13 @@ import {
 } from './config';
 import CalculatorTitle from '../../component/title/title';
 import cache from '../../core/cache';
-import { YiJinJingValues } from 'jx3-dps-core/build/types';
-import { UserAttributeKeys, getGameClass } from '../../core/config';
+import { UserAttributeKeys } from '../../core/util';
+import icon from '../../assets/sl_yjj.png';
+import { getBackgroundColor, getInitUserAttributes } from '../../utils/utils';
+import { setJDCCore, setJDCResult, setJDCSupport } from '../../core/action';
+
+const BuffKeys: any = {};
+UserAttributeKeys.forEach(ua => (BuffKeys[ua.value] = ua.value));
 
 const BoxWidthConfig = {
   min: 300,
@@ -41,40 +47,17 @@ const ModeConfig = {
 };
 
 function CalculatorPage() {
+  const dispatch = useDispatch();
+
   useLayoutEffect(() => {
     document.title = '剑网三 少林 易筋经 计算器';
   }, []);
 
-  /**
-   * 设置人物属性
-   */
-  const [core, { setUserAttr, replaceUserAttr }] = useUserAttribute(
-    process.env.NODE_ENV === 'production'
-      ? {
-          JiChuGongJi: 0,
-          WuQiShangHai: 2000,
-          HuiXin: 0,
-          HuiXiao: 0,
-          PoFang: 0,
-          PoZhao: 0,
-          JiaSu: CoreHelper.JiaSuList.YiDuanJiaSu,
-          WuShuang: 0,
-          YuanQi: 0,
-        }
-      : {
-          JiChuGongJi: 14399,
-          WuQiShangHai: 1998,
-          HuiXin: 18.69,
-          HuiXiao: 175.77,
-          PoFang: 40.44,
-          PoZhao: 5298,
-          WuShuang: 47.49,
-          YuanQi: 2904,
-          JiaSu: CoreHelper.JiaSuList.YiDuanJiaSu,
-        }
-  );
+  // 设置人物属性
+  const defaultUserAttributes = getInitUserAttributes();
+  const [core, { setUserAttr, replaceUserAttr }] = useUserAttribute(defaultUserAttributes);
   // Jx3DpsCore 实例
-  const [controller, setController] = useState({} as YiJinJing);
+  const [controller, setController] = useState({} as any);
   const [mode, setMode] = useState(ModeConfig.Normal);
   const [formation, setFormation] = useState(Formations[0].value);
   const [setBoenus, setSetBoenus] = useState(SetBoenus[1].value);
@@ -133,14 +116,12 @@ function CalculatorPage() {
   /**
    * 计算器版本
    */
-  const [version, setCalculatorVersion] = useState(
-    Jx3DpsCore.YiJinJing.YiJinJingVersion.Normal as YiJinJingValues
-  );
+  const [version, setCalculatorVersion] = useState(CoreHelper.CalculatorVersion.Normal as any);
 
   /**
    * 每次切换版本则重置计算结果
    */
-  const setVersion = (value: YiJinJingValues) => {
+  const setVersion = (value: string) => {
     setCalculatorVersion(value);
     setResult(undefined);
   };
@@ -154,15 +135,15 @@ function CalculatorPage() {
    */
   const changeCalculatorVersion = async () => {
     // 如果是从讲武堂模式切换到正式模式 则直接切换
-    if (version === Jx3DpsCore.YiJinJing.YiJinJingVersion.Immortal) {
-      setVersion(Jx3DpsCore.YiJinJing.YiJinJingVersion.Normal);
+    if (version === CoreHelper.CalculatorVersion.Immortal) {
+      setVersion(CoreHelper.CalculatorVersion.Normal);
       return;
     }
 
     // 如果是从正式版切换到讲武堂
     if (versionToken === true) {
       // 之前已经输入过讲武堂姓名校验成功
-      setVersion(Jx3DpsCore.YiJinJing.YiJinJingVersion.Immortal);
+      setVersion(CoreHelper.CalculatorVersion.Immortal);
       return;
     }
 
@@ -182,7 +163,7 @@ function CalculatorPage() {
 
     const result = await fetch(`${url}/${userName}`, { method: 'get' }).then(res => res.json());
     if (result.data === true) {
-      setVersion(Jx3DpsCore.YiJinJing.YiJinJingVersion.Immortal);
+      setVersion(CoreHelper.CalculatorVersion.Immortal);
       // 校验成功吧token设置为true
       setVersionToken(true);
       notification.success({ message: '切换成讲武堂版本！' });
@@ -364,25 +345,40 @@ function CalculatorPage() {
         coreValue[currentAttr.value] = core[currentAttr.value];
       }
 
-      const jx3Dps = new Jx3DpsCore.YiJinJing({
-        CalculatorVersion: version,
-        core: {
-          type: 'YuanQi',
-          ...coreValue,
-        },
-        support: {
-          mode: 'NeiGong',
-          target: target,
-          CWTimes: cwTimes,
-        },
+      const jdcCore = createDpsCore(
+        coreValue[BuffKeys.YuanQi],
+        coreValue[BuffKeys.JiChuGongJi], // 14470,
+        coreValue[BuffKeys.HuiXin], // 19.05,
+        coreValue[BuffKeys.HuiXiao], // 175.77,
+        coreValue[BuffKeys.PoFang], // 38.01,
+        coreValue[BuffKeys.PoZhao], // 4130,
+        coreValue[BuffKeys.WuShuang], // 54.06,
+        coreValue[BuffKeys.JiaSu], // 'YiDuanJiaSu',
+        coreValue[BuffKeys.WuQiShangHai] // 1998
+      );
+      console.log('[JDC-CORE:]', jdcCore);
+      cache.saveCoreAttributes(coreValue);
+      dispatch(setJDCCore(jdcCore));
+
+      const jdcSupport = new Support({
+        mode: 'NeiGong',
+        target: target,
+        CWTimes: cwTimes,
       });
 
-      cache.saveCoreAttributes(coreValue);
-
-      /**
-       * 增益库
-       * @param supportLib
-       */
+      jdcSupport.use(CoreHelper.TeamSkills.JinGangNuMu);
+      jdcSupport.use(CoreHelper.TeamSkills.QinLongJue);
+      jdcSupport.use({
+        name: 'UPDATE08-30',
+        type: 'Costom',
+        data: [{ gainTarget: 'damageBonus', value: 0.03, coverage: 1 }],
+      });
+      jdcSupport.use({
+        name: '少林常驻破防加成',
+        type: 'Costom',
+        data: [{ gainTarget: 'PoFangPercent', value: 0.15, coverage: 1 }],
+      });
+      // 增益库
       let supportLib = [];
 
       if (formation !== '') {
@@ -429,21 +425,25 @@ function CalculatorPage() {
       }
 
       if (hongFa === true) {
-        jx3Dps.use(CoreHelper.GroupSkills.HongFa, { coverage: hongFaPercent / 100 });
+        jdcSupport.use(CoreHelper.GroupSkills.HongFa, { coverage: hongFaPercent / 100 });
       }
 
       if (meiHuaDun === true) {
-        jx3Dps.use(CoreHelper.GroupSkills.MeiHuaDun, { coverage: meiHuaDunPercent / 100 });
+        jdcSupport.use(CoreHelper.GroupSkills.MeiHuaDun, { coverage: meiHuaDunPercent / 100 });
       }
 
       for (let index = 0; index < supportLib.length; index++) {
-        jx3Dps.use(supportLib[index], {});
+        jdcSupport.use(supportLib[index]);
       }
+      console.log('[JDC-SUPPORT]:', jdcSupport);
+      dispatch(setJDCSupport(jdcSupport));
 
-      const result = await jx3Dps.total();
-
+      const result = createCalculator(jdcCore, jdcSupport, version);
+      dispatch(setJDCResult(result));
+      // const result = await jx3Dps.total();
+      console.log('[JDC-RESULT]: ', result);
       // 设置实例
-      setController(jx3Dps);
+      setController(result);
 
       setTimeout(() => {
         setResult(result);
@@ -454,8 +454,6 @@ function CalculatorPage() {
       });
     }
   };
-
-  const gm = getGameClass('ShaoLin', 'YiJinJing');
 
   return (
     <div className='calculator-home'>
@@ -869,18 +867,12 @@ function CalculatorPage() {
       </Motion>
 
       {result !== undefined && !!result.dps ? (
-        <DetailPage
-          data={result}
-          gameClass={gm}
-          icons={skillIcons}
-          controller={controller}
-          version={version}
-        />
+        <DetailPage version={version} />
       ) : (
         <div style={{ display: 'flex', flex: 1, alignItems: 'center', justifyContent: 'center' }}>
           <div className='calculator-loading'>
-            <img src={gm.icon} />
-            <span style={{ backgroundColor: `rgba(${gm.color.join(', ')})` }} />
+            <img src={icon} />
+            <span style={{ backgroundColor: getBackgroundColor() }} />
           </div>
         </div>
       )}

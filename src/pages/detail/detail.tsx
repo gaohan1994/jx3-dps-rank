@@ -1,138 +1,104 @@
-import React, { useEffect, useLayoutEffect, useState } from 'react';
+import React, { useEffect, useMemo, useState, useCallback } from 'react';
+import { useSelector } from 'react-redux';
 import BaseDpsItem from '../../component/dps-item/base-dps-item';
-import numeral from 'numeral';
 import './index.css';
 import * as echarts from 'echarts';
 import ProfitPage from '../profit/profit';
-import Jx3DpsCore from 'jx3-dps-core';
-
-type GameClass = any;
+import { CoreHelper } from 'jx3-dps-core';
+import icon from '../../assets/sl_yjj.png';
+import { getJdcResult, getSkills } from '../../core/selector';
+import {
+  getSClassDps,
+  makeDpsRowChartsData,
+  renderDpsChartsTitle,
+  renderSeriesLabelFormatter,
+  renderTooltipFormatter,
+} from '../../utils/utils';
 
 type Props = {
-  data: any;
-  gameClass: GameClass;
-  icons?: any;
-  controller?: any;
   version: any;
 };
 
-function DetailPage(props: Props) {
-  const { data, gameClass, icons = {}, controller, version } = props;
-
+const DetailPage = (props: Props) => {
+  const { version } = props;
   const [mycharts, setMycharts] = useState({} as echarts.ECharts);
 
-  const skills: any[] = (data && data.skills) || [];
-  skills.sort((a, b) => a.subTotal - b.subTotal);
+  const data = useSelector(getJdcResult);
+  const skills = useSelector(getSkills);
+  skills.sort((a, b) => (a.subTotal ?? 0) - (b.subTotal ?? 0));
 
-  useLayoutEffect(() => {
+  const sClassDps = useMemo(() => getSClassDps(data.dps), [data]);
+
+  useEffect(() => {
     const chartsDom = document.getElementById('echarts-main');
-
     const myCharts = echarts.init(chartsDom as any);
     myCharts.resize();
     setMycharts(myCharts);
-  }, [data]);
+  }, []);
 
   useEffect(() => {
-    if (mycharts && mycharts.setOption && skills.length > 0) {
-      const chartsData = [];
-      const yAxisData = [];
-
-      const yAxisRichIcons: any = {};
-
-      for (let index = 0; index < skills.length; index++) {
-        const currentSkill = skills[index];
-        yAxisData.push(currentSkill.skillTitle);
-        chartsData.push(currentSkill.subTotal);
-
-        yAxisRichIcons[currentSkill.skillTitle] = {
-          backgroundColor: {
-            image: icons[currentSkill.skillName] || gameClass.icon,
-          },
-        };
-      }
-
-      const option = {
-        title: {
-          textStyle: {
-            color: '#ffffff',
-          },
-          left: 'center',
-          subtext: `总输出：${numeral(data.totalExpectation).format('0,000')} 战斗时间：${
-            data.seconds
-          }秒 DPS：${numeral(data.dps).format('0,000')} `,
-        },
-        yAxis: {
-          type: 'category',
-          data: yAxisData,
-        },
-        xAxis: {
-          type: 'value',
-        },
-        tooltip: {
-          trigger: 'axis',
-          axisPointer: {
-            // 坐标轴指示器，坐标轴触发有效
-            type: 'shadow', // 默认为直线，可选为：'line' | 'shadow'
-          },
-          formatter: function (params: any) {
-            var targetParams = params[0];
-            const currentSkill = skills.find(item => item.skillTitle === targetParams.axisValue);
-            return (
-              `技能：${currentSkill.skillTitle}` +
-              '<br/>' +
-              `次数：${currentSkill.skillTimes} 次` +
-              '<br/>' +
-              `平均单次输出：${numeral(currentSkill.subTotal / currentSkill.skillTimes).format(
-                '0,000'
-              )}` +
-              '<br/>' +
-              `小计：${currentSkill.subTotal}` +
-              '<br/>' +
-              `技能占比：${numeral(currentSkill.percent * 100).format('0.00')} %`
-            );
-          },
-        },
-        series: [
-          {
-            data: chartsData,
-            type: 'bar',
-            itemStyle: {
-              color: '#FFCE34',
-            },
-            label: {
-              show: true,
-              position: 'right',
-              color: '#ffffff',
-              formatter: function (params: any) {
-                var targetParams = params;
-                const currentSkill = skills.find(item => item.skillTitle === targetParams.name);
-                return `${numeral(currentSkill.percent * 100).format('0.00')} %`;
-              },
-            },
-          },
-        ],
-      };
-      mycharts.setOption(option);
+    if (!mycharts.setOption) {
+      return;
     }
+
+    const { chartsData, yAxisData } = makeDpsRowChartsData(skills);
+    const option = {
+      title: {
+        textStyle: {
+          color: '#ffffff',
+        },
+        left: 'center',
+        subtext: renderDpsChartsTitle(data),
+      },
+      yAxis: {
+        type: 'category',
+        data: yAxisData,
+      },
+      xAxis: {
+        type: 'value',
+      },
+      tooltip: {
+        trigger: 'axis',
+        axisPointer: {
+          // 坐标轴指示器，坐标轴触发有效
+          type: 'shadow', // 默认为直线，可选为：'line' | 'shadow'
+        },
+        formatter: (params: any) => renderTooltipFormatter(params, skills),
+      },
+      series: [
+        {
+          data: chartsData,
+          type: 'bar',
+          itemStyle: {
+            color: '#FFCE34',
+          },
+          label: {
+            show: true,
+            position: 'right',
+            color: '#ffffff',
+            formatter: (params: any) => renderSeriesLabelFormatter(params, skills),
+          },
+        },
+      ],
+    };
+    mycharts.setOption(option);
   }, [mycharts, skills]);
-
-  const SClass = numeral(data.dps * 1.03).format('0,000');
-
   return (
     <div className='detail-page'>
       {data && (
         <BaseDpsItem
           index='DPS'
-          icon={gameClass.icon}
-          name={`${gameClass.professionName} - ${gameClass.className}`}
-          value={data.dps}
-          color={gameClass.color.join(', ')}
+          icon={icon}
+          name='少林-易筋经'
+          value={`${data.dps}`}
           extra={
             <>
-              {version !== Jx3DpsCore.YiJinJing.YiJinJingVersion.Immortal && (
-                <span className='s-class'>S：{SClass}</span>
+              {version !== CoreHelper.CalculatorVersion.Immortal && (
+                <span className='s-class'>S：{sClassDps}</span>
               )}
-              <div className='profit-box'>{ProfitPage({ controller })}</div>
+              <div className='profit-box'>
+                <ProfitPage />
+              </div>
             </>
           }
         />
@@ -141,6 +107,6 @@ function DetailPage(props: Props) {
       <div id='echarts-main' style={{ width: '100%', height: '100%' }} />
     </div>
   );
-}
+};
 
 export default DetailPage;

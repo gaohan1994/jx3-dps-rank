@@ -1,11 +1,5 @@
 import { CoreHelper } from 'jx3-dps-core';
 
-const img1 = '';
-const img2 = '';
-const img3 = '';
-const img4 = '';
-const img5 = '';
-
 export const GroupSkills = [
   {
     title: '立地成佛',
@@ -268,18 +262,3 @@ export const Target = [
     value: CoreHelper.Target.DaMoDong,
   },
 ];
-
-export const skillIcons = {
-  WeiTuoXianChu: img1,
-  ShouQueShi: img2,
-  NaYunShi: img3,
-  HengSaoLiuHe: img4,
-  HengSaoLiuHeDot: img4,
-  PuDuSiFang: img5,
-  LiuHeGun: undefined,
-  SuoDi: undefined,
-  TiHuGuanDing: undefined,
-  FoGuo: undefined,
-  PoZhao: undefined,
-  EnChantShoe: undefined,
-};
