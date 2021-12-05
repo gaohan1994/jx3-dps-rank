@@ -1,19 +1,19 @@
-import React, { useEffect, useMemo, useState, useCallback } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { useSelector } from 'react-redux';
-import BaseDpsItem from '../../component/dps-item/base-dps-item';
-import './index.css';
-import * as echarts from 'echarts';
-import ProfitPage from '../profit/profit';
+import { init } from 'echarts';
+import icon from '@assets/sl_yjj.png';
+import { getJdcResult, getSkills } from '@core/selector';
+import BaseDpsItem from '@component/dps-item/base-dps-item';
 import { CoreHelper } from 'jx3-dps-core';
-import icon from '../../assets/sl_yjj.png';
-import { getJdcResult, getSkills } from '../../core/selector';
 import {
   getSClassDps,
   makeDpsRowChartsData,
   renderDpsChartsTitle,
   renderSeriesLabelFormatter,
   renderTooltipFormatter,
-} from '../../utils/utils';
+} from '@utils/utils';
+import './index.css';
+import ProfitPage from '../profit/profit';
 
 type Props = {
   version: any;
@@ -21,7 +21,7 @@ type Props = {
 
 const DetailPage = (props: Props) => {
   const { version } = props;
-  const [mycharts, setMycharts] = useState({} as echarts.ECharts);
+  const [mycharts, setMycharts] = useState({} as any);
 
   const data = useSelector(getJdcResult);
   const skills = useSelector(getSkills);
@@ -31,7 +31,7 @@ const DetailPage = (props: Props) => {
 
   useEffect(() => {
     const chartsDom = document.getElementById('echarts-main');
-    const myCharts = echarts.init(chartsDom as any);
+    const myCharts = init(chartsDom as any);
     myCharts.resize();
     setMycharts(myCharts);
   }, []);
