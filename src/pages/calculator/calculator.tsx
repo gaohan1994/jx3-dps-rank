@@ -2,7 +2,7 @@
 import React, { useMemo, useLayoutEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { CoreHelper, createCalculator, createDpsCore, Support } from 'jx3-dps-core';
-import { Button, Card, Input, notification, Select, Tooltip, Modal } from 'antd';
+import { Button, Card, notification, Tooltip } from 'antd';
 import { CaretRightOutlined, InfoCircleOutlined } from '@ant-design/icons';
 import './index.css';
 import { Motion, spring, presets, TransitionMotion } from 'react-motion';
@@ -47,10 +47,6 @@ function CalculatorPage() {
   const [boxWidth, setBoxWidth] = useState(BoxWidthConfig.min);
   const [translateY, setTranslateY] = useState(0);
   const [result, setResult] = useState(undefined as any);
-  const [versionToken, setVersionToken] = useState(false);
-  const [userName, setUserName] = useState('');
-  const [versionVisible, setVersionVisible] = useState(false);
-
   const jdcComponentsSelectedValues = useMemo(
     () => [
       getJDCGainGroupValue(coreComponentsValue, GainGroupTypes.Formations),

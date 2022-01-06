@@ -7,6 +7,7 @@ function CalculatorTitle(props: any) {
   const [visible, setVisible] = useState(false);
 
   const data = [
+    '血妈更新一波',
     '新增正式版和讲武堂版本',
     '新增属性收益',
     '新增保存最近一次的人物属性',

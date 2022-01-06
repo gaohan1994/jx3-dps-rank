@@ -163,7 +163,7 @@ const ProfitPage = () => {
 
   return (
     <div>
-      <span onClick={calcalutorProfit}>属性收益</span>
+      {/* <span onClick={calcalutorProfit}>属性收益</span> */}
       <Modal
         visible={visible}
         onCancel={() => setVisible(false)}
