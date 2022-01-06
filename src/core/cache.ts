@@ -1,17 +1,17 @@
 /**
  * 历史记录
- * 
+ *
  * 保存内容
  * - 保存角色属性
- * 
+ *
  * 保存方式
  * - 自动保存 | 手动保存
- * 
+ *
  * 导入功能
  * - 自动导入 + 手动导入
- * 
- * @Author: centerm.gaohan 
- * @Date: 2021-09-02 14:34:09 
+ *
+ * @Author: centerm.gaohan
+ * @Date: 2021-09-02 14:34:09
  * @Last Modified by: centerm.gaohan
  * @Last Modified time: 2021-09-02 15:12:59
  */
@@ -19,8 +19,8 @@
 class Cache {
   static Keys = {
     // 保存人物属性的历史记录
-    Core: 'Jx3DpsCalculator-Core'
-  }
+    Core: 'Jx3DpsCalculator-Core',
+  };
   /**
    * 历史记录控制器
    *
@@ -46,13 +46,16 @@ class Cache {
    * @memberof Cache
    */
   public saveCoreAttributes(value: any): void {
-    this.controller.setItem(Cache.Keys.Core, typeof value === 'string' ? value : JSON.stringify(value));
+    this.controller.setItem(
+      Cache.Keys.Core,
+      typeof value === 'string' ? value : JSON.stringify(value)
+    );
   }
 
   /**
    * 返回最近一次的 Core 历史记录
    *
-   * @return {*} 
+   * @return {*}
    * @memberof Cache
    */
   public getLastCore() {
