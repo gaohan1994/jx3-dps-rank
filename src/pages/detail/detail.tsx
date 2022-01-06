@@ -4,7 +4,6 @@ import { init } from 'echarts';
 import icon from '@assets/sl_yjj.png';
 import { getJdcResult, getSkills } from '@core/selector';
 import BaseDpsItem from '@component/dps-item/base-dps-item';
-import { CoreHelper } from 'jx3-dps-core';
 import {
   getSClassDps,
   makeDpsRowChartsData,
@@ -15,12 +14,9 @@ import {
 import './index.css';
 import ProfitPage from '../profit/profit';
 
-type Props = {
-  version: any;
-};
+type Props = {};
 
 const DetailPage = (props: Props) => {
-  const { version } = props;
   const [mycharts, setMycharts] = useState({} as any);
 
   const data = useSelector(getJdcResult);
@@ -93,9 +89,9 @@ const DetailPage = (props: Props) => {
           value={`${data.dps}`}
           extra={
             <>
-              {version !== CoreHelper.CalculatorVersion.Immortal && (
+              {/* {version !== CoreHelper.CalculatorVersion.Immortal && (
                 <span className='s-class'>S：{sClassDps}</span>
-              )}
+              )} */}
               <div className='profit-box'>
                 <ProfitPage />
               </div>

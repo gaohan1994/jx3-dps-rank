@@ -51,7 +51,6 @@ const ProfitPage = () => {
     const pfit = new Profit({
       core: jdcCore,
       support: jdcSupport,
-      version: CoreHelper.CalculatorVersion.Normal,
     });
     setProfit(pfit.calculatroProfit());
   }, [jdcResult]);

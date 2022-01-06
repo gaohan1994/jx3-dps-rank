@@ -48,14 +48,33 @@
   align-items: center;
 }
 
+.calculator-item > .ant-select {
+  flex: 1;
+  max-width: 270px;
+}
+
 .calculator-item-title {
   width: 100px;
+}
+
+.calculator-item-extra {
+  margin-right: 25px;
 }
 
 .calculator-loading {
   align-items: center;
   justify-content: center;
   animation: rotate 15s linear infinite;
+}
+
+.calculator-button-wrapper {
+  justify-content: flex-end;
+}
+
+.calculator-suffix-wrapper {
+  color: #1890ff;
+  margin-left: 5px;
+  width: 20px;
 }
 
 @keyframes rotate {
@@ -79,7 +98,7 @@
 }
 
 .calculator-tips {
-  margin-top: 20px;
+  margin: 20px 0;
   background-color: gray;
   color: #f9f9f9;
   font-size: 12px;

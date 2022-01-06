@@ -1,34 +1,7 @@
 import numeral from 'numeral';
 import Skill from 'jx3-dps-core/build/packages/core/skill';
-import { CoreHelper } from 'jx3-dps-core';
 import { ProfitCore } from 'jx3-dps-core/build/packages/profit/profit';
 import { CalculatorResult } from 'jx3-dps-core/build/calculator/calculator';
-
-export const getInitUserAttributes = () => {
-  return process.env.NODE_ENV === 'production'
-    ? {
-        JiChuGongJi: 0,
-        WuQiShangHai: 2000,
-        HuiXin: 0,
-        HuiXiao: 0,
-        PoFang: 0,
-        PoZhao: 0,
-        JiaSu: CoreHelper.JiaSuList.YiDuanJiaSu,
-        WuShuang: 0,
-        YuanQi: 0,
-      }
-    : {
-        JiChuGongJi: 14399,
-        WuQiShangHai: 2000,
-        HuiXin: 18.69,
-        HuiXiao: 175.77,
-        PoFang: 40.44,
-        PoZhao: 5298,
-        WuShuang: 47.49,
-        YuanQi: 2904,
-        JiaSu: CoreHelper.JiaSuList.YiDuanJiaSu,
-      };
-};
 
 export const getThemeColor = () => [145, 134, 29].join(', ');
 export const getBackgroundColor = () => `rgba(${getThemeColor()})`;
