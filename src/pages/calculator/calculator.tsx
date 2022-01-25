@@ -19,7 +19,13 @@ import icon from '../../assets/sl_yjj.png';
 import { getBackgroundColor } from '../../utils/utils';
 import { setJDCCore, setJDCResult, setJDCSupport } from '../../core/action';
 import { Character, JDCDropdown, JDCSwitch, JDCTarget } from '@component/dps-core';
-import { getCore, getJDCCharacter, getJDCGainGroupValue, getJDCTarget } from '@core/selector';
+import {
+  getCore,
+  getJDCCharacter,
+  getJDCCWTimes,
+  getJDCGainGroupValue,
+  getJDCTarget,
+} from '@core/selector';
 
 const { GainGroupTypes } = CoreHelper;
 
@@ -31,6 +37,7 @@ const BoxWidthConfig = {
 function CalculatorPage() {
   const dispatch = useDispatch();
   const calculatorTarget = useSelector(getJDCTarget);
+  const calculatorCWTimes = useSelector(getJDCCWTimes);
   const characterAttributes = useSelector(getJDCCharacter);
   const coreComponentsValue = useSelector(getCore);
 
@@ -133,7 +140,7 @@ function CalculatorPage() {
       const jdcSupport = new Support({
         mode: 'NeiGong',
         target: calculatorTarget,
-        CWTimes: 3,
+        CWTimes: calculatorCWTimes,
       });
 
       jdcSupport.use(CoreHelper.TeamSkills.JinGangNuMu);

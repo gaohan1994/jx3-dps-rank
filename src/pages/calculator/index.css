@@ -57,6 +57,12 @@
   width: 100px;
 }
 
+.calculator-item-suffix {
+  width: 80px;
+  text-align: right;
+  font-weight: bold;
+}
+
 .calculator-item-extra {
   margin-right: 25px;
 }

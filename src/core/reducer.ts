@@ -10,6 +10,7 @@ import {
   RECEIVE_JDC_CHARACTER_CHANGE,
   REPLEASE_JDC_CHARACTER_ATTRIBUTES,
   RECEIVE_JDC_TARGET,
+  RECEIVE_JDC_CW_TIMES,
 } from './constants';
 import { JDCComponentsGainGroupValue } from './selector';
 
@@ -76,6 +77,7 @@ const initState = {
   jdcCharacter: initJdcCharacter,
   jdcSupport: {},
   jdcTarget: initTarget,
+  jdcCWTimes: 3,
 
   [GainGroupTypes.Formations]: {} as JDCComponentsGainGroupValue,
   [GainGroupTypes.TeamSkills]: {} as JDCComponentsGainGroupValue,
@@ -163,6 +165,12 @@ export const jdcCore = (state = initState, { type, payload }: any) => {
       return {
         ...state,
         jdcTarget: payload,
+      };
+    }
+    case RECEIVE_JDC_CW_TIMES: {
+      return {
+        ...state,
+        jdcCWTimes: payload,
       };
     }
     default: {

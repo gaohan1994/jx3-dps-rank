@@ -12,7 +12,7 @@ import {
 import { getCore, getJDCGainGroupValue } from '@core/selector';
 import { setJDCGain } from '@core/action';
 import { SetExtraModal } from '../extra/extra';
-import { makeJDCComponentSelectOptions } from '@core/util';
+import { gainIsCW, makeJDCComponentSelectOptions } from '@core/util';
 
 const { GainGroupTypes } = CoreHelper;
 const { allGainGroupList, allGainList } = gainModule;
@@ -87,28 +87,11 @@ export const JDCDropdown = (props: JDCDropdownProps) => {
     [multiple]
   );
 
-  const [
-    selectPlaceholder,
-    selectValue,
-    showGroupSkillsExtra,
-    showTeamSkillsExtra,
-    selectOptions,
-    suffixEmptyIcon,
-  ] = useMemo(
+  const [selectPlaceholder, selectValue, selectOptions, suffixEmptyIcon] = useMemo(
     () => [
       `${currentGroupData.title} - 无`,
       !multiple ? currentGroupValue?.value?.[0] : currentGroupValue.value,
-
-      currentGroupValue.value &&
-        currentGroupValue.value.length > 0 &&
-        JDCDataName === GainGroupTypes.GroupSkills,
-
-      currentGroupValue.value &&
-        currentGroupValue.value.length > 0 &&
-        JDCDataName === GainGroupTypes.TeamSkills,
-
       makeJDCComponentSelectOptions(currentGroupData),
-
       currentGroupValue.value && currentGroupValue.value.length > 0 && (
         <CloseCircleOutlined onClick={emptyDropdownAction} />
       ),
@@ -116,6 +99,22 @@ export const JDCDropdown = (props: JDCDropdownProps) => {
     [currentGroupData, currentGroupValue, multiple, JDCDataName]
   );
 
+  // show extra stuff
+  const [showGroupSkillsExtra, showTeamSkillsExtra, showWeaponExtra] = useMemo(
+    () => [
+      currentGroupValue.value &&
+        currentGroupValue.value.length > 0 &&
+        JDCDataName === GainGroupTypes.GroupSkills,
+      currentGroupValue.value &&
+        currentGroupValue.value.length > 0 &&
+        JDCDataName === GainGroupTypes.TeamSkills,
+      currentGroupValue.value &&
+        currentGroupValue.value.length > 0 &&
+        JDCDataName === GainGroupTypes.Weapons &&
+        gainIsCW(selectGainById(allGainList, selectValue as number)),
+    ],
+    [currentGroupValue, selectValue]
+  );
   return (
     <>
       <div className='calculator-item'>
@@ -142,6 +141,9 @@ export const JDCDropdown = (props: JDCDropdownProps) => {
         <SetExtraModal gainGroup={currentGroupData} currentGroupValue={currentGroupValue} />
       )}
       {showTeamSkillsExtra && (
+        <SetExtraModal gainGroup={currentGroupData} currentGroupValue={currentGroupValue} />
+      )}
+      {showWeaponExtra && (
         <SetExtraModal gainGroup={currentGroupData} currentGroupValue={currentGroupValue} />
       )}
     </>

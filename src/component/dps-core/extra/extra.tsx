@@ -1,10 +1,11 @@
 import React, { useState, useMemo, useCallback } from 'react';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { Button, Modal, Slider } from 'antd';
 import { GainGroup } from 'jx3-dps-core/build/packages/gain/group';
 import { Gain } from 'jx3-dps-core/build/packages/gain/gain';
-import { JDCComponentsGainGroupValue } from '@core/selector';
-import { setJDCGainExtraOption } from '@core/action';
+import { getJDCCWTimes, JDCComponentsGainGroupValue } from '@core/selector';
+import { setJDCCWTimes, setJDCGainExtraOption } from '@core/action';
+import { gainIsCW, getNumberInteger } from '@core/util';
 
 type SetExtraModalProps = {
   gainGroup: GainGroup;
@@ -53,22 +54,50 @@ export const SetExtraModal = (props: SetExtraModalProps) => {
 
         <Modal title={extraText} visible={visible} centered={true} footer={null} onCancel={onHide}>
           {currentGroupValue.data.map(gainData => {
+            if (gainIsCW(gainData)) {
+              return <CWExtra gain={gainData} />;
+            }
+
             const currentSliderValue = +getCurrentSliderValue(gainData) * 100;
             return (
               <div key={gainData.id} className='calculator-item'>
                 <div className='calculator-item-title'>{gainData.name}</div>
                 <Slider
-                  style={{ width: '100%' }}
+                  style={{ flex: 1 }}
                   min={1}
                   max={100}
                   value={currentSliderValue}
                   onChange={value => setExtraOptionAction(gainData, value)}
                 />
+                <div className='calculator-item-suffix'>
+                  {`${getNumberInteger(currentSliderValue)} %`}
+                </div>
               </div>
             );
           })}
         </Modal>
       </div>
     </>
+  );
+};
+
+type CWExtraProps = {
+  gain: Gain;
+};
+
+const CWExtra = (props: CWExtraProps) => {
+  const { gain } = props;
+  const dispatch = useDispatch();
+  const cwTimes = useSelector(getJDCCWTimes);
+  const onCWTimesChange = useCallback(value => dispatch(setJDCCWTimes(value)), []);
+
+  // 战斗时间5分钟 最多每30秒触发一次
+  const max = (5 * 60) / 30;
+  return (
+    <div className='calculator-item'>
+      <div className='calculator-item-title'>{gain.name}</div>
+      <Slider style={{ flex: 1 }} min={1} max={max} value={cwTimes} onChange={onCWTimesChange} />
+      <div className='calculator-item-suffix'>{`${getNumberInteger(cwTimes)} 次`}</div>
+    </div>
   );
 };
