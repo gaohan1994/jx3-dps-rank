@@ -1,8 +1,8 @@
 import React, { useEffect, useMemo, useState } from 'react';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { init } from 'echarts';
 import icon from '@assets/sl_yjj.png';
-import { getJdcResult, getSkills } from '@core/selector';
+import { getJdcResult, getNeedResizeECharts, getSkills } from '@core/selector';
 import BaseDpsItem from '@component/dps-item/base-dps-item';
 import {
   getSClassDps,
@@ -13,14 +13,16 @@ import {
 } from '@utils/utils';
 import './index.css';
 import ProfitPage from '../profit/profit';
+import { setNeedResizeECharts } from '@core/action';
 
 type Props = {};
 
 const DetailPage = (props: Props) => {
   const [mycharts, setMycharts] = useState({} as any);
-
+  const dispatch = useDispatch();
   const data = useSelector(getJdcResult);
   const skills = useSelector(getSkills);
+  const resizeEChartsToken = useSelector(getNeedResizeECharts);
   skills.sort((a, b) => (a.subTotal ?? 0) - (b.subTotal ?? 0));
 
   const sClassDps = useMemo(() => getSClassDps(data.dps), [data]);
@@ -79,6 +81,14 @@ const DetailPage = (props: Props) => {
     };
     mycharts.setOption(option);
   }, [mycharts, skills]);
+
+  useEffect(() => {
+    if (mycharts.resize && resizeEChartsToken) {
+      mycharts.resize();
+      dispatch(setNeedResizeECharts(false));
+    }
+  }, [mycharts, resizeEChartsToken]);
+
   return (
     <div className='detail-page'>
       {data && (

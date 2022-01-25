@@ -35,3 +35,5 @@ export const getJDCCharacter = (state: any): JDCCharacter => state.jdcCore.jdcCh
 export const getJDCTarget = (state: any) => state.jdcCore.jdcTarget ?? {};
 
 export const getJDCCWTimes = (state: any) => state.jdcCore.jdcCWTimes ?? 3;
+
+export const getNeedResizeECharts = (state: any) => state.jdcCore.resizeECharts ?? false;
