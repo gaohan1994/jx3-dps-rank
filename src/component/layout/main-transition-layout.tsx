@@ -1,7 +1,6 @@
 import React, { useState, useRef, useCallback } from 'react';
 import { TransitionMotion, spring } from 'react-motion';
 import { CaretRightOutlined } from '@ant-design/icons';
-
 type MainTransitionLayoutProps = {
   children: any;
 };
@@ -14,13 +13,13 @@ export const MainTransitionLayout = (props: MainTransitionLayoutProps) => {
   const layoutRef = useRef(MAIN_LAYOUT_BOX_CLOSE);
 
   const [layouts, setLayouts] = useState([
-    { key: 'JDCUser', width: 300 },
+    { key: 'JDCUser', width: 300, opacity: 1 },
     { key: 'JDCOptions', width: 0, opacity: 0 },
   ]);
 
   const closeBox = () => {
     setLayouts([
-      { key: 'JDCUser', width: 300 },
+      { key: 'JDCUser', width: 300, opacity: 1 },
       { key: 'JDCOptions', width: 0, opacity: 0 },
     ]);
     layoutRef.current = MAIN_LAYOUT_BOX_CLOSE;
@@ -28,7 +27,7 @@ export const MainTransitionLayout = (props: MainTransitionLayoutProps) => {
 
   const openBox = () => {
     setLayouts([
-      { key: 'JDCUser', width: 300 },
+      { key: 'JDCUser', width: 300, opacity: 1 },
       { key: 'JDCOptions', width: 400, opacity: 1 },
     ]);
     layoutRef.current = MAIN_LAYOUT_BOX_OPEN;

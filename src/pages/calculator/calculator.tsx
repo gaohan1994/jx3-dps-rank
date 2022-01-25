@@ -16,7 +16,7 @@ import {
 } from '../../core/util';
 import icon from '../../assets/sl_yjj.png';
 import { getBackgroundColor } from '../../utils/utils';
-import { setJDCCore, setJDCResult, setJDCSupport } from '../../core/action';
+import { setJDCCore, setJDCResult, setJDCSupport, setNeedResizeECharts } from '../../core/action';
 import { Character, JDCDropdown, JDCSwitch, JDCTarget } from '@component/dps-core';
 import {
   getCore,
@@ -122,6 +122,7 @@ function CalculatorPage() {
       const result = createCalculator(jdcCore, jdcSupport);
       dispatch(setJDCResult(result));
       setTimeout(() => {
+        dispatch(setNeedResizeECharts(true));
         setResult(result);
       }, 1000 * 1);
     } catch (error: any) {

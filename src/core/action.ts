@@ -14,6 +14,7 @@ import {
   REPLEASE_JDC_CHARACTER_ATTRIBUTES,
   RECEIVE_JDC_TARGET,
   RECEIVE_JDC_CW_TIMES,
+  NEED_RESIZE_MAIN_ECHARTS,
 } from './constants';
 import { JDCComponentsSupportOptions } from './selector';
 import { JDCCharacter } from './reducer';
@@ -82,4 +83,8 @@ export const setJDCTarget = (target: TargetListKeys) => ({
 export const setJDCCWTimes = (times: number) => ({
   type: RECEIVE_JDC_CW_TIMES,
   payload: times,
+});
+export const setNeedResizeECharts = (value: boolean) => ({
+  type: NEED_RESIZE_MAIN_ECHARTS,
+  payload: value,
 });

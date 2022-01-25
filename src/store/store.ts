@@ -4,9 +4,6 @@ import rootReducers from './root-reducers';
 
 const middlewares = [];
 
-// if (process.env.NODE_ENV === 'development') {
-
-// }
 middlewares.push(createLogger());
 
 const enhancer = compose(applyMiddleware(...middlewares));
