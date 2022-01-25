@@ -3,9 +3,8 @@ import React, { useMemo, useLayoutEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { CoreHelper, createCalculator, createDpsCore, Support } from 'jx3-dps-core';
 import { Button, Card, notification, Tooltip } from 'antd';
-import { CaretRightOutlined, InfoCircleOutlined } from '@ant-design/icons';
+import { InfoCircleOutlined } from '@ant-design/icons';
 import './index.css';
-import { Motion, spring, presets, TransitionMotion } from 'react-motion';
 import numeral from 'numeral';
 import DetailPage from '../detail/detail';
 import CalculatorTitle from '../../component/title/title';
@@ -26,13 +25,9 @@ import {
   getJDCGainGroupValue,
   getJDCTarget,
 } from '@core/selector';
+import { MainTransitionLayout } from '@component/layout/main-transition-layout';
 
 const { GainGroupTypes } = CoreHelper;
-
-const BoxWidthConfig = {
-  min: 300,
-  max: 700,
-};
 
 function CalculatorPage() {
   const dispatch = useDispatch();
@@ -44,15 +39,6 @@ function CalculatorPage() {
   useLayoutEffect(() => {
     document.title = '剑网三 少林 易筋经 计算器';
   }, []);
-  /**
-   * 盒子宽度
-   * @param boxWidth
-   *
-   * icon 旋转角度
-   * @param translateY
-   */
-  const [boxWidth, setBoxWidth] = useState(BoxWidthConfig.min);
-  const [translateY, setTranslateY] = useState(0);
   const [result, setResult] = useState(undefined as any);
   const jdcComponentsSelectedValues = useMemo(
     () => [
@@ -82,33 +68,6 @@ function CalculatorPage() {
     [jdcComponentsSelectedValues]
   );
 
-  // 切换盒子宽度
-  const toogleBox = (value?: boolean) => {
-    let targetWidth = 0;
-    let targetTranslateY = 0;
-
-    if (boxWidth === BoxWidthConfig.min) {
-      targetWidth = BoxWidthConfig.max;
-      targetTranslateY = 180;
-    } else {
-      targetWidth = BoxWidthConfig.min;
-      targetTranslateY = 0;
-    }
-
-    if (value === true) {
-      targetWidth = BoxWidthConfig.max;
-      targetTranslateY = 180;
-    }
-
-    if (value === false) {
-      targetWidth = BoxWidthConfig.min;
-      targetTranslateY = 0;
-    }
-
-    setBoxWidth(targetWidth);
-    setTranslateY(targetTranslateY);
-  };
-
   // 计算dps
   const onCalculator = async () => {
     try {
@@ -121,7 +80,6 @@ function CalculatorPage() {
           throw new Error(`请输入${attributeTitle}`);
         }
       }
-
       const jdcCore = createDpsCore(
         numeral(characterAttributes.YuanQi).value(),
         numeral(characterAttributes.JiChuGongJi).value(), // 14470,
@@ -133,7 +91,7 @@ function CalculatorPage() {
         characterAttributes.JiaSu as any, // 'YiDuanJiaSu',
         numeral(characterAttributes.WuQiShangHai).value() // 1998
       );
-      // console.log('[JDC-CORE:]', jdcCore);
+
       cache.saveCoreAttributes(characterAttributes);
       dispatch(setJDCCore(jdcCore));
 
@@ -142,7 +100,6 @@ function CalculatorPage() {
         target: calculatorTarget,
         CWTimes: calculatorCWTimes,
       });
-
       jdcSupport.use(CoreHelper.TeamSkills.JinGangNuMu);
       jdcSupport.use(CoreHelper.TeamSkills.QinLongJue);
       jdcSupport.use({
@@ -161,13 +118,9 @@ function CalculatorPage() {
           jdcSupport.use(jdcSupportUseGain.gain, jdcSupportUseGain.options);
         });
       }
-      // console.log('[JDC-SUPPORT]:', jdcSupport);
       dispatch(setJDCSupport(jdcSupport));
-
       const result = createCalculator(jdcCore, jdcSupport);
-      // console.log('[object]', result);
       dispatch(setJDCResult(result));
-
       setTimeout(() => {
         setResult(result);
       }, 1000 * 1);
@@ -181,122 +134,60 @@ function CalculatorPage() {
   return (
     <div className='calculator-home'>
       <CalculatorTitle />
-      <Motion
+      <Card
         style={{
-          motionWidth: spring(boxWidth, presets.gentle),
-          motionTranslateY: spring(translateY),
+          overflow: 'hidden',
+          position: 'relative',
         }}
       >
-        {interpolatedStyle => {
-          return (
-            <Card
-              style={{
-                width: interpolatedStyle.motionWidth,
-                overflow: 'hidden',
-                position: 'relative',
-              }}
-            >
-              <div style={{ width: 260 }}>
-                <Character />
-                <JDCTarget />
-              </div>
-
-              <TransitionMotion
-                styles={
-                  interpolatedStyle.motionWidth > BoxWidthConfig.min + 50
-                    ? [
-                        {
-                          key: 'test',
-                          style: { scale: spring(1) },
-                        },
-                      ]
-                    : [
-                        {
-                          key: 'test',
-                          style: { scale: spring(0) },
-                        },
-                      ]
-                }
-              >
-                {inStyles => {
-                  return inStyles[0] ? (
-                    <div
-                      className='calculator-more-box'
-                      style={{
-                        transform: `scale(${inStyles[0].style.scale}, ${inStyles[0].style.scale})`,
-                      }}
-                    >
-                      <div className='calculator-title'>高级选项</div>
-                      <JDCDropdown
-                        JDCDataName={CoreHelper.GainGroupTypes.Formations}
-                        useDescription={false}
-                      />
-                      <JDCDropdown
-                        JDCDataName={CoreHelper.GainGroupTypes.Weapons}
-                        useDescription={false}
-                      />
-                      <JDCDropdown
-                        JDCDataName={CoreHelper.GainGroupTypes.SetBonusesGain}
-                        multiple={true}
-                        useDescription={false}
-                      />
-                      <JDCSwitch JDCDataName={CoreHelper.GainGroupTypes.EffectSpines} />
-                      <JDCDropdown
-                        JDCDataName={CoreHelper.GainGroupTypes.Enchants}
-                        multiple={true}
-                        useDescription={false}
-                      />
-                      <JDCDropdown JDCDataName={CoreHelper.GainGroupTypes.WeaponEnchant} />
-                      <JDCDropdown
-                        JDCDataName={CoreHelper.GainGroupTypes.Banquet}
-                        multiple={true}
-                      />
-                      <JDCDropdown JDCDataName={CoreHelper.GainGroupTypes.HomeFood} />
-                      <JDCDropdown JDCDataName={CoreHelper.GainGroupTypes.FoodEnhance} />
-                      <JDCDropdown JDCDataName={CoreHelper.GainGroupTypes.FoodSupport} />
-                      <JDCDropdown JDCDataName={CoreHelper.GainGroupTypes.DrugEnhance} />
-                      <JDCDropdown JDCDataName={CoreHelper.GainGroupTypes.DrugSupport} />
-                      <JDCDropdown JDCDataName={CoreHelper.GainGroupTypes.HomeDrink} />
-                      <JDCDropdown JDCDataName={CoreHelper.GainGroupTypes.FestivalFood} />
-                      <JDCDropdown
-                        JDCDataName={CoreHelper.GainGroupTypes.TeamSkills}
-                        multiple={true}
-                      />
-                      <JDCDropdown
-                        JDCDataName={CoreHelper.GainGroupTypes.GroupSkills}
-                        multiple={true}
-                      />
-                    </div>
-                  ) : (
-                    <div />
-                  );
-                }}
-              </TransitionMotion>
-
-              <div className='calculator-options-button'>
-                <div onClick={() => toogleBox()}>
-                  <CaretRightOutlined
-                    style={{ transform: `rotate(${interpolatedStyle.motionTranslateY}deg)` }}
-                  />
-                  高级选项
-                </div>
-              </div>
-
-              <div className='calculator-button'>
-                <Button
-                  style={{ width: 60, height: 60 }}
-                  type='primary'
-                  shape='circle'
-                  danger={true}
-                  onClick={onCalculator}
-                >
-                  计算
-                </Button>
-              </div>
-            </Card>
-          );
-        }}
-      </Motion>
+        <MainTransitionLayout>
+          <div style={{ width: 260 }}>
+            <Character />
+            <JDCTarget />
+          </div>
+          <div className='calculator-more-box'>
+            <div className='calculator-title'>高级选项</div>
+            <JDCDropdown
+              JDCDataName={CoreHelper.GainGroupTypes.Formations}
+              useDescription={false}
+            />
+            <JDCDropdown JDCDataName={CoreHelper.GainGroupTypes.Weapons} useDescription={false} />
+            <JDCDropdown
+              JDCDataName={CoreHelper.GainGroupTypes.SetBonusesGain}
+              multiple={true}
+              useDescription={false}
+            />
+            <JDCSwitch JDCDataName={CoreHelper.GainGroupTypes.EffectSpines} />
+            <JDCDropdown
+              JDCDataName={CoreHelper.GainGroupTypes.Enchants}
+              multiple={true}
+              useDescription={false}
+            />
+            <JDCDropdown JDCDataName={CoreHelper.GainGroupTypes.WeaponEnchant} />
+            <JDCDropdown JDCDataName={CoreHelper.GainGroupTypes.Banquet} multiple={true} />
+            <JDCDropdown JDCDataName={CoreHelper.GainGroupTypes.HomeFood} />
+            <JDCDropdown JDCDataName={CoreHelper.GainGroupTypes.FoodEnhance} />
+            <JDCDropdown JDCDataName={CoreHelper.GainGroupTypes.FoodSupport} />
+            <JDCDropdown JDCDataName={CoreHelper.GainGroupTypes.DrugEnhance} />
+            <JDCDropdown JDCDataName={CoreHelper.GainGroupTypes.DrugSupport} />
+            <JDCDropdown JDCDataName={CoreHelper.GainGroupTypes.HomeDrink} />
+            <JDCDropdown JDCDataName={CoreHelper.GainGroupTypes.FestivalFood} />
+            <JDCDropdown JDCDataName={CoreHelper.GainGroupTypes.TeamSkills} multiple={true} />
+            <JDCDropdown JDCDataName={CoreHelper.GainGroupTypes.GroupSkills} multiple={true} />
+          </div>
+        </MainTransitionLayout>
+        <div className='calculator-button'>
+          <Button
+            style={{ width: 60, height: 60 }}
+            type='primary'
+            shape='circle'
+            danger={true}
+            onClick={onCalculator}
+          >
+            计算
+          </Button>
+        </div>
+      </Card>
 
       {result !== undefined && !!result.dps ? (
         <DetailPage />

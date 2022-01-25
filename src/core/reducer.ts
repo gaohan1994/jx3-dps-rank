@@ -55,18 +55,18 @@ const initJdcCharacter: JDCCharacter =
         PoZhao: '',
         WuShuang: '',
         JiaSu: CoreHelper.JiaSuList.YiDuanJiaSu,
-        WuQiShangHai: '',
+        WuQiShangHai: '2000',
       }
     : {
         YuanQi: '2897',
         JiChuGongJi: '16912',
-        WuQiShangHai: '2000',
         HuiXin: '23.42',
         HuiXiao: '180.8',
         PoFang: '40.6',
         PoZhao: '3066',
         WuShuang: '52.05',
         JiaSu: CoreHelper.JiaSuList.YiDuanJiaSu,
+        WuQiShangHai: '2000',
       };
 
 const initTarget = CoreHelper.Target.MuZhuang113;
