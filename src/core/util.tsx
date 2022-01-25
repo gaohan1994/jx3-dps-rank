@@ -48,6 +48,9 @@ export const makeCharacterStuff = (characterValues: JDCCharacter): CharacterStuf
 
   for (const attributeKey in characterValues) {
     const [attributeTitle, attributeSuffix, sort] = makeCharacterOptions(attributeKey);
+    if (attributeTitle === '武器伤害') {
+      continue;
+    }
     characterSelectKeys.push({
       title: attributeTitle,
       target: attributeKey,
