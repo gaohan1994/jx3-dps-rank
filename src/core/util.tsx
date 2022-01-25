@@ -1,9 +1,8 @@
 import React from 'react';
+import numeral from 'numeral';
 import { CoreHelper } from 'jx3-dps-core';
 import { Gain } from 'jx3-dps-core/build/packages/gain/gain';
 import { GainGroup } from 'jx3-dps-core/build/packages/gain/group';
-import { Tooltip } from 'antd';
-import { InfoCircleOutlined } from '@ant-design/icons';
 import { JDCComponentsGainGroupValue, JDCComponentsSupportOptions } from './selector';
 import { JDCCharacter } from './reducer';
 
@@ -130,3 +129,7 @@ export const makeJDCComponentSelectOptions = (gainGroup: GainGroup) => {
 
   return list ?? [];
 };
+
+export const gainIsCW = (gain: Gain) => gain.name === '橙武';
+
+export const getNumberInteger = (value: number | string) => numeral(value).format('0');

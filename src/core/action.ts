@@ -13,6 +13,7 @@ import {
   RESET_JDC_CHARACTER_CHANGE,
   REPLEASE_JDC_CHARACTER_ATTRIBUTES,
   RECEIVE_JDC_TARGET,
+  RECEIVE_JDC_CW_TIMES,
 } from './constants';
 import { JDCComponentsSupportOptions } from './selector';
 import { JDCCharacter } from './reducer';
@@ -76,4 +77,9 @@ export const replaceJDCCharacterAttributes = (payload: JDCCharacter) => ({
 export const setJDCTarget = (target: TargetListKeys) => ({
   type: RECEIVE_JDC_TARGET,
   payload: target,
+});
+
+export const setJDCCWTimes = (times: number) => ({
+  type: RECEIVE_JDC_CW_TIMES,
+  payload: times,
 });

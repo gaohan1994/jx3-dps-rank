@@ -33,3 +33,5 @@ export const getJDCGainGroupValue = (
 export const getJDCCharacter = (state: any): JDCCharacter => state.jdcCore.jdcCharacter ?? {};
 
 export const getJDCTarget = (state: any) => state.jdcCore.jdcTarget ?? {};
+
+export const getJDCCWTimes = (state: any) => state.jdcCore.jdcCWTimes ?? 3;
