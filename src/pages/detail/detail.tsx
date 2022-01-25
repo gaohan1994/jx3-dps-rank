@@ -35,56 +35,55 @@ const DetailPage = (props: Props) => {
   }, []);
 
   useEffect(() => {
-    if (!mycharts.setOption) {
-      return;
-    }
-
-    const { chartsData, yAxisData } = makeDpsRowChartsData(skills);
-    const option = {
-      title: {
-        textStyle: {
-          color: '#ffffff',
-        },
-        left: 'center',
-        subtext: renderDpsChartsTitle(data),
-      },
-      yAxis: {
-        type: 'category',
-        data: yAxisData,
-      },
-      xAxis: {
-        type: 'value',
-      },
-      tooltip: {
-        trigger: 'axis',
-        axisPointer: {
-          // 坐标轴指示器，坐标轴触发有效
-          type: 'shadow', // 默认为直线，可选为：'line' | 'shadow'
-        },
-        formatter: (params: any) => renderTooltipFormatter(params, skills),
-      },
-      series: [
-        {
-          data: chartsData,
-          type: 'bar',
-          itemStyle: {
-            color: '#FFCE34',
-          },
-          label: {
-            show: true,
-            position: 'right',
+    if (mycharts.setOption) {
+      const { chartsData, yAxisData } = makeDpsRowChartsData(skills);
+      const option = {
+        title: {
+          textStyle: {
             color: '#ffffff',
-            formatter: (params: any) => renderSeriesLabelFormatter(params, skills),
           },
+          left: 'center',
+          subtext: renderDpsChartsTitle(data),
         },
-      ],
-    };
-    mycharts.setOption(option);
+        yAxis: {
+          type: 'category',
+          data: yAxisData,
+        },
+        xAxis: {
+          type: 'value',
+        },
+        tooltip: {
+          trigger: 'axis',
+          axisPointer: {
+            // 坐标轴指示器，坐标轴触发有效
+            type: 'shadow', // 默认为直线，可选为：'line' | 'shadow'
+          },
+          formatter: (params: any) => renderTooltipFormatter(params, skills),
+        },
+        series: [
+          {
+            data: chartsData,
+            type: 'bar',
+            itemStyle: {
+              color: '#FFCE34',
+            },
+            label: {
+              show: true,
+              position: 'right',
+              color: '#ffffff',
+              formatter: (params: any) => renderSeriesLabelFormatter(params, skills),
+            },
+          },
+        ],
+      };
+      mycharts.setOption(option);
+    }
   }, [mycharts, skills]);
 
   useEffect(() => {
     if (mycharts.resize && resizeEChartsToken) {
-      mycharts.resize();
+      // remove resize handle becouse echarts animation will invalid;
+      // mycharts.resize();
       dispatch(setNeedResizeECharts(false));
     }
   }, [mycharts, resizeEChartsToken]);

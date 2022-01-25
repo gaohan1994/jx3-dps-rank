@@ -23,6 +23,7 @@ import {
   getJDCCharacter,
   getJDCCWTimes,
   getJDCGainGroupValue,
+  getJdcResult,
   getJDCTarget,
 } from '@core/selector';
 import { MainTransitionLayout } from '@component/layout/main-transition-layout';
@@ -31,6 +32,7 @@ const { GainGroupTypes } = CoreHelper;
 
 function CalculatorPage() {
   const dispatch = useDispatch();
+  const result = useSelector(getJdcResult);
   const calculatorTarget = useSelector(getJDCTarget);
   const calculatorCWTimes = useSelector(getJDCCWTimes);
   const characterAttributes = useSelector(getJDCCharacter);
@@ -39,7 +41,6 @@ function CalculatorPage() {
   useLayoutEffect(() => {
     document.title = '剑网三 少林 易筋经 计算器';
   }, []);
-  const [result, setResult] = useState(undefined as any);
   const jdcComponentsSelectedValues = useMemo(
     () => [
       getJDCGainGroupValue(coreComponentsValue, GainGroupTypes.Formations),
@@ -71,6 +72,7 @@ function CalculatorPage() {
   // 计算dps
   const onCalculator = async () => {
     try {
+      dispatch(setNeedResizeECharts(true));
       for (const [attributeKey, attributeValue] of Object.entries(characterAttributes)) {
         if (checkCharacterAttributeCanBeEmpty(attributeKey)) {
           continue;
@@ -119,12 +121,8 @@ function CalculatorPage() {
         });
       }
       dispatch(setJDCSupport(jdcSupport));
-      const result = createCalculator(jdcCore, jdcSupport);
-      dispatch(setJDCResult(result));
-      setTimeout(() => {
-        dispatch(setNeedResizeECharts(true));
-        setResult(result);
-      }, 1000 * 1);
+      const currentResult = createCalculator(jdcCore, jdcSupport);
+      dispatch(setJDCResult(currentResult));
     } catch (error: any) {
       notification.error({
         message: error.message,
