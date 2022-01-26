@@ -51,6 +51,11 @@
   width: 100px;
 }
 
+.calculator-item-title-important {
+  font-weight: bold;
+  color: tomato;
+}
+
 .calculator-item-suffix {
   width: 80px;
   text-align: right;

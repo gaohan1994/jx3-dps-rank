@@ -1,4 +1,5 @@
 import { CoreHelper, gainModule, selectGainByName } from 'jx3-dps-core';
+import { CreateCalculatorOptions } from 'jx3-dps-core/build/calculator/calculator';
 import { JDCCharacterPayload, JDCGainDropdownPayload, JDCGainExtraOptionPayload } from './action';
 import {
   RECEIVE_JDC_RESILT,
@@ -12,6 +13,7 @@ import {
   RECEIVE_JDC_TARGET,
   RECEIVE_JDC_CW_TIMES,
   NEED_RESIZE_MAIN_ECHARTS,
+  RECEIVE_JDC_CALCULATOR_OPTIONS,
 } from './constants';
 import { JDCComponentsGainGroupValue } from './selector';
 
@@ -72,6 +74,11 @@ const initJdcCharacter: JDCCharacter =
 
 const initTarget = CoreHelper.Target.MuZhuang113;
 
+const initCalculatorOptions: CreateCalculatorOptions = {
+  qiXueVersion: CoreHelper.YiJinJingQiXueVersion.XinZheng,
+  skillEnchant: null as any,
+};
+
 const initState = {
   jdcResult: {},
   jdcCore: {},
@@ -79,6 +86,7 @@ const initState = {
   jdcSupport: {},
   jdcTarget: initTarget,
   jdcCWTimes: 3,
+  jdcCalculatorOptions: initCalculatorOptions,
   resizeECharts: false,
 
   [GainGroupTypes.Formations]: {} as JDCComponentsGainGroupValue,
@@ -179,6 +187,16 @@ export const jdcCore = (state = initState, { type, payload }: any) => {
       return {
         ...state,
         resizeECharts: payload,
+      };
+    }
+    case RECEIVE_JDC_CALCULATOR_OPTIONS: {
+      const { target, value } = payload;
+      return {
+        ...state,
+        jdcCalculatorOptions: {
+          ...state.jdcCalculatorOptions,
+          [target]: value,
+        },
       };
     }
     default: {

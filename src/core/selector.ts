@@ -1,7 +1,10 @@
 import DpsCore from 'jx3-dps-core/build/packages/core/core';
 import Support from 'jx3-dps-core/build/packages/support/support';
 import Skill from 'jx3-dps-core/build/packages/core/skill';
-import { CalculatorResult } from 'jx3-dps-core/build/calculator/calculator';
+import {
+  CalculatorResult,
+  CreateCalculatorOptions,
+} from 'jx3-dps-core/build/calculator/calculator';
 import { Gain } from 'jx3-dps-core/build/packages/gain/gain';
 import { JDCCharacter } from './reducer';
 
@@ -37,3 +40,6 @@ export const getJDCTarget = (state: any) => state.jdcCore.jdcTarget ?? {};
 export const getJDCCWTimes = (state: any) => state.jdcCore.jdcCWTimes ?? 3;
 
 export const getNeedResizeECharts = (state: any) => state.jdcCore.resizeECharts ?? false;
+
+export const getCalculatorOptions = (state: any): CreateCalculatorOptions =>
+  state.jdcCore.jdcCalculatorOptions ?? {};

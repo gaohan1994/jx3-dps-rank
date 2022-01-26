@@ -1,4 +1,7 @@
-import { CalculatorResult } from 'jx3-dps-core/build/calculator/calculator';
+import {
+  CalculatorResult,
+  CreateCalculatorOptions,
+} from 'jx3-dps-core/build/calculator/calculator';
 import DpsCore from 'jx3-dps-core/build/packages/core/core';
 import Support from 'jx3-dps-core/build/packages/support/support';
 import GainTypes from 'jx3-dps-core/build/packages/gain/gain';
@@ -15,6 +18,7 @@ import {
   RECEIVE_JDC_TARGET,
   RECEIVE_JDC_CW_TIMES,
   NEED_RESIZE_MAIN_ECHARTS,
+  RECEIVE_JDC_CALCULATOR_OPTIONS,
 } from './constants';
 import { JDCComponentsSupportOptions } from './selector';
 import { JDCCharacter } from './reducer';
@@ -84,7 +88,16 @@ export const setJDCCWTimes = (times: number) => ({
   type: RECEIVE_JDC_CW_TIMES,
   payload: times,
 });
+
 export const setNeedResizeECharts = (value: boolean) => ({
   type: NEED_RESIZE_MAIN_ECHARTS,
   payload: value,
+});
+
+export const setJDCCalculatorOptions = (target: keyof CreateCalculatorOptions, value: any) => ({
+  type: RECEIVE_JDC_CALCULATOR_OPTIONS,
+  payload: {
+    target,
+    value,
+  },
 });
