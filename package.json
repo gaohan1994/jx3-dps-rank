@@ -46,7 +46,7 @@
     "jest-circus": "26.6.0",
     "jest-resolve": "26.6.0",
     "jest-watch-typeahead": "0.6.1",
-    "jx3-dps-core": "^2.2.7",
+    "jx3-dps-core": "^2.2.8",
     "less": "^4.1.2",
     "less-loader": "7",
     "lodash": "^4.17.21",

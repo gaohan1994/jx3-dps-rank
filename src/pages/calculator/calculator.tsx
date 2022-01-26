@@ -19,6 +19,7 @@ import { getBackgroundColor } from '../../utils/utils';
 import { setJDCCore, setJDCResult, setJDCSupport, setNeedResizeECharts } from '../../core/action';
 import { Character, JDCDropdown, JDCSwitch, JDCTarget } from '@component/dps-core';
 import {
+  getCalculatorOptions,
   getCore,
   getJDCCharacter,
   getJDCCWTimes,
@@ -27,6 +28,7 @@ import {
   getJDCTarget,
 } from '@core/selector';
 import { MainTransitionLayout } from '@component/layout/main-transition-layout';
+import { JDCOptions } from '@component/dps-core/enchat/skill-enchat';
 
 const { GainGroupTypes } = CoreHelper;
 
@@ -35,6 +37,7 @@ function CalculatorPage() {
   const result = useSelector(getJdcResult);
   const calculatorTarget = useSelector(getJDCTarget);
   const calculatorCWTimes = useSelector(getJDCCWTimes);
+  const calculatorOptions = useSelector(getCalculatorOptions);
   const characterAttributes = useSelector(getJDCCharacter);
   const coreComponentsValue = useSelector(getCore);
 
@@ -121,7 +124,7 @@ function CalculatorPage() {
         });
       }
       dispatch(setJDCSupport(jdcSupport));
-      const currentResult = createCalculator(jdcCore, jdcSupport);
+      const currentResult = createCalculator(jdcCore, jdcSupport, calculatorOptions);
       dispatch(setJDCResult(currentResult));
     } catch (error: any) {
       notification.error({
@@ -143,6 +146,7 @@ function CalculatorPage() {
           <div style={{ width: 260 }}>
             <Character />
             <JDCTarget />
+            <JDCOptions />
           </div>
           <div className='calculator-more-box'>
             <div className='calculator-title'>高级选项</div>
