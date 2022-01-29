@@ -1,9 +1,15 @@
-import React from 'react';
+import React, { useCallback } from 'react';
 import { Button } from 'antd';
-import { useCalculatorHook } from '@core/hook';
+import { useDispatch } from 'react-redux';
+import { calculateJDCResultAction } from '@core/action';
 
 export const MainButton = () => {
-  const { calculate } = useCalculatorHook();
+  const dispatch = useDispatch();
+
+  const onCaculate = useCallback(() => {
+    dispatch(calculateJDCResultAction());
+  }, [calculateJDCResultAction]);
+
   return (
     <div className='calculator-button'>
       <Button
@@ -11,7 +17,7 @@ export const MainButton = () => {
         type='primary'
         shape='circle'
         danger={true}
-        onClick={calculate}
+        onClick={onCaculate}
       >
         计算
       </Button>

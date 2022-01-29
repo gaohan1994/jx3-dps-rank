@@ -73,6 +73,8 @@
     "react-router-dom": "^5.2.0",
     "redux": "^4.1.2",
     "redux-logger": "^3.0.6",
+    "redux-multi": "^0.1.12",
+    "redux-thunk": "^2.4.1",
     "resolve": "1.18.1",
     "resolve-url-loader": "^3.1.2",
     "sass-loader": "^10.0.5",
