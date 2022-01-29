@@ -1,27 +1,9 @@
-import React, { useState } from 'react';
-import { InfoCircleOutlined } from '@ant-design/icons';
-import { Modal, Timeline, Tooltip } from 'antd';
+import React from 'react';
+import { Tooltip } from 'antd';
 import './index.less';
+import { HistoryLog } from '@component/log/history-log';
 
-function CalculatorTitle(props: any) {
-  const [visible, setVisible] = useState(false);
-
-  const data = [
-    '血妈更新一波',
-    '新增正式版和讲武堂版本',
-    '新增属性收益',
-    '新增保存最近一次的人物属性',
-    '修复和尚阵、气纯阵、莫问阵无双少加bug',
-    '新增梅花盾、弘法',
-    '修复无视内防计算方式',
-    '更新 少林侠士3%增伤 2021-08-30',
-    '新增小吃',
-    '新增加速计算',
-    '新增橙武、水特效武器',
-    '新增团队辅助技能',
-    '新增小队辅助技能',
-  ];
-
+function CalculatorTitle() {
   /**
    * 为了保证准确计算大多数少林玩家dps，减少不必要的误解，计算器默认为正式版
    * 加入讲武堂之后可以切换至讲武堂版本，两版计算方式完全相同，只有技能数不同
@@ -41,27 +23,7 @@ function CalculatorTitle(props: any) {
           </Tooltip>
         </div>
       </header>
-      <div className='calculator-title-logs' onClick={() => setVisible(true)}>
-        更新日志
-        <InfoCircleOutlined style={{ color: '#ffffff', marginLeft: 10 }} />
-      </div>
-      <Modal
-        title='更新日志'
-        visible={visible}
-        onOk={() => setVisible(false)}
-        onCancel={() => setVisible(false)}
-        okText='确定'
-        cancelText='取消'
-        centered={true}
-      >
-        <div className='calculator-title-logs-box'>
-          <Timeline>
-            {data.map(item => {
-              return <Timeline.Item key={item}>{item}</Timeline.Item>;
-            })}
-          </Timeline>
-        </div>
-      </Modal>
+      <HistoryLog />
     </>
   );
 }
