@@ -1,6 +1,7 @@
 import { CoreHelper, gainModule, selectGainByName } from 'jx3-dps-core';
 import { CreateCalculatorOptions } from 'jx3-dps-core/build/calculator/calculator';
 import { JDCCharacterPayload, JDCGainDropdownPayload, JDCGainExtraOptionPayload } from './action';
+import cache from './cache';
 import {
   RECEIVE_JDC_RESILT,
   RECEIVE_JDC_CORE,
@@ -47,30 +48,28 @@ export type JDCCharacter = {
   WuQiShangHai?: string;
 };
 
-const initJdcCharacter: JDCCharacter =
-  process.env.NODE_ENV === 'production'
-    ? {
-        YuanQi: '',
-        JiChuGongJi: '',
-        HuiXin: '',
-        HuiXiao: '',
-        PoFang: '',
-        PoZhao: '',
-        WuShuang: '',
-        JiaSu: CoreHelper.JiaSuList.YiDuanJiaSu,
-        WuQiShangHai: '2000',
-      }
-    : {
-        YuanQi: '2897',
-        JiChuGongJi: '16912',
-        HuiXin: '23.42',
-        HuiXiao: '180.8',
-        PoFang: '40.6',
-        PoZhao: '3066',
-        WuShuang: '52.05',
-        JiaSu: CoreHelper.JiaSuList.YiDuanJiaSu,
-        WuQiShangHai: '2000',
-      };
+/**
+ * @param initJdcCharacter 角色属性
+ *
+ * @todo 修改导入方式
+ * @todo 默认导入上次计算时的角色属性
+ */
+const initJdcCharacter: JDCCharacter = cache.hasLastCore()
+  ? {
+      ...cache.getLastCore(),
+      WuQiShangHai: '2000',
+    }
+  : {
+      YuanQi: '',
+      JiChuGongJi: '',
+      HuiXin: '',
+      HuiXiao: '',
+      PoFang: '',
+      PoZhao: '',
+      WuShuang: '',
+      JiaSu: CoreHelper.JiaSuList.YiDuanJiaSu,
+      WuQiShangHai: '2000',
+    };
 
 const initTarget = CoreHelper.Target.MuZhuang113;
 

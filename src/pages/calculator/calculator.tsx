@@ -3,7 +3,7 @@ import React, { useLayoutEffect } from 'react';
 import { useSelector } from 'react-redux';
 import { CoreHelper } from 'jx3-dps-core';
 import { Card } from 'antd';
-import './index.css';
+import './index.less';
 import { getJdcResult } from '@core/selector';
 import DetailPage from '../detail/detail';
 import CalculatorTitle from '@component/title/title';
@@ -14,6 +14,8 @@ import { MainButton } from '@component/dps-item/main-button';
 import { Contract } from '@component/bate/contract';
 import { EmptyDetail } from '@component/layout/empty-detail';
 import { hasCalculatorResult } from '@core/util';
+import { CharacherTip } from '@component/log/characher-tip';
+import { PZCopy } from '@component/dps-item/pz-copy';
 
 function CalculatorPage() {
   const result = useSelector(getJdcResult);
@@ -33,6 +35,8 @@ function CalculatorPage() {
         <MainTransitionLayout>
           <div style={{ width: 260 }}>
             <Character />
+            <PZCopy />
+            <CharacherTip />
             <JDCTarget />
             <JDCOptions />
           </div>

@@ -1,15 +1,10 @@
 import React, { useMemo } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { Button, Input, Modal, notification, Select } from 'antd';
+import { Input, Select } from 'antd';
 import { CoreHelper } from 'jx3-dps-core';
 import { getJDCCharacter } from '@core/selector';
 import { makeCharacterStuff } from '@core/util';
-import {
-  replaceJDCCharacterAttributes,
-  resetJDCCharacterAttributes,
-  setJDCCharacterAttributes,
-} from '@core/action';
-import cache from '@core/cache';
+import { setJDCCharacterAttributes } from '@core/action';
 
 export const Character = () => {
   const dispatch = useDispatch();
@@ -27,31 +22,6 @@ export const Character = () => {
 
   const onChangeCharacterJiasu = jiaSuValue => {
     dispatch(setJDCCharacterAttributes({ target: 'JiaSu', value: jiaSuValue }));
-  };
-
-  const onResetCharacter = () => {
-    Modal.confirm({
-      title: '清空角色属性',
-      content: '确定清空角色属性吗？',
-      okText: '确定',
-      cancelText: '取消',
-      onOk: () => {
-        dispatch(resetJDCCharacterAttributes());
-      },
-    });
-  };
-
-  const onImportCharacter = () => {
-    const token = cache.hasLastCore();
-    if (!token) {
-      notification.error({
-        message: '导入失败',
-        description: '没有历史记录',
-      });
-      return;
-    }
-    const core = cache.getLastCore();
-    dispatch(replaceJDCCharacterAttributes(core));
   };
 
   return (
@@ -88,17 +58,6 @@ export const Character = () => {
           </div>
         );
       })}
-
-      <div className='calculator-bar'>
-        <Button type='primary' onClick={onImportCharacter}>
-          导入角色属性
-        </Button>
-        <Button onClick={onResetCharacter}>清空角色属性</Button>
-      </div>
-
-      <div className='calculator-tips'>
-        如果您输入的角色属性是已经吃过小吃、桌子等增益之后的面板了，请勿在高级选项中再次勾选，否则计算出来的结果会高很多
-      </div>
     </>
   );
 };
