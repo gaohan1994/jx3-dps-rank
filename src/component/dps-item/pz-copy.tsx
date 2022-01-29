@@ -1,16 +1,15 @@
 import React, { useCallback, useState } from 'react';
 import { Button, Modal, notification, Input, Tooltip } from 'antd';
 import { CoreHelper } from 'jx3-dps-core';
-import cache from '@core/cache';
 import { useDispatch } from 'react-redux';
 import { replaceJDCCharacterAttributes, resetJDCCharacterAttributes } from '@core/action';
 import { QuestionCircleOutlined } from '@ant-design/icons';
 import { PZCopyTip } from '@component/log/pz-copy-tip';
 import { JDCDropdown } from '@component/dps-core';
 import { getJsonFromBox, mapBoxJsonToCalcolator } from '@core/util';
+import { useCalculatorHook } from '@core/hook';
 
 const { TextArea } = Input;
-
 /**
  * @todo 导入配装器功能
  *
@@ -19,7 +18,7 @@ const { TextArea } = Input;
  */
 export const PZCopy = () => {
   const dispatch = useDispatch();
-
+  const { calculate } = useCalculatorHook();
   const [value, setValue] = useState('');
   const [visible, setVisible] = useState(false);
   const openImportModal = useCallback(() => setVisible(true), []);
@@ -48,11 +47,12 @@ export const PZCopy = () => {
       dispatch(replaceJDCCharacterAttributes(copyCore));
 
       notification.success({ message: '导入成功！' });
+      calculate();
       closeImportModal();
     } catch (error) {
       notification.error({ message: '请复制正确的配装数据' });
     }
-  }, [value]);
+  }, [value, calculate]);
 
   const howToImportPZ = () => {
     window.open('https://www.jx3box.com/tool/31607');
@@ -97,8 +97,9 @@ export const PZCopy = () => {
             multiple={true}
             useDescription={false}
           />
+
           <Button type='primary' size='large' onClick={onImportCharacter}>
-            识别并导入
+            识别导入并计算
           </Button>
         </div>
       </Modal>
