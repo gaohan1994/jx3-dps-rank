@@ -8,6 +8,7 @@ export const HistoryLog = () => {
   const [visible, setVisible] = useState(false);
 
   const data = [
+    '新增从魔盒导入人物属性; 2022-01-29',
     '新增金刚日轮; 2022-01-28',
     '移除武器伤害; 2022-01-25',
     '新增手动修改橙武触发次数; 2022-01-25',

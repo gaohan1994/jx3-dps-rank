@@ -138,3 +138,40 @@ export const gainIsCW = (gain: Gain) => gain.name === '橙武';
 export const getNumberInteger = (value: number | string) => numeral(value).format('0');
 
 export const hasCalculatorResult = (result): boolean => result !== undefined && !!result.dps;
+
+/**
+ * 从剑三魔盒配装器copy过来的数据转换成json格式
+ * @param value string
+ */
+export const getJsonFromBox = (value: string) => {
+  if (!value && typeof value !== 'string') {
+    return null;
+  }
+
+  return JSON.parse(value);
+};
+
+const makeNumberPercent = (attr: number): string => {
+  return numeral(attr * 100).format('0.00');
+};
+
+const makeJiaSuSection = (jiaSuValue: number) => {
+  if (jiaSuValue < 0.044) {
+    return CoreHelper.JiaSuList.YiDuanJiaSu;
+  }
+  return CoreHelper.JiaSuList.ErDuanJiaSu;
+};
+
+export const mapBoxJsonToCalcolator = (data): JDCCharacter => {
+  return {
+    YuanQi: data.Spunk,
+    JiChuGongJi: data.SolarAttackPowerBase,
+    HuiXin: makeNumberPercent(data.SolarCriticalStrikeRate),
+    HuiXiao: makeNumberPercent(data.SolarCriticalDamagePowerPercent),
+    PoFang: makeNumberPercent(data.SolarOvercomePercent),
+    PoZhao: data.SurplusValue,
+    WuShuang: makeNumberPercent(data.StrainPercent),
+    JiaSu: makeJiaSuSection(data.HastePercent),
+    WuQiShangHai: data.MeleeWeaponDamage,
+  };
+};
