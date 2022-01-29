@@ -42,13 +42,13 @@
   align-items: center;
 }
 
-.calculator-item > .ant-select {
+.calculator-item > .ant-input-affix-wrapper, .calculator-item > .ant-input, .calculator-item > .ant-select {
+  width: auto;
   flex: 1;
-  max-width: 270px;
 }
 
 .calculator-item-title {
-  width: 100px;
+  width: 80px;
 }
 
 .calculator-item-title-important {
@@ -124,4 +124,10 @@
   flex-direction: row;
   position: relative;
   height: 100%;
+}
+
+.calculator-history-item  > .ant-timeline-item-content {
+  display: flex;
+  justify-content: space-between;
+  padding-right: 20px;
 }

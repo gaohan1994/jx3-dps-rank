@@ -136,3 +136,5 @@ export const makeJDCComponentSelectOptions = (gainGroup: GainGroup) => {
 export const gainIsCW = (gain: Gain) => gain.name === '橙武';
 
 export const getNumberInteger = (value: number | string) => numeral(value).format('0');
+
+export const hasCalculatorResult = (result): boolean => result !== undefined && !!result.dps;

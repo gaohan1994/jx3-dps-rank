@@ -93,3 +93,8 @@ export const getProfitStoneLabelOptions = () => ({
     name: {},
   },
 });
+
+export const makeHistoryLogItem = (value: string) => {
+  const [log, time] = value.split(';');
+  return { log, time };
+};
