@@ -164,14 +164,14 @@ const makeJiaSuSection = (jiaSuValue: number) => {
 
 export const mapBoxJsonToCalcolator = (data): JDCCharacter => {
   return {
-    YuanQi: data.Spunk,
-    JiChuGongJi: data.SolarAttackPowerBase,
+    YuanQi: `${data.Spunk}`,
+    JiChuGongJi: `${data.SolarAttackPowerBase}`,
     HuiXin: makeNumberPercent(data.SolarCriticalStrikeRate),
     HuiXiao: makeNumberPercent(data.SolarCriticalDamagePowerPercent),
     PoFang: makeNumberPercent(data.SolarOvercomePercent),
-    PoZhao: data.SurplusValue,
+    PoZhao: `${data.SurplusValue}`,
     WuShuang: makeNumberPercent(data.StrainPercent),
     JiaSu: makeJiaSuSection(data.HastePercent),
-    WuQiShangHai: data.MeleeWeaponDamage,
+    WuQiShangHai: `${data.MeleeWeaponDamage}`,
   };
 };

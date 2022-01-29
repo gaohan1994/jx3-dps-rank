@@ -48,6 +48,17 @@ export type JDCCharacter = {
   WuQiShangHai?: string;
 };
 
+const emptyJdcCharacter = {
+  YuanQi: '',
+  JiChuGongJi: '',
+  HuiXin: '',
+  HuiXiao: '',
+  PoFang: '',
+  PoZhao: '',
+  WuShuang: '',
+  JiaSu: CoreHelper.JiaSuList.YiDuanJiaSu,
+  WuQiShangHai: '2000',
+};
 /**
  * @param initJdcCharacter 角色属性
  *
@@ -161,7 +172,7 @@ export const jdcCore = (state = initState, { type, payload }: any) => {
     case RESET_JDC_CHARACTER_CHANGE: {
       return {
         ...state,
-        jdcCharacter: initJdcCharacter,
+        jdcCharacter: emptyJdcCharacter,
       };
     }
     case REPLEASE_JDC_CHARACTER_ATTRIBUTES: {

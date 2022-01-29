@@ -1,10 +1,12 @@
+import numeral from 'numeral';
 import {
   CalculatorResult,
   CreateCalculatorOptions,
 } from 'jx3-dps-core/build/calculator/calculator';
 import DpsCore from 'jx3-dps-core/build/packages/core/core';
-import Support from 'jx3-dps-core/build/packages/support/support';
 import GainTypes from 'jx3-dps-core/build/packages/gain/gain';
+import { TargetListKeys } from 'jx3-dps-core/build/types';
+import { Support, CoreHelper, createCalculator, createDpsCore } from 'jx3-dps-core';
 
 import {
   RECEIVE_JDC_CORE,
@@ -20,9 +22,25 @@ import {
   NEED_RESIZE_MAIN_ECHARTS,
   RECEIVE_JDC_CALCULATOR_OPTIONS,
 } from './constants';
-import { JDCComponentsSupportOptions } from './selector';
+import {
+  getCalculatorOptions,
+  getCore,
+  getJDCCharacter,
+  getJDCCWTimes,
+  getJDCGainGroupValue,
+  getJDCTarget,
+  JDCComponentsSupportOptions,
+} from './selector';
 import { JDCCharacter } from './reducer';
-import { TargetListKeys } from 'jx3-dps-core/build/types';
+import {
+  checkCharacterAttributeCanBeEmpty,
+  makeCharacterOptions,
+  makeJDCSupportUseGain,
+} from './util';
+import cache from './cache';
+import { notification } from 'antd';
+
+const { GainGroupTypes } = CoreHelper;
 
 export const setJDCResult = (payload: CalculatorResult) => ({
   type: RECEIVE_JDC_RESILT,
@@ -101,3 +119,94 @@ export const setJDCCalculatorOptions = (target: keyof CreateCalculatorOptions, v
     value,
   },
 });
+
+export const calculateJDCResultAction = () => (dispatch, getState) => {
+  const state = getState();
+
+  const calculatorTarget = getJDCTarget(state);
+  const calculatorCWTimes = getJDCCWTimes(state);
+  const calculatorOptions = getCalculatorOptions(state);
+  const characterAttributes = getJDCCharacter(state);
+  const coreComponentsValue = getCore(state);
+
+  const jdcComponentsSelectedValues = [
+    getJDCGainGroupValue(coreComponentsValue, GainGroupTypes.Formations),
+    getJDCGainGroupValue(coreComponentsValue, GainGroupTypes.TeamSkills),
+    getJDCGainGroupValue(coreComponentsValue, GainGroupTypes.GroupSkills),
+    getJDCGainGroupValue(coreComponentsValue, GainGroupTypes.SetBonusesGain),
+    getJDCGainGroupValue(coreComponentsValue, GainGroupTypes.Weapons),
+    getJDCGainGroupValue(coreComponentsValue, GainGroupTypes.Enchants),
+    getJDCGainGroupValue(coreComponentsValue, GainGroupTypes.EffectSpines),
+    getJDCGainGroupValue(coreComponentsValue, GainGroupTypes.Banquet),
+    getJDCGainGroupValue(coreComponentsValue, GainGroupTypes.DrugEnhance),
+    getJDCGainGroupValue(coreComponentsValue, GainGroupTypes.DrugSupport),
+    getJDCGainGroupValue(coreComponentsValue, GainGroupTypes.FoodEnhance),
+    getJDCGainGroupValue(coreComponentsValue, GainGroupTypes.FoodSupport),
+    getJDCGainGroupValue(coreComponentsValue, GainGroupTypes.HomeFood),
+    getJDCGainGroupValue(coreComponentsValue, GainGroupTypes.Target),
+    getJDCGainGroupValue(coreComponentsValue, GainGroupTypes.WeaponEnchant),
+    getJDCGainGroupValue(coreComponentsValue, GainGroupTypes.HomeDrink),
+    getJDCGainGroupValue(coreComponentsValue, GainGroupTypes.FestivalFood),
+  ];
+
+  const jdcSupportUseGains = makeJDCSupportUseGain(jdcComponentsSelectedValues);
+
+  try {
+    for (const [attributeKey, attributeValue] of Object.entries(characterAttributes)) {
+      if (checkCharacterAttributeCanBeEmpty(attributeKey)) {
+        continue;
+      }
+      if (!attributeValue) {
+        const [attributeTitle] = makeCharacterOptions(attributeKey);
+        throw new Error(`请输入${attributeTitle}`);
+      }
+    }
+    const jdcCore = createDpsCore(
+      numeral(characterAttributes.YuanQi).value(),
+      numeral(characterAttributes.JiChuGongJi).value(),
+      numeral(characterAttributes.HuiXin).value(),
+      numeral(characterAttributes.HuiXiao).value(),
+      numeral(characterAttributes.PoFang).value(),
+      numeral(characterAttributes.PoZhao).value(),
+      numeral(characterAttributes.WuShuang).value(),
+      characterAttributes.JiaSu as any,
+      numeral(characterAttributes.WuQiShangHai).value()
+    );
+
+    cache.saveCoreAttributes(characterAttributes);
+    dispatch(setJDCCore(jdcCore));
+
+    const jdcSupport = new Support({
+      mode: 'NeiGong',
+      target: calculatorTarget,
+      CWTimes: calculatorCWTimes,
+    });
+    jdcSupport.use(CoreHelper.TeamSkills.JinGangNuMu);
+    jdcSupport.use(CoreHelper.TeamSkills.QinLongJue);
+    jdcSupport.use({
+      name: 'UPDATE08-30',
+      type: 'Costom',
+      data: [{ gainTarget: 'damageBonus', value: 0.03, coverage: 1 }],
+    });
+    jdcSupport.use({
+      name: '少林常驻破防加成',
+      type: 'Costom',
+      data: [{ gainTarget: 'PoFangPercent', value: 0.15, coverage: 1 }],
+    });
+
+    if (jdcSupportUseGains.length > 0) {
+      jdcSupportUseGains.forEach(jdcSupportUseGain => {
+        jdcSupport.use(jdcSupportUseGain.gain, jdcSupportUseGain.options);
+      });
+    }
+    dispatch(setJDCSupport(jdcSupport));
+    const currentResult = createCalculator(jdcCore, jdcSupport, calculatorOptions);
+    dispatch(setJDCResult(currentResult));
+  } catch (error: any) {
+    notification.error({
+      message: error.message,
+    });
+  }
+
+  return null;
+};
