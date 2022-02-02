@@ -1,17 +1,76 @@
-## 剑网三 dps 排行榜
 
-## 剑网三 dps 计算器
+## 剑网三 少林 易筋经 dps 计算器
 
-### 08-29
+本来打算写全职业计算器
 
-http://101.132.24.127:9090/#/calculator
-更新了
-1、加速计算
-2、橙武
-3、新增最大值模式
+后来发现步子迈的太大，扯到蛋了
 
-后续更新计划：
-1、历史记录
-2、更多小队、团队增益技能
+别的门派不好瞎掺和都有自己的“学术圈”
 
-这版没啥问题的话 明天就准备正式发布了，大家有什么意见都可以提
+还是管好自己门派的一亩三分地
+
+如果需要合作、有问题请联系我的QQ:871418277
+
+计算不准可以提issue给 [Jx3-dps-core](https://github.com/gaohan1994/jx3-dps-core)
+
+## 核心组件 
+
+[Jx3-dps-core](https://github.com/gaohan1994/jx3-dps-core)
+
+## document
+
+### 旧版本 jx3-dps-core 适配器
+
+```javascript
+/**
+ * 旧版本 Jx3-dps-core 适配器
+ * 如果是v3之前的jdc则删除掉cache防止出现白屏
+ * @component JDCAdapter
+ */
+<JDCAdapter />
+```
+
+### JDCDropdown
+
+```javascript
+/**
+ * @interface JDCDropdownProps
+ *
+ * @param JDCDataName 使用jx3-dps-core增益的名字
+ * @param multiple 是否多选
+ * @param useDescription 是否显示增益详情
+ */
+type JDCDropdownProps = {
+  JDCDataName: string;
+  multiple?: boolean;
+  useDescription?: boolean;
+};
+
+<JDCDropdown
+    JDCDataName={Jx3DpsCore.GainGroupTypes.Formations}
+    useDescription={false}
+/>
+<JDCDropdown JDCDataName={Jx3DpsCore.GainGroupTypes.Weapons} useDescription={false} />
+<JDCDropdown
+    JDCDataName={Jx3DpsCore.GainGroupTypes.SetBonusesGain}
+    multiple={true}
+    useDescription={false}
+/>
+<JDCSwitch JDCDataName={Jx3DpsCore.GainGroupTypes.EffectSpines} />
+<JDCDropdown
+    JDCDataName={Jx3DpsCore.GainGroupTypes.Enchants}
+    multiple={true}
+    useDescription={false}
+/>
+<JDCDropdown JDCDataName={Jx3DpsCore.GainGroupTypes.WeaponEnchant} />
+<JDCDropdown JDCDataName={Jx3DpsCore.GainGroupTypes.Banquet} multiple={true} />
+<JDCDropdown JDCDataName={Jx3DpsCore.GainGroupTypes.HomeFood} />
+<JDCDropdown JDCDataName={Jx3DpsCore.GainGroupTypes.FoodEnhance} />
+<JDCDropdown JDCDataName={Jx3DpsCore.GainGroupTypes.FoodSupport} />
+<JDCDropdown JDCDataName={Jx3DpsCore.GainGroupTypes.DrugEnhance} />
+<JDCDropdown JDCDataName={Jx3DpsCore.GainGroupTypes.DrugSupport} />
+<JDCDropdown JDCDataName={Jx3DpsCore.GainGroupTypes.HomeDrink} />
+<JDCDropdown JDCDataName={Jx3DpsCore.GainGroupTypes.FestivalFood} />
+<JDCDropdown JDCDataName={Jx3DpsCore.GainGroupTypes.TeamSkills} multiple={true} />
+<JDCDropdown JDCDataName={Jx3DpsCore.GainGroupTypes.GroupSkills} multiple={true} />
+```

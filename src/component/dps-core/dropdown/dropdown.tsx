@@ -15,6 +15,13 @@ import { gainIsCW, makeJDCComponentSelectOptions } from '@core/util';
 
 const { allGainGroupList, allGainList } = gainModule;
 
+/**
+ * @interface JDCDropdownProps
+ *
+ * @param JDCDataName 使用jx3-dps-core增益的名字
+ * @param multiple 是否多选
+ * @param useDescription 是否显示增益详情
+ */
 export type JDCDropdownProps = {
   JDCDataName: string;
   multiple?: boolean;
