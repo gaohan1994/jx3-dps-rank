@@ -8,6 +8,7 @@ export const HistoryLog = () => {
   const [visible, setVisible] = useState(false);
 
   const data = [
+    '修复使用金刚日轮时，其他技能数较多的bug; 2022-02-02',
     '修复颂言4%错误描述bug实际400攻击; 2022-01-31',
     '修复刀刀烈火bug; 2022-01-31',
     '新增从魔盒导入人物属性; 2022-01-29',
