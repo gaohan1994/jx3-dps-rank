@@ -73,6 +73,15 @@ class Cache {
     const core = this.getLastCore();
     return core !== undefined;
   }
+
+  /**
+   * 清空缓存的core
+   *
+   * @memberof Cache
+   */
+  public clearCore() {
+    this.controller.removeItem(Cache.Keys.Core);
+  }
 }
 
 export default new Cache();

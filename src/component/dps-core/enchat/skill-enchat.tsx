@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { Switch, Tooltip } from 'antd';
 import { getCalculatorOptions } from '@core/selector';
 import { setJDCCalculatorOptions } from '@core/action';
-import { CoreHelper } from 'jx3-dps-core';
+import Jx3DpsCore from 'jx3-dps-core';
 
 export const JDCOptions = () => {
   const dispatch = useDispatch();
@@ -12,7 +12,8 @@ export const JDCOptions = () => {
   const jinGangRiLunUsed = useMemo(
     () =>
       calculatorOptions.skillEnchant &&
-      calculatorOptions.skillEnchant === CoreHelper.YiJinJingSkillEnchant.JinGangRiLun
+      calculatorOptions.skillEnchant ===
+        Jx3DpsCore.CalculatorVersions.YiJinJingSkillEnchant.JinGangRiLun
         ? true
         : false,
     [calculatorOptions]
@@ -22,7 +23,10 @@ export const JDCOptions = () => {
       return dispatch(setJDCCalculatorOptions('skillEnchant', null));
     }
     dispatch(
-      setJDCCalculatorOptions('skillEnchant', CoreHelper.YiJinJingSkillEnchant.JinGangRiLun)
+      setJDCCalculatorOptions(
+        'skillEnchant',
+        Jx3DpsCore.CalculatorVersions.YiJinJingSkillEnchant.JinGangRiLun
+      )
     );
   }, [jinGangRiLunUsed]);
   return (

@@ -6,7 +6,7 @@ import {
 import DpsCore from 'jx3-dps-core/build/packages/core/core';
 import GainTypes from 'jx3-dps-core/build/packages/gain/gain';
 import { TargetListKeys } from 'jx3-dps-core/build/types';
-import { Support, CoreHelper, createCalculator, createDpsCore } from 'jx3-dps-core';
+import Jx3DpsCore, { Support } from 'jx3-dps-core';
 
 import {
   RECEIVE_JDC_CORE,
@@ -35,12 +35,13 @@ import { JDCCharacter } from './reducer';
 import {
   checkCharacterAttributeCanBeEmpty,
   makeCharacterOptions,
+  makeCharacterValue,
   makeJDCSupportUseGain,
 } from './util';
 import cache from './cache';
 import { notification } from 'antd';
 
-const { GainGroupTypes } = CoreHelper;
+const { GainGroupTypes } = Jx3DpsCore;
 
 export const setJDCResult = (payload: CalculatorResult) => ({
   type: RECEIVE_JDC_RESILT,
@@ -158,31 +159,20 @@ export const calculateJDCResultAction = () => (dispatch, getState) => {
       }
       if (!attributeValue) {
         const [attributeTitle] = makeCharacterOptions(attributeKey);
-        throw new Error(`请输入${attributeTitle}`);
+
+        if (attributeTitle) {
+          throw new Error(`请输入${attributeTitle}`);
+        }
       }
     }
-    const jdcCore = createDpsCore(
-      numeral(characterAttributes.YuanQi).value(),
-      numeral(characterAttributes.JiChuGongJi).value(),
-      numeral(characterAttributes.HuiXin).value(),
-      numeral(characterAttributes.HuiXiao).value(),
-      numeral(characterAttributes.PoFang).value(),
-      numeral(characterAttributes.PoZhao).value(),
-      numeral(characterAttributes.WuShuang).value(),
-      characterAttributes.JiaSu as any,
-      numeral(characterAttributes.WuQiShangHai).value()
-    );
-
     cache.saveCoreAttributes(characterAttributes);
-    dispatch(setJDCCore(jdcCore));
 
     const jdcSupport = new Support({
-      mode: 'NeiGong',
       target: calculatorTarget,
       CWTimes: calculatorCWTimes,
     });
-    jdcSupport.use(CoreHelper.TeamSkills.JinGangNuMu);
-    jdcSupport.use(CoreHelper.TeamSkills.QinLongJue);
+    jdcSupport.use(Jx3DpsCore.TeamSkills.JinGangNuMu);
+    jdcSupport.use(Jx3DpsCore.TeamSkills.QinLongJue);
     jdcSupport.use({
       name: 'UPDATE08-30',
       type: 'Costom',
@@ -191,7 +181,7 @@ export const calculateJDCResultAction = () => (dispatch, getState) => {
     jdcSupport.use({
       name: '少林常驻破防加成',
       type: 'Costom',
-      data: [{ gainTarget: 'PoFangPercent', value: 0.15, coverage: 1 }],
+      data: [{ gainTarget: 'SolarOvercomePercent', value: 0.15, coverage: 1 }],
     });
 
     if (jdcSupportUseGains.length > 0) {
@@ -200,8 +190,14 @@ export const calculateJDCResultAction = () => (dispatch, getState) => {
       });
     }
     dispatch(setJDCSupport(jdcSupport));
-    const currentResult = createCalculator(jdcCore, jdcSupport, calculatorOptions);
-    dispatch(setJDCResult(currentResult));
+    const jdc = new Jx3DpsCore(
+      makeCharacterValue(characterAttributes),
+      jdcSupport,
+      calculatorOptions
+    );
+    const result = jdc.calculate();
+    // const currentResult = createCalculator(jdcCore, jdcSupport, calculatorOptions);
+    dispatch(setJDCResult(result));
   } catch (error: any) {
     notification.error({
       message: error.message,

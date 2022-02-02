@@ -2,19 +2,17 @@ import React, { useMemo, useCallback } from 'react';
 import { CloseCircleOutlined } from '@ant-design/icons';
 import { useDispatch, useSelector } from 'react-redux';
 import { Select } from 'antd';
-import {
+import Jx3DpsCore, {
+  gainModule,
   selectGainGroupByName,
   selectGainById,
-  gainModule,
   gainDataToString,
-  CoreHelper,
 } from 'jx3-dps-core';
 import { getCore, getJDCGainGroupValue } from '@core/selector';
 import { setJDCGain } from '@core/action';
 import { SetExtraModal } from '../extra/extra';
 import { gainIsCW, makeJDCComponentSelectOptions } from '@core/util';
 
-const { GainGroupTypes } = CoreHelper;
 const { allGainGroupList, allGainList } = gainModule;
 
 export type JDCDropdownProps = {
@@ -104,13 +102,13 @@ export const JDCDropdown = (props: JDCDropdownProps) => {
     () => [
       currentGroupValue.value &&
         currentGroupValue.value.length > 0 &&
-        JDCDataName === GainGroupTypes.GroupSkills,
+        JDCDataName === Jx3DpsCore.GainGroupTypes.GroupSkills,
       currentGroupValue.value &&
         currentGroupValue.value.length > 0 &&
-        JDCDataName === GainGroupTypes.TeamSkills,
+        JDCDataName === Jx3DpsCore.GainGroupTypes.TeamSkills,
       currentGroupValue.value &&
         currentGroupValue.value.length > 0 &&
-        JDCDataName === GainGroupTypes.Weapons &&
+        JDCDataName === Jx3DpsCore.GainGroupTypes.Weapons &&
         gainIsCW(selectGainById(allGainList, selectValue as number)),
     ],
     [currentGroupValue, selectValue]

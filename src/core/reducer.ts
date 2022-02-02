@@ -1,5 +1,6 @@
-import { CoreHelper, gainModule, selectGainByName } from 'jx3-dps-core';
+import Jx3DpsCore, { selectGainByName, gainModule } from 'jx3-dps-core';
 import { CreateCalculatorOptions } from 'jx3-dps-core/build/calculator/calculator';
+import { CreateDpsCoreOptions } from 'jx3-dps-core/build/packages/core/core';
 import { JDCCharacterPayload, JDCGainDropdownPayload, JDCGainExtraOptionPayload } from './action';
 import cache from './cache';
 import {
@@ -18,46 +19,35 @@ import {
 } from './constants';
 import { JDCComponentsGainGroupValue } from './selector';
 
-const { GainGroupTypes } = CoreHelper;
 const { allGainList } = gainModule;
 
-const enChantBelt = selectGainByName(allGainList, CoreHelper.Enchants.EnChantBelt);
-const enChantBody = selectGainByName(allGainList, CoreHelper.Enchants.EnChantBody);
-const enChantHead = selectGainByName(allGainList, CoreHelper.Enchants.EnChantHead);
+const enChantBelt = selectGainByName(allGainList, Jx3DpsCore.Enchants.EnChantBelt);
+const enChantBody = selectGainByName(allGainList, Jx3DpsCore.Enchants.EnChantBody);
+const enChantHead = selectGainByName(allGainList, Jx3DpsCore.Enchants.EnChantHead);
 const initEnchant = {
   data: [enChantBelt, enChantBody, enChantHead],
   value: [enChantBelt, enChantBody, enChantHead].map(e => e.id),
 };
 
-const skillSetBonuse = selectGainByName(allGainList, CoreHelper.SetBonusesGain.SkillSetBonuse);
-const valueSetBonuse = selectGainByName(allGainList, CoreHelper.SetBonusesGain.ValueSetBonuse);
+const skillSetBonuse = selectGainByName(allGainList, Jx3DpsCore.SetBonusesGain.SkillSetBonuse);
+const valueSetBonuse = selectGainByName(allGainList, Jx3DpsCore.SetBonusesGain.ValueSetBonuse);
 const initSetBonuse = {
   data: [skillSetBonuse, valueSetBonuse],
   value: [skillSetBonuse, valueSetBonuse].map(e => e.id),
 };
 
-export type JDCCharacter = {
-  YuanQi: string;
-  JiChuGongJi: string;
-  HuiXin: string;
-  HuiXiao: string;
-  PoFang: string;
-  PoZhao: string;
-  WuShuang: string;
-  JiaSu: string;
-  WuQiShangHai?: string;
-};
+export type JDCCharacter = CreateDpsCoreOptions;
 
 const emptyJdcCharacter = {
-  YuanQi: '',
-  JiChuGongJi: '',
-  HuiXin: '',
-  HuiXiao: '',
-  PoFang: '',
-  PoZhao: '',
-  WuShuang: '',
-  JiaSu: CoreHelper.JiaSuList.YiDuanJiaSu,
-  WuQiShangHai: '2000',
+  Spunk: '',
+  SolarAttackPowerBase: '',
+  SolarCriticalStrikeRate: '',
+  SolarCriticalDamagePowerPercent: '',
+  SolarOvercomePercent: '',
+  SurplusValue: '',
+  StrainPercent: '',
+  Haste: Jx3DpsCore.HasteList.YiDuanJiaSu,
+  MeleeWeaponDamage: '2000',
 };
 /**
  * @param initJdcCharacter 角色属性
@@ -68,24 +58,24 @@ const emptyJdcCharacter = {
 const initJdcCharacter: JDCCharacter = cache.hasLastCore()
   ? {
       ...cache.getLastCore(),
-      WuQiShangHai: '2000',
+      MeleeWeaponDamage: '2000',
     }
   : {
-      YuanQi: '',
-      JiChuGongJi: '',
-      HuiXin: '',
-      HuiXiao: '',
-      PoFang: '',
-      PoZhao: '',
-      WuShuang: '',
-      JiaSu: CoreHelper.JiaSuList.YiDuanJiaSu,
-      WuQiShangHai: '2000',
+      Spunk: '',
+      SolarAttackPowerBase: '',
+      SolarCriticalStrikeRate: '',
+      SolarCriticalDamagePowerPercent: '',
+      SolarOvercomePercent: '',
+      SurplusValue: '',
+      StrainPercent: '',
+      Haste: Jx3DpsCore.HasteList.YiDuanJiaSu,
+      MeleeWeaponDamage: '2000',
     };
 
-const initTarget = CoreHelper.Target.MuZhuang113;
+const initTarget = Jx3DpsCore.Target.MuZhuang113;
 
 const initCalculatorOptions: CreateCalculatorOptions = {
-  qiXueVersion: CoreHelper.YiJinJingQiXueVersion.XinZheng,
+  qiXueVersion: Jx3DpsCore.CalculatorVersions.YiJinJingQiXueVersion.XinZheng,
   skillEnchant: null as any,
 };
 
@@ -99,20 +89,20 @@ const initState = {
   jdcCalculatorOptions: initCalculatorOptions,
   resizeECharts: false,
 
-  [GainGroupTypes.Formations]: {} as JDCComponentsGainGroupValue,
-  [GainGroupTypes.TeamSkills]: {} as JDCComponentsGainGroupValue,
-  [GainGroupTypes.GroupSkills]: {} as JDCComponentsGainGroupValue,
-  [GainGroupTypes.Weapons]: {} as JDCComponentsGainGroupValue,
-  [GainGroupTypes.EffectSpines]: {} as JDCComponentsGainGroupValue,
-  [GainGroupTypes.Banquet]: {} as JDCComponentsGainGroupValue,
-  [GainGroupTypes.DrugEnhance]: {} as JDCComponentsGainGroupValue,
-  [GainGroupTypes.DrugSupport]: {} as JDCComponentsGainGroupValue,
-  [GainGroupTypes.FoodEnhance]: {} as JDCComponentsGainGroupValue,
-  [GainGroupTypes.FoodSupport]: {} as JDCComponentsGainGroupValue,
-  [GainGroupTypes.HomeFood]: {} as JDCComponentsGainGroupValue,
+  [Jx3DpsCore.GainGroupTypes.Formations]: {} as JDCComponentsGainGroupValue,
+  [Jx3DpsCore.GainGroupTypes.TeamSkills]: {} as JDCComponentsGainGroupValue,
+  [Jx3DpsCore.GainGroupTypes.GroupSkills]: {} as JDCComponentsGainGroupValue,
+  [Jx3DpsCore.GainGroupTypes.Weapons]: {} as JDCComponentsGainGroupValue,
+  [Jx3DpsCore.GainGroupTypes.EffectSpines]: {} as JDCComponentsGainGroupValue,
+  [Jx3DpsCore.GainGroupTypes.Banquet]: {} as JDCComponentsGainGroupValue,
+  [Jx3DpsCore.GainGroupTypes.DrugEnhance]: {} as JDCComponentsGainGroupValue,
+  [Jx3DpsCore.GainGroupTypes.DrugSupport]: {} as JDCComponentsGainGroupValue,
+  [Jx3DpsCore.GainGroupTypes.FoodEnhance]: {} as JDCComponentsGainGroupValue,
+  [Jx3DpsCore.GainGroupTypes.FoodSupport]: {} as JDCComponentsGainGroupValue,
+  [Jx3DpsCore.GainGroupTypes.HomeFood]: {} as JDCComponentsGainGroupValue,
   // [GainGroupTypes.Target]: {} as JDCComponentsGainGroupValue,
-  [GainGroupTypes.SetBonusesGain]: initSetBonuse as JDCComponentsGainGroupValue,
-  [GainGroupTypes.Enchants]: initEnchant as JDCComponentsGainGroupValue,
+  [Jx3DpsCore.GainGroupTypes.SetBonusesGain]: initSetBonuse as JDCComponentsGainGroupValue,
+  [Jx3DpsCore.GainGroupTypes.Enchants]: initEnchant as JDCComponentsGainGroupValue,
 };
 
 export const jdcCore = (state = initState, { type, payload }: any) => {

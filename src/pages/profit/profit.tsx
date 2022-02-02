@@ -1,6 +1,6 @@
 import React, { useState, useCallback, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { CoreHelper, Profit } from 'jx3-dps-core';
+import Jx3DpsCore from 'jx3-dps-core';
 import { deepClone } from 'smar-util';
 import { Modal, Tabs } from 'antd';
 import * as echarts from 'echarts';
@@ -47,12 +47,6 @@ const ProfitPage = () => {
 
   const calcalutorProfit = useCallback(() => {
     setVisible(true);
-
-    const pfit = new Profit({
-      core: jdcCore,
-      support: jdcSupport,
-    });
-    setProfit(pfit.calculatroProfit());
   }, [jdcResult]);
 
   const showPointProfit = useCallback(() => {
