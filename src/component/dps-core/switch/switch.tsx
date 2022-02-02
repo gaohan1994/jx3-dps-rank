@@ -1,7 +1,7 @@
 import React, { useMemo, useCallback } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Switch } from 'antd';
-import { selectGainGroupByName, gainModule } from 'jx3-dps-core';
+import Jx3DpsCore, { gainModule, selectGainGroupByName } from 'jx3-dps-core';
 import { getCore, getJDCGainGroupValue } from '@core/selector';
 import { setJDCGain } from '@core/action';
 

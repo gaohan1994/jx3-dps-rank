@@ -1,32 +1,30 @@
 import React from 'react';
 import numeral from 'numeral';
-import { CoreHelper } from 'jx3-dps-core';
+import Jx3DpsCore from 'jx3-dps-core';
 import { Gain } from 'jx3-dps-core/build/packages/gain/gain';
 import { GainGroup } from 'jx3-dps-core/build/packages/gain/group';
 import { JDCComponentsGainGroupValue, JDCComponentsSupportOptions } from './selector';
 import { JDCCharacter } from './reducer';
 
-const { GainGroupTypes } = CoreHelper;
-
 export const makeCharacterOptions = (characterKey): Array<any> => {
   switch (characterKey) {
-    case 'YuanQi':
+    case 'Spunk':
       return ['元气', null, 1];
-    case 'JiChuGongJi':
+    case 'SolarAttackPowerBase':
       return ['基础攻击', null, 2];
-    case 'HuiXin':
+    case 'SolarCriticalStrikeRate':
       return ['会心', '%', 3];
-    case 'HuiXiao':
+    case 'SolarCriticalDamagePowerPercent':
       return ['会效', '%', 4];
-    case 'PoFang':
+    case 'SolarOvercomePercent':
       return ['破防', '%', 5];
-    case 'PoZhao':
+    case 'SurplusValue':
       return ['破招', null, 6];
-    case 'WuShuang':
+    case 'StrainPercent':
       return ['无双', '%', 7];
-    case 'JiaSu':
+    case 'Haste':
       return ['加速', null, 8];
-    case 'WuQiShangHai':
+    case 'MeleeWeaponDamage':
       return ['武器伤害', null, 9];
     default: {
       return [''];
@@ -51,19 +49,22 @@ export const makeCharacterStuff = (characterValues: JDCCharacter): CharacterStuf
     if (attributeTitle === '武器伤害') {
       continue;
     }
-    characterSelectKeys.push({
-      title: attributeTitle,
-      target: attributeKey,
-      suffix: attributeSuffix,
-      sort,
-    });
+
+    if (attributeTitle) {
+      characterSelectKeys.push({
+        title: attributeTitle,
+        target: attributeKey,
+        suffix: attributeSuffix,
+        sort,
+      });
+    }
   }
   characterSelectKeys.sort((a, b) => a.sort - b.sort);
   return characterSelectKeys;
 };
 
 export const checkCharacterAttributeCanBeEmpty = (characterKey: string) => {
-  if (characterKey === 'WuQiShangHai') {
+  if (characterKey === 'MeleeWeaponDamage') {
     return true;
   }
   return false;
@@ -100,12 +101,12 @@ export const makeJDCSupportUseGain = (selectedGains: JDCComponentsGainGroupValue
 export const makeJDCComponentSelectOptions = (gainGroup: GainGroup) => {
   const { list } = gainGroup;
 
-  if (gainGroup.name === GainGroupTypes.Enchants) {
+  if (gainGroup.name === Jx3DpsCore.GainGroupTypes.Enchants) {
     const nextList = list
       .map(item => {
         if (
-          item.name !== CoreHelper.Enchants.EnChantHand &&
-          item.name !== CoreHelper.Enchants.EnChantShoe
+          item.name !== Jx3DpsCore.Enchants.EnChantHand &&
+          item.name !== Jx3DpsCore.Enchants.EnChantShoe
         ) {
           return item;
         }
@@ -115,12 +116,12 @@ export const makeJDCComponentSelectOptions = (gainGroup: GainGroup) => {
     return nextList;
   }
 
-  if (gainGroup.name === GainGroupTypes.TeamSkills) {
+  if (gainGroup.name === Jx3DpsCore.GainGroupTypes.TeamSkills) {
     const nextList = list
       .map(item => {
         if (
-          item.name !== CoreHelper.TeamSkills.JinGangNuMu &&
-          item.name !== CoreHelper.TeamSkills.QinLongJue
+          item.name !== Jx3DpsCore.TeamSkills.JinGangNuMu &&
+          item.name !== Jx3DpsCore.TeamSkills.QinLongJue
         ) {
           return item;
         }
@@ -155,23 +156,35 @@ const makeNumberPercent = (attr: number): string => {
   return numeral(attr * 100).format('0.00');
 };
 
-const makeJiaSuSection = (jiaSuValue: number) => {
-  if (jiaSuValue < 0.044) {
-    return CoreHelper.JiaSuList.YiDuanJiaSu;
+const makeHasteSection = (hasteValue: number) => {
+  if (hasteValue < 0.044) {
+    return Jx3DpsCore.HasteList.YiDuanJiaSu;
   }
-  return CoreHelper.JiaSuList.ErDuanJiaSu;
+  return Jx3DpsCore.HasteList.ErDuanJiaSu;
 };
 
 export const mapBoxJsonToCalcolator = (data): JDCCharacter => {
   return {
-    YuanQi: `${data.Spunk}`,
-    JiChuGongJi: `${data.SolarAttackPowerBase}`,
-    HuiXin: makeNumberPercent(data.SolarCriticalStrikeRate),
-    HuiXiao: makeNumberPercent(data.SolarCriticalDamagePowerPercent),
-    PoFang: makeNumberPercent(data.SolarOvercomePercent),
-    PoZhao: `${data.SurplusValue}`,
-    WuShuang: makeNumberPercent(data.StrainPercent),
-    JiaSu: makeJiaSuSection(data.HastePercent),
-    WuQiShangHai: `${data.MeleeWeaponDamage}`,
+    ...data,
+    SolarCriticalStrikeRate: makeNumberPercent(data.SolarCriticalStrikeRate),
+    SolarCriticalDamagePowerPercent: makeNumberPercent(data.SolarCriticalDamagePowerPercent),
+    SolarOvercomePercent: makeNumberPercent(data.SolarOvercomePercent),
+    StrainPercent: makeNumberPercent(data.StrainPercent),
+    Haste: makeHasteSection(data.HastePercent),
   };
+};
+
+export const makeCharacterValue = (values: any): JDCCharacter => {
+  const coreAttrs: JDCCharacter = {
+    Spunk: numeral(values.Spunk).value(),
+    SolarAttackPowerBase: numeral(values.SolarAttackPowerBase).value(),
+    SolarCriticalStrikeRate: numeral(values.SolarCriticalStrikeRate).value(),
+    SolarCriticalDamagePowerPercent: numeral(values.SolarCriticalDamagePowerPercent).value(),
+    SolarOvercomePercent: numeral(values.SolarOvercomePercent).value(),
+    SurplusValue: numeral(values.SurplusValue).value(),
+    StrainPercent: numeral(values.StrainPercent).value(),
+    Haste: values.Haste,
+    MeleeWeaponDamage: numeral(values.MeleeWeaponDamage).value(),
+  };
+  return coreAttrs;
 };

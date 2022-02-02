@@ -1,7 +1,7 @@
 /* eslint-disable no-unreachable */
 import React, { useLayoutEffect } from 'react';
 import { useSelector } from 'react-redux';
-import { CoreHelper } from 'jx3-dps-core';
+import Jx3DpsCore from 'jx3-dps-core';
 import { Card } from 'antd';
 import './index.less';
 import { getJdcResult } from '@core/selector';
@@ -43,32 +43,32 @@ function CalculatorPage() {
           <div className='calculator-more-box'>
             <div className='calculator-title'>高级选项</div>
             <JDCDropdown
-              JDCDataName={CoreHelper.GainGroupTypes.Formations}
+              JDCDataName={Jx3DpsCore.GainGroupTypes.Formations}
               useDescription={false}
             />
-            <JDCDropdown JDCDataName={CoreHelper.GainGroupTypes.Weapons} useDescription={false} />
+            <JDCDropdown JDCDataName={Jx3DpsCore.GainGroupTypes.Weapons} useDescription={false} />
             <JDCDropdown
-              JDCDataName={CoreHelper.GainGroupTypes.SetBonusesGain}
+              JDCDataName={Jx3DpsCore.GainGroupTypes.SetBonusesGain}
               multiple={true}
               useDescription={false}
             />
-            <JDCSwitch JDCDataName={CoreHelper.GainGroupTypes.EffectSpines} />
+            <JDCSwitch JDCDataName={Jx3DpsCore.GainGroupTypes.EffectSpines} />
             <JDCDropdown
-              JDCDataName={CoreHelper.GainGroupTypes.Enchants}
+              JDCDataName={Jx3DpsCore.GainGroupTypes.Enchants}
               multiple={true}
               useDescription={false}
             />
-            <JDCDropdown JDCDataName={CoreHelper.GainGroupTypes.WeaponEnchant} />
-            <JDCDropdown JDCDataName={CoreHelper.GainGroupTypes.Banquet} multiple={true} />
-            <JDCDropdown JDCDataName={CoreHelper.GainGroupTypes.HomeFood} />
-            <JDCDropdown JDCDataName={CoreHelper.GainGroupTypes.FoodEnhance} />
-            <JDCDropdown JDCDataName={CoreHelper.GainGroupTypes.FoodSupport} />
-            <JDCDropdown JDCDataName={CoreHelper.GainGroupTypes.DrugEnhance} />
-            <JDCDropdown JDCDataName={CoreHelper.GainGroupTypes.DrugSupport} />
-            <JDCDropdown JDCDataName={CoreHelper.GainGroupTypes.HomeDrink} />
-            <JDCDropdown JDCDataName={CoreHelper.GainGroupTypes.FestivalFood} />
-            <JDCDropdown JDCDataName={CoreHelper.GainGroupTypes.TeamSkills} multiple={true} />
-            <JDCDropdown JDCDataName={CoreHelper.GainGroupTypes.GroupSkills} multiple={true} />
+            <JDCDropdown JDCDataName={Jx3DpsCore.GainGroupTypes.WeaponEnchant} />
+            <JDCDropdown JDCDataName={Jx3DpsCore.GainGroupTypes.Banquet} multiple={true} />
+            <JDCDropdown JDCDataName={Jx3DpsCore.GainGroupTypes.HomeFood} />
+            <JDCDropdown JDCDataName={Jx3DpsCore.GainGroupTypes.FoodEnhance} />
+            <JDCDropdown JDCDataName={Jx3DpsCore.GainGroupTypes.FoodSupport} />
+            <JDCDropdown JDCDataName={Jx3DpsCore.GainGroupTypes.DrugEnhance} />
+            <JDCDropdown JDCDataName={Jx3DpsCore.GainGroupTypes.DrugSupport} />
+            <JDCDropdown JDCDataName={Jx3DpsCore.GainGroupTypes.HomeDrink} />
+            <JDCDropdown JDCDataName={Jx3DpsCore.GainGroupTypes.FestivalFood} />
+            <JDCDropdown JDCDataName={Jx3DpsCore.GainGroupTypes.TeamSkills} multiple={true} />
+            <JDCDropdown JDCDataName={Jx3DpsCore.GainGroupTypes.GroupSkills} multiple={true} />
           </div>
         </MainTransitionLayout>
         <MainButton />

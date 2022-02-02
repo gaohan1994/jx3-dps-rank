@@ -1,6 +1,6 @@
 import React, { useCallback, useState } from 'react';
 import { Button, Modal, notification, Input, Tooltip } from 'antd';
-import { CoreHelper } from 'jx3-dps-core';
+import Jx3DpsCore from 'jx3-dps-core';
 import { useDispatch } from 'react-redux';
 import {
   calculateJDCResultAction,
@@ -11,6 +11,7 @@ import { QuestionCircleOutlined } from '@ant-design/icons';
 import { PZCopyTip } from '@component/log/pz-copy-tip';
 import { JDCDropdown } from '@component/dps-core';
 import { getJsonFromBox, mapBoxJsonToCalcolator } from '@core/util';
+import cache from '@core/cache';
 
 const { TextArea } = Input;
 /**
@@ -34,6 +35,7 @@ export const PZCopy = () => {
       okText: '确定',
       cancelText: '取消',
       onOk: () => {
+        cache.clearCore();
         dispatch(resetJDCCharacterAttributes());
       },
     });
@@ -92,9 +94,9 @@ export const PZCopy = () => {
 
         <div className='calculator-import-content'>
           <PZCopyTip />
-          <JDCDropdown JDCDataName={CoreHelper.GainGroupTypes.Weapons} useDescription={false} />
+          <JDCDropdown JDCDataName={Jx3DpsCore.GainGroupTypes.Weapons} useDescription={false} />
           <JDCDropdown
-            JDCDataName={CoreHelper.GainGroupTypes.SetBonusesGain}
+            JDCDataName={Jx3DpsCore.GainGroupTypes.SetBonusesGain}
             multiple={true}
             useDescription={false}
           />

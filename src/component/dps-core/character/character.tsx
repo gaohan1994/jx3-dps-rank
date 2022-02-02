@@ -1,7 +1,7 @@
 import React, { useMemo } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { Input, Select } from 'antd';
-import { CoreHelper } from 'jx3-dps-core';
+import Jx3DpsCore from 'jx3-dps-core';
 import { getJDCCharacter } from '@core/selector';
 import { makeCharacterStuff } from '@core/util';
 import { setJDCCharacterAttributes } from '@core/action';
@@ -20,8 +20,8 @@ export const Character = () => {
     dispatch(setJDCCharacterAttributes({ target: characterTarget, value: event.target.value }));
   };
 
-  const onChangeCharacterJiasu = jiaSuValue => {
-    dispatch(setJDCCharacterAttributes({ target: 'JiaSu', value: jiaSuValue }));
+  const onChangeCharacterHaste = hasteValue => {
+    dispatch(setJDCCharacterAttributes({ target: 'Haste', value: hasteValue }));
   };
 
   return (
@@ -49,11 +49,11 @@ export const Character = () => {
             <Select
               value={characterValues[target]}
               data-at={target}
-              onChange={onChangeCharacterJiasu}
+              onChange={onChangeCharacterHaste}
               style={{ width: '100%' }}
             >
-              <Select.Option value={CoreHelper.JiaSuList.YiDuanJiaSu}>一段加速</Select.Option>
-              <Select.Option value={CoreHelper.JiaSuList.ErDuanJiaSu}>二段加速</Select.Option>
+              <Select.Option value={Jx3DpsCore.HasteList.YiDuanJiaSu}>一段加速</Select.Option>
+              <Select.Option value={Jx3DpsCore.HasteList.ErDuanJiaSu}>二段加速</Select.Option>
             </Select>
           </div>
         );
