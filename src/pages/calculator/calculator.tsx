@@ -16,6 +16,7 @@ import { EmptyDetail } from '@component/layout/empty-detail';
 import { hasCalculatorResult } from '@core/util';
 import { CharacherTip } from '@component/log/characher-tip';
 import { PZCopy } from '@component/dps-item/pz-copy';
+import { JDCAdapter } from '@component/bate/adapter';
 
 function CalculatorPage() {
   const result = useSelector(getJdcResult);
@@ -25,6 +26,7 @@ function CalculatorPage() {
   }, []);
   return (
     <div className='calculator-home'>
+      <JDCAdapter />
       <CalculatorTitle />
       <Card
         style={{
