@@ -7,7 +7,7 @@ export const getThemeColor = () => [145, 134, 29].join(', ');
 export const getBackgroundColor = () => `rgba(${getThemeColor()})`;
 
 const S_CLASS_DPS_COE = 1.03;
-export const getSClassDps = (dps: number) => numeral(dps * S_CLASS_DPS_COE).format('0,000');
+export const getSLevelDps = (dps: number) => numeral(dps * S_CLASS_DPS_COE).format('0,000');
 
 export const renderDpsChartsTitle = (data: CalculatorResult) =>
   `总输出：${numeral(data.total).format('0,000')} 战斗时间：${data.seconds}秒 DPS：${numeral(

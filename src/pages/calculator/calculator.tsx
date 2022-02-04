@@ -35,7 +35,7 @@ function CalculatorPage() {
         }}
       >
         <MainTransitionLayout>
-          <div style={{ width: 260 }}>
+          <div style={{ width: 280 }}>
             <Character />
             <PZCopy />
             <CharacherTip />
