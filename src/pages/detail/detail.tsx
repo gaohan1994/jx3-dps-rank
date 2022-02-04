@@ -5,7 +5,7 @@ import icon from '@assets/sl_yjj.png';
 import { getJdcResult, getNeedResizeECharts, getSkills } from '@core/selector';
 import BaseDpsItem from '@component/dps-item/base-dps-item';
 import {
-  getSClassDps,
+  getSLevelDps,
   makeDpsRowChartsData,
   renderDpsChartsTitle,
   renderSeriesLabelFormatter,
@@ -25,7 +25,7 @@ const DetailPage = (props: Props) => {
   const resizeEChartsToken = useSelector(getNeedResizeECharts);
   skills.sort((a, b) => (a.subTotal ?? 0) - (b.subTotal ?? 0));
 
-  const sClassDps = useMemo(() => getSClassDps(data.dps), [data]);
+  const sLevelDps = useMemo(() => getSLevelDps(data.dps), [data]);
 
   useEffect(() => {
     const chartsDom = document.getElementById('echarts-main');
@@ -98,9 +98,7 @@ const DetailPage = (props: Props) => {
           value={`${data.dps}`}
           extra={
             <>
-              {/* {version !== CoreHelper.CalculatorVersion.Immortal && (
-                <span className='s-class'>S：{sClassDps}</span>
-              )} */}
+              <span className='s-class'>S：{sLevelDps}</span>
               <div className='profit-box'>
                 <ProfitPage />
               </div>
