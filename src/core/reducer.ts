@@ -4,7 +4,7 @@ import { CreateDpsCoreOptions } from 'jx3-dps-core/build/packages/core/core';
 import { JDCCharacterPayload, JDCGainDropdownPayload, JDCGainExtraOptionPayload } from './action';
 import cache from './cache';
 import {
-  RECEIVE_JDC_RESILT,
+  RECEIVE_JDC_RESULT,
   RECEIVE_JDC_CORE,
   RECEIVE_JDC_SUPPORT,
   RECEIVE_JDC_GAIN,
@@ -107,7 +107,7 @@ const initState = {
 
 export const jdcCore = (state = initState, { type, payload }: any) => {
   switch (type) {
-    case RECEIVE_JDC_RESILT: {
+    case RECEIVE_JDC_RESULT: {
       return {
         ...state,
         jdcResult: payload,
