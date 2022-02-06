@@ -10,7 +10,7 @@ import Jx3DpsCore, { Support } from 'jx3-dps-core';
 
 import {
   RECEIVE_JDC_CORE,
-  RECEIVE_JDC_RESILT,
+  RECEIVE_JDC_RESULT,
   RECEIVE_JDC_SUPPORT,
   RECEIVE_JDC_GAIN,
   RECEIVE_JDC_GAIN_EXTRA,
@@ -44,7 +44,7 @@ import { notification } from 'antd';
 const { GainGroupTypes } = Jx3DpsCore;
 
 export const setJDCResult = (payload: CalculatorResult) => ({
-  type: RECEIVE_JDC_RESILT,
+  type: RECEIVE_JDC_RESULT,
   payload,
 });
 

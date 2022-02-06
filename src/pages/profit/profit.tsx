@@ -1,4 +1,4 @@
-import React, { useState, useCallback, useEffect } from 'react';
+import React, { useState, useCallback, useEffect, useMemo } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import Jx3DpsCore from 'jx3-dps-core';
 import { deepClone } from 'smar-util';
@@ -21,17 +21,16 @@ const PROFIT_POINT_TAB = 'PROFIT_POINT_TAB';
 const PROFIT_STONE_TAB = 'PROFIT_STONE_TAB';
 
 const ProfitPage = () => {
-  const dispatch = useDispatch();
-
   const jdcResult = useSelector(getJdcResult);
-  const jdcCore = useSelector(getJdcCore);
-  const jdcSupport = useSelector(getJdcSupport);
+  const [visible, setVisible] = useState(false);
+
+  const showModal = useCallback(() => setVisible(true), []);
+  const hideModal = useCallback(() => setVisible(false), []);
 
   const [tab, setTab] = useState(PROFIT_POINT_TAB);
   const changeTab = useCallback(tabKey => setTab(tabKey), []);
 
-  const [visible, setVisible] = useState(false);
-  const [profit, setProfit] = useState([] as any[]);
+  const profit = useMemo(() => jdcResult.profit, [jdcResult]);
 
   useEffect(() => {
     if (!visible) {
@@ -44,10 +43,6 @@ const ProfitPage = () => {
       showStoneProfit();
     }
   }, [visible, tab]);
-
-  const calcalutorProfit = useCallback(() => {
-    setVisible(true);
-  }, [jdcResult]);
 
   const showPointProfit = useCallback(() => {
     const reactPointDom = makeProfitDom();
@@ -157,10 +152,10 @@ const ProfitPage = () => {
 
   return (
     <div>
-      {/* <span onClick={calcalutorProfit}>属性收益</span> */}
+      <span onClick={showModal}>属性收益</span>
       <Modal
         visible={visible}
-        onCancel={() => setVisible(false)}
+        onCancel={hideModal}
         closeIcon={null}
         okText='确定'
         width={'900px'}

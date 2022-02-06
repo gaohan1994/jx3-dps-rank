@@ -8,6 +8,8 @@ export const HistoryLog = () => {
   const [visible, setVisible] = useState(false);
 
   const data = [
+    '重写并重新开放属性收益模块; 2022-02-04',
+    '重新开放S级Dps; 2022-02-04',
     '新增满阶小橙武特效; 2022-02-03',
     '修复使用金刚日轮时，其他技能数较多的bug; 2022-02-02',
     '修复颂言4%错误描述bug实际400攻击; 2022-01-31',

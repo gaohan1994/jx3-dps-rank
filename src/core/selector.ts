@@ -7,6 +7,9 @@ import {
 } from 'jx3-dps-core/build/calculator/calculator';
 import { Gain } from 'jx3-dps-core/build/packages/gain/gain';
 import { JDCCharacter } from './reducer';
+import { ProfitCore } from 'jx3-dps-core/build/packages/profit/profit';
+
+type Jx3DpsCoreCalculateResult = { profit: ProfitCore[] } & CalculatorResult;
 
 export const getCore = (state: any) => state.jdcCore;
 
@@ -16,7 +19,8 @@ export const getJdcSupport = (state: any): Support => state.jdcCore.jdcSupport ?
 
 export const getSkills = (state: any): Skill[] => state.jdcCore.jdcResult?.skills ?? [];
 
-export const getJdcResult = (state: any): CalculatorResult => state.jdcCore.jdcResult ?? {};
+export const getJdcResult = (state: any): Jx3DpsCoreCalculateResult =>
+  state.jdcCore.jdcResult ?? {};
 
 export type JDCComponentsSupportOptions = { coverage: number };
 
