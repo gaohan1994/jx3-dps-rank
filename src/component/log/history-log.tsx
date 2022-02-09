@@ -8,6 +8,7 @@ export const HistoryLog = () => {
   const [visible, setVisible] = useState(false);
 
   const data = [
+    '修改颂言Buff、dps结果小增2.9%; 2022-02-06',
     '重写并重新开放属性收益模块; 2022-02-04',
     '重新开放S级Dps; 2022-02-04',
     '新增满阶小橙武特效; 2022-02-03',
