@@ -8263,10 +8263,10 @@ jsprim@^1.2.2:
     array-includes "^3.1.2"
     object.assign "^4.1.2"
 
-jx3-dps-core@^3.2.0:
-  version "3.2.0"
-  resolved "https://registry.yarnpkg.com/jx3-dps-core/-/jx3-dps-core-3.2.0.tgz#8f12937557f6e9272cecae88fe44c846d4ae9236"
-  integrity sha512-sLeJ2tjugxOWoJR5VvHq/9rPIO8qdtVvQj8tEw3RKzF+5dRjrFCZaRsC39Hq8SlS5zu5jbhsSXl4EeB08PI9Sw==
+jx3-dps-core@^3.3.0:
+  version "3.3.0"
+  resolved "https://registry.yarnpkg.com/jx3-dps-core/-/jx3-dps-core-3.3.0.tgz#cac9602b2158f6dfb16b5ea7666d01b01d0a37a4"
+  integrity sha512-LPkkYzqK3W7hSOrpFiW0fTlkMW4sJSMw+u4ME5ChxwP3mLGwEbGZiHgGuanGzzVrkyrgCDlPUwBvPsNekZjrdg==
   dependencies:
     invariant "^2.2.4"
     numeral "^2.0.6"
